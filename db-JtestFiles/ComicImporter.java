@@ -1,6 +1,11 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import JDBChelpers.JDBC;
 import JDBChelpers.JDBCInsert;
 import model.*;
 
@@ -202,13 +207,13 @@ public class ComicImporter {
 
     // }
 
-    private void importComicNoChecks2() {
+    private StringListContainer importComicNoChecks2() {
         /*
          * This is an ADMIN ONLY COMMAND. If ran multiple times into the same database, duplicate entries are created.
          * This command only works under the pretenses that you import no duplicate comics, and the database starts empty
          */
 
-        if (comics_in.contains(copy_target)) {return ;}// check for duplicate entries
+        if (comics_in.contains(copy_target)) {return null;}// check for duplicate entries
 
         String master_sql = "";
 
@@ -305,7 +310,10 @@ public class ComicImporter {
         master_prepared.add(collection_id);
         master_prepared.add(comics_in.indexOf(copy_target) );
 
-        inserter.executePreparedSQL(master_sql, master_prepared) ;
+        
+        StringListContainer returns = new StringListContainer(master_sql, master_prepared) ;
+
+        return returns ;
 
     }
 
@@ -315,6 +323,7 @@ public class ComicImporter {
 
 
     public static void main(String[] args) {
+
         Scanner reader = new Scanner(System.in);
         System.out.println("Type \"I know what I'm doing, and I'm prepared for the consequences of my actions\" to proceed: ");
         String pass = reader.nextLine() ;
@@ -342,13 +351,42 @@ public class ComicImporter {
             target = read.getNextComic() ;
             target = read.getNextComic() ;
 
+
+            System.out.println("Creating Connection...");
+            String URL = "jdbc:postgresql://jdb1.c4qx1ly4rhvr.us-east-2.rds.amazonaws.com:5432/postgres" ;
+            String USER = "jmaster" ;
+            String PASS = "w3nd1g0s" ;
+        
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);) {
+
             while (target != null) {
                 importer.changeTarget(target) ;
-                importer.importComicNoChecks2() ;
-                System.out.println("Imported: "+ target.getSeries() + "\n");
+
+                StringListContainer SQL_prepareds = importer.importComicNoChecks2() ;
+                String SQL = SQL_prepareds.string ;
+                ArrayList<Object> prepareds = SQL_prepareds.objects ;
+
+                PreparedStatement stmt = conn.prepareStatement(SQL) ;
+
+                int x = 1 ;
+                System.out.println("Preparing Statement...");
+                for (Object obj :prepareds) {
+                    stmt.setObject(x, obj);
+                    x++ ;
+                    System.out.println("Preparing Statement..." + obj);
+                }
+                System.out.println("Executing Command...");
+
+                stmt.executeUpdate();
+                System.out.println("Command Executed!");
 
                 target = read.getNextComic() ;
             }
+
+        } catch (SQLException e) {
+            throw new Error("Outer Problem", e);
+        }
+        
 
             System.out.println("Operation completed!");
         } catch (Exception e) {
