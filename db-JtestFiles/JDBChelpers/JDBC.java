@@ -8,8 +8,8 @@ public abstract class JDBC {
 
     public JDBC() {
         this.URL = "jdbc:postgresql://jdb1.c4qx1ly4rhvr.us-east-2.rds.amazonaws.com:5432/postgres" ;
-        this.USER = "swen262" ;
-        this.PASS = "bubbles" ;
+        this.USER = "jmaster" ;
+        this.PASS = "w3nd1g0s" ;
 
         
     } public JDBC( String url, String username, String password) {
@@ -18,5 +18,4 @@ public abstract class JDBC {
         this.PASS = password ;
     }
 
-    abstract public void executeSQL(String SQL) ;
 }

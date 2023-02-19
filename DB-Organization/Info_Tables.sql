@@ -14,7 +14,7 @@ CREATE TABLE creator_info(
 CREATE TABLE character_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
-    character_name  VARCHAR NOT NULL                                    ,--DD
+    character_name  VARCHAR NOT NULL                                     --DD
 );
 
 CREATE TABLE comic_info(

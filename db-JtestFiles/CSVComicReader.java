@@ -121,7 +121,7 @@ public class CSVComicReader {
 
         try {
             
-            CSVComicReader x = new CSVComicReader("comics.csv") ;
+            CSVComicReader x = new CSVComicReader("./comics.csv") ;
             Comic test = x.getNextComic() ;
 
             while (test != null) {
@@ -134,7 +134,6 @@ public class CSVComicReader {
 
 
         } catch (Exception e) {
-            System.out.println(e);
             e.printStackTrace();
         }
     }

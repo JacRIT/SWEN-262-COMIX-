@@ -62,4 +62,145 @@ public class Comic {
 
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        result = prime * result + ((publisher == null) ? 0 : publisher.hashCode());
+        result = prime * result + ((series == null) ? 0 : series.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + volumeNumber;
+        result = prime * result + ((issueNumber == null) ? 0 : issueNumber.hashCode());
+        result = prime * result + ((publicationDate == null) ? 0 : publicationDate.hashCode());
+        result = prime * result + ((creators == null) ? 0 : creators.hashCode());
+        result = prime * result + ((principlCharacters == null) ? 0 : principlCharacters.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + Float.floatToIntBits(initial_value);
+        result = prime * result + Float.floatToIntBits(value);
+        result = prime * result + grade;
+        result = prime * result + (isSlabbed ? 1231 : 1237);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Comic other = (Comic) obj;
+        if (id != other.id)
+            return false;
+        if (publisher == null) {
+            if (other.publisher != null)
+                return false;
+        } else if (!publisher.equals(other.publisher))
+            return false;
+        if (series == null) {
+            if (other.series != null)
+                return false;
+        } else if (!series.equals(other.series))
+            return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        if (volumeNumber != other.volumeNumber)
+            return false;
+        if (issueNumber == null) {
+            if (other.issueNumber != null)
+                return false;
+        } else if (!issueNumber.equals(other.issueNumber))
+            return false;
+        if (publicationDate == null) {
+            if (other.publicationDate != null)
+                return false;
+        } else if (!publicationDate.equals(other.publicationDate))
+            return false;
+        if (creators == null) {
+            if (other.creators != null)
+                return false;
+        } else if (!creators.equals(other.creators))
+            return false;
+        if (principlCharacters == null) {
+            if (other.principlCharacters != null)
+                return false;
+        } else if (!principlCharacters.equals(other.principlCharacters))
+            return false;
+        if (description == null) {
+            if (other.description != null)
+                return false;
+        } else if (!description.equals(other.description))
+            return false;
+        if (Float.floatToIntBits(initial_value) != Float.floatToIntBits(other.initial_value))
+            return false;
+        if (Float.floatToIntBits(value) != Float.floatToIntBits(other.value))
+            return false;
+        if (grade != other.grade)
+            return false;
+        if (isSlabbed != other.isSlabbed)
+            return false;
+        return true;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public ArrayList<Publisher> getPublisher() {
+        return publisher;
+    }
+
+    public String getSeries() {
+        return series;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getVolumeNumber() {
+        return volumeNumber;
+    }
+
+    public String getIssueNumber() {
+        return issueNumber;
+    }
+
+    public String getPublicationDate() {
+        return publicationDate;
+    }
+
+    public ArrayList<Creator> getCreators() {
+        return creators;
+    }
+
+    public ArrayList<Character> getPrinciplCharacters() {
+        return principlCharacters;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public float getInitial_value() {
+        return initial_value;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public boolean isSlabbed() {
+        return isSlabbed;
+    }
+
 }

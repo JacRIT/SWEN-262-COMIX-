@@ -1,7 +1,7 @@
 CREATE TABLE publisher_refrence(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
-    pubisher_fk     INTEGER NOT NULL                                    ,--FK
+    publisher_fk     INTEGER NOT NULL                                    ,--FK
     comic_fk        INTEGER NOT NULL                                    
 );
 
