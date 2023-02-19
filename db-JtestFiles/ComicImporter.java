@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Scanner;
 
 import JDBChelpers.JDBCInsert;
@@ -102,6 +101,7 @@ public class ComicImporter {
          * This command only works under the pretenses that you import no duplicate comics, and the database starts empty
          */
 
+        if (comics_in.contains(copy_target)) {return ;}// check for duplicate entries
         //-----------------------------------------------------------------------
         // import the comic
         //-----------------------------------------------------------------------
