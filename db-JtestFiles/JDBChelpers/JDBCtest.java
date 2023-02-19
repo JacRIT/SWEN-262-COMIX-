@@ -13,7 +13,7 @@ import model.Creator;
 import model.Publisher;
 import model.Character;
 
-
+@Deprecated
 class JDBCtest{
     public static void main(String[] args) {
 

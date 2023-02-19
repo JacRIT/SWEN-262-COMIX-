@@ -11,11 +11,27 @@ import model.Creator;
 import model.Publisher;
 import model.Character;
 
-public class CSVImport {
+
+/*
+ * This class is meant to take a CSV file, with headers that include the following:
+ *  1. Series
+ *  2. Full Title
+ *  3. Issue
+ *  4. Description
+ *  5. Publication Date
+ * 
+ *  The getNextComic() function returns one comic 
+ *  while reading through the CSV file one line at a time
+ * 
+ *  At the end of the file is a main method which decribes proper use of the class.
+ *  It generates each comic from the CSV file and prints them to terminal.
+ * 
+ */
+public class CSVComicReader {
 
     private final CSVReaderHeaderAware reader ;
 
-    public CSVImport(String filename) throws Exception {
+    public CSVComicReader(String filename) throws Exception {
         reader = new CSVReaderHeaderAware( new FileReader(filename) ) ;
     }
 
@@ -47,7 +63,7 @@ public class CSVImport {
         // COMPUTE SPECIAL VALUES
         //---------------------------------------------------------
 
-        //compute volume number if "Vol. is in series"
+        //compute volume number if "Vol. " is in series, otherwise leave volume number as '1'
         if ( series.contains("Vol. ") ) {
 
             Pattern find_volnum = Pattern.compile("(Vol. )([0-9]+)") ;
@@ -71,7 +87,7 @@ public class CSVImport {
         for (String pub : pubs) {
 
             if (pub == "") {continue ;}
-            
+
             publishers.add( new Publisher(1, pub)) ; // 1 is placeholder number, wont actually be INSERTed into the DB with id 1
         }
 
@@ -101,24 +117,25 @@ public class CSVImport {
 
     }
 
-    // public static void main(String[] args) {
-    //     try {
+    public static void main(String[] args) {
+
+        try {
             
-    //         CSVImport x = new CSVImport("comics.csv") ;
-    //         Comic test = x.getNextComic() ;
+            CSVComicReader x = new CSVComicReader("comics.csv") ;
+            Comic test = x.getNextComic() ;
 
-    //         while (test != null) {
+            while (test != null) {
 
-    //             System.out.println(test);
-    //             System.out.println();
-    //             test = x.getNextComic() ;
+                System.out.println(test);
+                System.out.println();
+                test = x.getNextComic() ;
 
-    //         }
+            }
 
 
-    //     } catch (Exception e) {
-    //         System.out.println(e);
-    //         e.printStackTrace();
-    //     }
-    // }
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+    }
 }

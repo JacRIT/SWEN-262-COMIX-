@@ -6,9 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.postgresql.util.PSQLException;
 
-
+@Deprecated
 public class JDBCRun {
 
     private final String URL ;

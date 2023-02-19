@@ -1,21 +1,28 @@
 package JDBChelpers;
 
-public class JDBCInsert {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-    private final String URL ;
-    private final String USER ;
-    private final String PASS ;
+public class JDBCInsert extends JDBC {
 
-    public JDBCInsert() {
-        this.URL = "jdbc:postgresql://jdb1.c4qx1ly4rhvr.us-east-2.rds.amazonaws.com:5432/postgres" ;
-        this.USER = "swen262" ;
-        this.PASS = "bubbles" ;
+
+    @Override
+    public void executeSQL(String SQL) {
 
         
-    } public JDBCInsert( String url, String username, String password) {
-        this.URL = url ;
-        this.USER = username ;
-        this.PASS = password ;
-    }
+        try (
+            Connection conn = DriverManager.getConnection(URL, USER, PASS);
+            Statement stmt = conn.createStatement()
+        ) {
 
+        stmt.executeUpdate(SQL);
+
+        } catch (SQLException e) {
+            throw new Error("Outer Problem", e);
+        } 
+
+
+    }
 }
