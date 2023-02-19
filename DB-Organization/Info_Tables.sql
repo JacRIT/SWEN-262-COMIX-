@@ -7,8 +7,7 @@ CREATE TABLE publisher_info(
 CREATE TABLE creator_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
-    c_first_name    VARCHAR NOT NULL                                    ,--DD
-    c_last_name     VARCHAR NOT NULL                                    
+    c_name          VARCHAR NOT NULL                                     --DD
 );
 
 CREATE TABLE character_info(

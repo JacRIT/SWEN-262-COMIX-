@@ -265,9 +265,8 @@ public class ComicImporter {
             // if creator is NOT in auths_in
             if (id == -1) {
                 // import creator
-                master_sql = master_sql.concat( "INSERT INTO creator_info(c_first_name, c_last_name) VALUES (?,?); " );
-                master_prepared.add(aut.getFirst_name() );
-                master_prepared.add(aut.getLast_name() );
+                master_sql = master_sql.concat( "INSERT INTO creator_info(c_name) VALUES (?); " );
+                master_prepared.add(aut.getName() );
 
                 // add publisher to pubs_in
                 auths_in.add(aut) ;

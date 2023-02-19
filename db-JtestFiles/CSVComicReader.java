@@ -98,10 +98,8 @@ public class CSVComicReader {
         for (String cre : cres) {
 
             if (cre == "") {continue ;}
+            else {creators.add(new Creator(1,cre)) ;}
 
-            String[] first_last = cre.split(" ") ;
-            if (first_last.length == 1) { creators.add( new Creator(1, first_last[0], "")); }
-            else                        { creators.add( new Creator(1, first_last[0], first_last[1])); } // 1 is placeholder number, wont actually be INSERTed into the DB with id 1
         }
 
         //compute characters
