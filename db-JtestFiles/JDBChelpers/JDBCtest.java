@@ -1,3 +1,4 @@
+package JDBChelpers;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -53,10 +54,12 @@ class JDBCtest{
         //     WHERE creator_refrence_test.comic_fk = ?
         // """;
         String url = "jdbc:postgresql://jdb1.c4qx1ly4rhvr.us-east-2.rds.amazonaws.com:5432/postgres";
+        ArrayList<Comic> comix = new ArrayList<Comic>() ;
 
-        try (Connection conn = DriverManager.getConnection(url, "swen262", "bubbles");
-
-        Statement stmt = conn.createStatement()) {
+        try (
+            Connection conn = DriverManager.getConnection(url, "swen262", "bubbles");
+            Statement stmt = conn.createStatement()
+        ) {
 
             try {
                 ResultSet rs = stmt.executeQuery(sql);
@@ -72,7 +75,7 @@ class JDBCtest{
                     ArrayList<Creator>      creators              = null ;
                     ArrayList<Character>    principlCharacters    = null ;
                     String                  description           = rs.getString("descrip") ;
-                    float                   initial_value         = rs.getFloat("initial_value") ;
+                    float                   initial_value         = 0f ;
                     float                   value                 = rs.getInt("comic_value") ;
                     int                     grade                 = 0 ;
                     boolean                 isSlabbed             = rs.getBoolean("slabbed") ;
@@ -84,6 +87,7 @@ class JDBCtest{
                                                     publicationDate, creators, principlCharacters,
                                                     description, initial_value, value, grade, isSlabbed);
                     System.out.println(generated_comic);
+                    comix.add(generated_comic) ;
                 }
             } catch (PSQLException e ) {
                 throw new Error("Problem", e);
@@ -92,5 +96,9 @@ class JDBCtest{
         } catch (SQLException e) {
             throw new Error("Problem", e);
         } 
+
+        System.out.println(comix);
     }
+
+
 }

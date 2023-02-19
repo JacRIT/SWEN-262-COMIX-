@@ -1,8 +1,10 @@
+package JDBChelpers;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import org.postgresql.util.PSQLException;
 
@@ -24,25 +26,37 @@ public class JDBCRun {
         this.PASS = password ;
     }
 
-    public ResultSet executeSQL(String SQL_stmt) {
+    public ArrayList<String> executeSQL(String SQL_stmt) {
+
+        ArrayList<String> hw = new ArrayList<String>();
         
         try (
             Connection conn = DriverManager.getConnection(URL, USER, PASS);
             Statement stmt = conn.createStatement()
         ) {
 
-            ResultSet rs = stmt.executeQuery(SQL_stmt);
+            try {
+                ResultSet rs = stmt.executeQuery(SQL_stmt);
 
-            return rs ;
+                while (rs.next()) {
+
+                    hw.add(rs.getString("string") ) ;
+                }
+            } catch (Exception e) {
+                throw new Error("Inner Problem", e);
+            }
 
         } catch (SQLException e) {
-            throw new Error("Problem", e);
+            throw new Error("Outer Problem", e);
         } 
+
+        return hw ;
     }
 
     public static void main(String[] args) {
         try {
-            System.out.println( new JDBCRun().executeSQL("SELECT * FROM exampletest").getString("string") );
+            JDBCRun test = new JDBCRun() ;
+            System.out.println( test.executeSQL("SELECT * FROM exampletest") );
         } catch (Exception e) {
             System.out.println(e);
         }

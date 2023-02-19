@@ -52,11 +52,12 @@ public class CSVImport {
 
             Pattern find_volnum = Pattern.compile("(Vol. )([0-9]+)") ;
             Matcher match_volnum = find_volnum.matcher(series) ;
+
             while (match_volnum.find()) {
                 volume_number = Integer.parseInt( match_volnum.group().split(" ")[1] ) ;
             }
 
-            // alternate implementation
+            // alternative implementation
 
             // String[] series_volnum = series.split("(Vol. )") ;
             // volume_number = Integer.parseInt(series_volnum[1].split(" ")[0]);
@@ -66,16 +67,22 @@ public class CSVImport {
         //compute publishers
         String csv_pub = values.get("Publisher") ;
         String[] pubs = csv_pub.split(" [|] ") ;
+
         for (String pub : pubs) {
+
             if (pub == "") {continue ;}
+            
             publishers.add( new Publisher(1, pub)) ; // 1 is placeholder number, wont actually be INSERTed into the DB with id 1
         }
 
         //compute creators
         String csv_cre = values.get("Creators") ;
         String[] cres = csv_cre.split("( [|] )") ;
+
         for (String cre : cres) {
+
             if (cre == "") {continue ;}
+
             String[] first_last = cre.split(" ") ;
             if (first_last.length == 1) { creators.add( new Creator(1, first_last[0], "")); }
             else                        { creators.add( new Creator(1, first_last[0], first_last[1])); } // 1 is placeholder number, wont actually be INSERTed into the DB with id 1
@@ -94,22 +101,24 @@ public class CSVImport {
 
     }
 
-    public static void main(String[] args) {
-        try {
+    // public static void main(String[] args) {
+    //     try {
             
-            CSVImport x = new CSVImport("comics.csv") ;
-            Comic test = x.getNextComic() ;
+    //         CSVImport x = new CSVImport("comics.csv") ;
+    //         Comic test = x.getNextComic() ;
 
-            while (test != null) {
-                System.out.println(test);
-                test = x.getNextComic() ;
-                System.out.println();
-            }
+    //         while (test != null) {
+
+    //             System.out.println(test);
+    //             System.out.println();
+    //             test = x.getNextComic() ;
+
+    //         }
 
 
-        } catch (Exception e) {
-            System.out.println(e);
-            e.printStackTrace();
-        }
-    }
+    //     } catch (Exception e) {
+    //         System.out.println(e);
+    //         e.printStackTrace();
+    //     }
+    // }
 }
