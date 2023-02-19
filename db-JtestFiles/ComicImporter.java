@@ -325,6 +325,7 @@ public class ComicImporter {
         }
 
         try {
+            long start = System.currentTimeMillis() ;
             JDBCInsert createuser = new JDBCInsert() ;
             createuser.executeSQL("INSERT INTO user_info(first_name,last_name,username) VALUES ('D','B','Database'); INSERT INTO collection_info(nickname) VALUES ('Database Comics'); INSERT INTO collection_ownership(collection_fk, user_fk) VALUES (1,1);") ;
             System.out.println("Database collection setup completed...");
@@ -349,8 +350,8 @@ public class ComicImporter {
 
                 target = read.getNextComic() ;
             }
-
-            System.out.println("Operation completed!");
+            long end = System.currentTimeMillis() ;
+            System.out.println("Operation completed! Time (ms): " + (end-start));
         } catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
