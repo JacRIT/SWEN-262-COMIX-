@@ -364,22 +364,24 @@ public class ComicImporter {
                 importer.changeTarget(target) ;
 
                 StringListContainer SQL_prepareds = importer.importComicNoChecks2() ;
-                String SQL = SQL_prepareds.string ;
-                ArrayList<Object> prepareds = SQL_prepareds.objects ;
+                if (SQL_prepareds != null) {
+                    String SQL = SQL_prepareds.string ;
+                    ArrayList<Object> prepareds = SQL_prepareds.objects ;
 
-                PreparedStatement stmt = conn.prepareStatement(SQL) ;
+                    PreparedStatement stmt = conn.prepareStatement(SQL) ;
 
-                int x = 1 ;
-                System.out.println("Preparing Statement...");
-                for (Object obj :prepareds) {
-                    stmt.setObject(x, obj);
-                    x++ ;
-                    System.out.println("Preparing Statement..." + obj);
+                    int x = 1 ;
+                    System.out.println("Preparing Statement...");
+                    for (Object obj :prepareds) {
+                        stmt.setObject(x, obj);
+                        x++ ;
+                        System.out.println("Preparing Statement..." + obj);
+                    }
+                    System.out.println("Executing Command...");
+
+                    stmt.executeUpdate();
+                    System.out.println("Command Executed!");
                 }
-                System.out.println("Executing Command...");
-
-                stmt.executeUpdate();
-                System.out.println("Command Executed!");
 
                 target = read.getNextComic() ;
             }
