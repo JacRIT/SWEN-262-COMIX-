@@ -13,8 +13,7 @@ import model.*;
  * This class takes the Comic objects that are supplied from 
  * CSVComicReader and insertes them into the database. 
  * 
- * THIS IS ONLY MEANT TO BE RUN AT THE START OF THE PROJECT 
- * OR IF SOMETHING GOES HORRIBLY WRONG
+ * This class is kinda spaghetti, consult J if you want to reset the DB
  * 
  */
 
@@ -355,8 +354,8 @@ public class ComicImporter {
 
             System.out.println("Creating Connection...");
             String URL = "jdbc:postgresql://jdb1.c4qx1ly4rhvr.us-east-2.rds.amazonaws.com:5432/postgres" ;
-            String USER = "jmaster" ;
-            String PASS = "w3nd1g0s" ;
+            String USER = "swen262" ;
+            String PASS = "bubbles" ;
         
         try (Connection conn = DriverManager.getConnection(URL, USER, PASS);) {
 
