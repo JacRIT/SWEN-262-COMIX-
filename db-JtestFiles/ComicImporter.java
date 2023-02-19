@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import JDBChelpers.JDBC;
 import JDBChelpers.JDBCInsert;
 import model.*;
 
@@ -220,7 +219,6 @@ public class ComicImporter {
         //-----------------------------------------------------------------------
         // import the comic
         //-----------------------------------------------------------------------
-        JDBCInsert inserter = new JDBCInsert() ;
         master_sql = master_sql.concat( "INSERT INTO comic_info(series,title,volume_num,issue_num,initial_value,descrip,release_date) VALUES (?,?,?,?,?,?,?); " );
         master_prepared.add(copy_target.getSeries());
         master_prepared.add(copy_target.getTitle());
@@ -373,7 +371,6 @@ public class ComicImporter {
                     for (Object obj :prepareds) {
                         stmt.setObject(x, obj);
                         x++ ;
-                        System.out.println("Preparing Statement..." + obj);
                     }
                     System.out.println("Executing Command...");
 
