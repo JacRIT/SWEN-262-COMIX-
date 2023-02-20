@@ -42,4 +42,6 @@ CREATE TABLE collection_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
     nickname        VARCHAR                                              --DD
-)
+);
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO USER 'swen262' ;

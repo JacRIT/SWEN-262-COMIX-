@@ -49,3 +49,5 @@ CREATE TABLE subcollection_refrence(
     collect_fk      INTEGER NOT NULL                                    ,--FK
     subcollect_fk   INTEGER NOT NULL
 );
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO USER 'swen262' ;
