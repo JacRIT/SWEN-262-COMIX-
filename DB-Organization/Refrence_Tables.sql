@@ -36,13 +36,6 @@ CREATE TABLE collection_refrence(
     copy_fk         INTEGER NOT NULL
 );
 
-CREATE TABLE collection_ownership(
-    id              SERIAL PRIMARY KEY                                  ,--PK
-
-    user_fk         INTEGER NOT NULL                                    ,--FK
-    collection_fk   INTEGER NOT NULL                                    
-);
-
 CREATE TABLE subcollection_refrence(
     id              SERIAL PRIMARY KEY                                  ,--PK
 

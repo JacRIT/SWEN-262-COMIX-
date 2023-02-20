@@ -33,6 +33,8 @@ CREATE TABLE comic_info(
 CREATE TABLE user_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
+    collection_fk   INTEGER NOT NULL                                    ,--FK
+
     last_name       VARCHAR NOT NULL    DEFAULT 'Doe'                   ,--DD
     first_name      VARCHAR NOT NULL    DEFAULT 'John'                  ,
     username        VARCHAR(12) NOT NULL                                

@@ -9,5 +9,4 @@ DROP TABLE IF EXISTS creator_refrence ;
 DROP TABLE IF EXISTS character_refrence ;
 DROP TABLE IF EXISTS collection_refrence ;
 DROP TABLE IF EXISTS subcollection_refrence ;
-DROP TABLE IF EXISTS collection_ownership ;
 DROP TABLE IF EXISTS comic_ownership ;
