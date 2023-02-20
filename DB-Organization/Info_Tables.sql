@@ -44,4 +44,4 @@ CREATE TABLE collection_info(
     nickname        VARCHAR                                              --DD
 );
 
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO USER 'swen262' ;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO swen262 ;

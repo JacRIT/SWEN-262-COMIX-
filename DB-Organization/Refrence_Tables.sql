@@ -50,4 +50,4 @@ CREATE TABLE subcollection_refrence(
     subcollect_fk   INTEGER NOT NULL
 );
 
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO USER 'swen262' ;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO swen262 ;
