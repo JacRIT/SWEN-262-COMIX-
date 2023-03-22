@@ -1,3 +1,5 @@
+package Model.JavaObjects;
+
 public class User {
     private int id;
     private String name;
