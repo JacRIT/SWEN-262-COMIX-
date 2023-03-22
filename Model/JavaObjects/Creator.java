@@ -1,5 +1,3 @@
-package model;
-
 public class Creator {
     private final int id ;
     private final String name ;

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 import org.postgresql.util.PSQLException;
 
-import model.Comic;
-import model.Creator;
-import model.Publisher;
-import model.Character;
+import Model.JavaObjects.Character;
+import Model.JavaObjects.Comic;
+import Model.JavaObjects.Creator;
+import Model.JavaObjects.Publisher;
 
 @Deprecated
 class JDBCtest{

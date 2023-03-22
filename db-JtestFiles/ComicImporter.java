@@ -5,8 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import JDBChelpers.JDBCInsert;
-import model.*;
+import Controllers.Utils.JDBCInsert;
+import Model.JavaObjects.Comic;
+import Model.JavaObjects.Creator;
+import Model.JavaObjects.Publisher;
 
 /*
  * This class takes the Comic objects that are supplied from 
