@@ -6,10 +6,10 @@ import java.util.regex.Pattern;
 
 import com.opencsv.CSVReaderHeaderAware;
 
-import model.Comic;
-import model.Creator;
-import model.Publisher;
-import model.Character;
+import Model.JavaObjects.Character;
+import Model.JavaObjects.Comic;
+import Model.JavaObjects.Creator;
+import Model.JavaObjects.Publisher;
 
 
 /*
