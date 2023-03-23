@@ -21,18 +21,6 @@ interface ComixAPI
      */
     void setSearchStrategy (SearchAlgorithm searchStrategy);
 
-    /**
-     * Login and authenticate a user.  If user does not exist, creates a user account and logs them in.
-     * @param username the name of the user.
-     * @return User logged in.
-     */
-    User authenticate (String username);
-
-    /**
-     * Logs out a user.
-     * @return user logged out / unauthenticated
-     */
-    void unAuthenticate();
 
     /**
      * Executes a given search for a user given a keyword.
