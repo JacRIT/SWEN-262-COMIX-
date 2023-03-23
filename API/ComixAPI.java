@@ -32,7 +32,7 @@ interface ComixAPI
      * Logs out a user.
      * @return user logged out / unauthenticated
      */
-    User unAuthenticate();
+    void unAuthenticate();
 
     /**
      * Executes a given search for a user given a keyword.

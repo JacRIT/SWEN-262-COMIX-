@@ -1,4 +1,3 @@
-import Controllers.UserController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
@@ -17,12 +16,6 @@ public class GuestComixAPI implements ComixAPI{
     public void setSearchStrategy(SearchAlgorithm searchStrategy) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setSearchStrategy'");
-    }
-
-    @Override
-    public User authenticate(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
     }
 
     @Override
@@ -47,11 +40,5 @@ public class GuestComixAPI implements ComixAPI{
     public String createComic(Comic comic) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createComic'");
-    }
-
-    @Override
-    public User unAuthenticate() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'unAuthenticate'");
     }
 }

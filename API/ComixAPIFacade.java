@@ -10,8 +10,21 @@ public class ComixAPIFacade implements ComixAPI{
     private GuestComixAPI guestComixAPI;
     private UserComixAPI userComixAPI;
     ComixAPI comixAPI;
-
+    
     public ComixAPIFacade() {
+        comixAPI = guestComixAPI;
+    }
+    
+    
+    public User authenticate(String username) {
+        // TODO 
+        // Use User Controller to see if user Exists if does then switch to userComixAPI with a user??
+        // if user does not exist then create one and switch to userComixAPI with the new user created.
+
+        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
+    }
+    
+    public void unAuthenticate() {
         comixAPI = guestComixAPI;
     }
 
@@ -28,16 +41,6 @@ public class ComixAPIFacade implements ComixAPI{
         throw new UnsupportedOperationException("Unimplemented method 'setSearchStrategy'");
     }
 
-    @Override
-    public User authenticate(String username) {
-        // TODO 
-        // Use User Controller to see if user Exists if does then switch to userComixAPI with a user??
-        // if user does not exist then create one and switch to userComixAPI with the new user created.
-
-        //Notes :
-        // Adding an un-authenticate/logout
-        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
-    }
 
     
 
@@ -58,18 +61,13 @@ public class ComixAPIFacade implements ComixAPI{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'generateStatistics'");
     }
-
+    
     @Override
     public String createComic(Comic comic) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createComic'");
     }
 
-    @Override
-    public User unAuthenticate() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'unAuthenticate'");
-    }
 
     
 }

@@ -17,11 +17,6 @@ public class UserComixAPI implements ComixAPI {
         throw new UnsupportedOperationException("Unimplemented method 'setSearchStrategy'");
     }
     @Override
-    public User authenticate(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
-    }
-    @Override
     public Comic[] executeSearch(int userId, Comic[] keyword) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'executeSearch'");
@@ -41,11 +36,4 @@ public class UserComixAPI implements ComixAPI {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createComic'");
     }
-    @Override
-    public User unAuthenticate() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'unAuthenticate'");
-    }
-
-
 }
