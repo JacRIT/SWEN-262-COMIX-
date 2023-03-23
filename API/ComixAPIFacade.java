@@ -4,12 +4,21 @@ import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 
-public class GuestComixAPI implements ComixAPI{
+public class ComixAPIFacade implements ComixAPI{
+    // ComicController ComixController;
+    UserController UserController;
+    private GuestComixAPI guestComixAPI;
+    private UserComixAPI userComixAPI;
+    ComixAPI comixAPI;
+
+    public ComixAPIFacade() {
+        comixAPI = guestComixAPI;
+    }
 
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
         // TODO Auto-generated method stub
-        
+        comixAPI.setSearchStrategy(null);
         throw new UnsupportedOperationException("Unimplemented method 'setSortStrategy'");
     }
 
@@ -21,13 +30,18 @@ public class GuestComixAPI implements ComixAPI{
 
     @Override
     public User authenticate(String username) {
-        // TODO Auto-generated method stub
+        // TODO 
+        // Use User Controller to see if user Exists if does then switch to userComixAPI with a user??
+        // if user does not exist then create one and switch to userComixAPI with the new user created.
+
+        //Notes :
+        // Adding an un-authenticate/logout
         throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
     }
 
     @Override
     public Comic[] executeSearch(int userId, Comic[] keyword) {
-        // TODO Auto-generated method stub 
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'executeSearch'");
     }
 
@@ -49,9 +63,5 @@ public class GuestComixAPI implements ComixAPI{
         throw new UnsupportedOperationException("Unimplemented method 'createComic'");
     }
 
-    @Override
-    public User unAuthenticate() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'unAuthenticate'");
-    }
+    
 }

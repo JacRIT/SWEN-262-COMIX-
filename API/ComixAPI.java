@@ -1,3 +1,8 @@
+import Model.JavaObjects.Comic;
+import Model.JavaObjects.User;
+import Model.Search.SearchAlgorithm;
+import Model.Search.SortAlgorithm;
+
 interface ComixAPI
 {
     /**
@@ -7,21 +12,27 @@ interface ComixAPI
      * to be called
      * @param strategy the strategy being used bt the user.
      */
-    void setSortStrategy (Strategy strategy);
+    void setSortStrategy (SortAlgorithm sortStrategy);
 
     /**
      * Sets search strategy of Comic Controller allowing it to use the proper search strategy 
      * to search comics.
      * @param strategy the strategy being used by the user.
      */
-    void setSearchStrategy (Strategy strategy);
+    void setSearchStrategy (SearchAlgorithm searchStrategy);
 
     /**
-     * TODO : look up how authenticate will switch proxy to authenticated API
+     * Login and authenticate a user.  If user does not exist, creates a user account and logs them in.
      * @param username the name of the user.
-     * @return
+     * @return User logged in.
      */
     User authenticate (String username);
+
+    /**
+     * Logs out a user.
+     * @return user logged out / unauthenticated
+     */
+    User unAuthenticate();
 
     /**
      * Executes a given search for a user given a keyword.
