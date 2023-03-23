@@ -39,6 +39,8 @@ public class ComixAPIFacade implements ComixAPI{
         throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
     }
 
+    
+
     @Override
     public Comic[] executeSearch(int userId, Comic[] keyword) {
         // TODO Auto-generated method stub
@@ -61,6 +63,12 @@ public class ComixAPIFacade implements ComixAPI{
     public String createComic(Comic comic) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createComic'");
+    }
+
+    @Override
+    public User unAuthenticate() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'unAuthenticate'");
     }
 
     
