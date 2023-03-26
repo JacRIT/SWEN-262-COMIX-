@@ -1,13 +1,19 @@
 package UI;
 
 import java.util.Scanner;
+// import API.ComixAPIFacade;
 
 public class CLI {
 
   private String previousInput;
+  // private ComixAPIFacade api;
+
+  public CLI() {
+    // this.api = new ComixAPIFacade();
+  }
 
   /**
-   * How the command line interface will be ran
+   * Command Line interface will be ran from this function
    */
   public static void main(String[] args) {
     System.out.println("Welcome to the Comix Application");
@@ -70,6 +76,7 @@ public class CLI {
     this.log(input);
 
     if (input.equals("I") || input.equals("i")) {
+      this.previousInput = null;
       this.instructions();
       return false;
     }
@@ -81,6 +88,7 @@ public class CLI {
     }
 
     if (input.equals("Exit")) {
+      this.previousInput = null;
       return true;
     }
 
@@ -110,26 +118,18 @@ public class CLI {
    * Print the instructions for a user to log into the system
    */
   private void loginInstructions() {
-    this.log("Enter your username and password in the format:");
-    this.log("Username:Password");
+    this.log("Please enter your username:");
+    // this.log("Username");
   }
 
   /**
-   * Destructure the users input to access their username and password
-   * send destructured variables to the server
+   * Send the users username to the facade
+   * and print welcome message if a user is returned from the facade
    */
-  private void login(String input) {
-    String[] inputSplit = input.split(":");
-
-    if (input.length() != 2) {
-      this.log("Syntax Unrecognized", false);
-      this.loginInstructions();
-    }
-
-    String userName = inputSplit[0];
-    String password = inputSplit[1];
+  private void login(String userName) {
 
     this.log("Welcome, " + userName);
+    this.previousInput = null;
   }
 
 }
