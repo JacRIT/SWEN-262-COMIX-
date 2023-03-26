@@ -1,15 +1,16 @@
 package UI;
 
 import java.util.Scanner;
-// import API.ComixAPIFacade;
+
+import Api.ComixAPIFacade;
 
 public class CLI {
 
   private String previousInput;
-  // private ComixAPIFacade api;
+  private ComixAPIFacade api;
 
   public CLI() {
-    // this.api = new ComixAPIFacade();
+    this.api = new ComixAPIFacade();
   }
 
   /**
@@ -125,9 +126,10 @@ public class CLI {
   /**
    * Send the users username to the facade
    * and print welcome message if a user is returned from the facade
+   * TODO: take away id from authenticate paramater
    */
   private void login(String userName) {
-
+    this.api.authenticate(userName, 0);
     this.log("Welcome, " + userName);
     this.previousInput = null;
   }
