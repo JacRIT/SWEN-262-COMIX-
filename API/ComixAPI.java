@@ -1,3 +1,5 @@
+package Api ;
+
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
