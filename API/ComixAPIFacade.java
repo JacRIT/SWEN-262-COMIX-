@@ -6,7 +6,7 @@ import Model.Search.SortAlgorithm;
 
 public class ComixAPIFacade implements ComixAPI{
     // ComicController ComixController;
-    UserController UserController;
+    UserController userController;
     private GuestComixAPI guestComixAPI;
     private UserComixAPI userComixAPI;
     ComixAPI comixAPI;
@@ -16,12 +16,19 @@ public class ComixAPIFacade implements ComixAPI{
     }
     
     
-    public User authenticate(String username) {
-        // TODO 
-        // Use User Controller to see if user Exists if does then switch to userComixAPI with a user??
-        // if user does not exist then create one and switch to userComixAPI with the new user created.
-
-        throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
+    public User authenticate(String username, int id) { 
+        User user = userController.get(id);
+        if (user != null)
+        {
+            this.comixAPI = userComixAPI;
+        }
+        else
+        {
+            user = new User(-1, username);
+            userController.create(user);
+            this.comixAPI = userComixAPI;
+        }
+        return user;
     }
     
     public void unAuthenticate() {
@@ -30,44 +37,31 @@ public class ComixAPIFacade implements ComixAPI{
 
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
-        // TODO Auto-generated method stub
         comixAPI.setSearchStrategy(null);
-        throw new UnsupportedOperationException("Unimplemented method 'setSortStrategy'");
     }
 
     @Override
     public void setSearchStrategy(SearchAlgorithm searchStrategy) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSearchStrategy'");
+        comixAPI.setSearchStrategy(searchStrategy);
     }
-
-
-    
 
     @Override
     public Comic[] executeSearch(int userId, Comic[] keyword) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'executeSearch'");
+        return comixAPI.executeSearch(userId, keyword);
     }
 
     @Override
     public Comic[] browse(String publisher, String series, String volume, String issue) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'browse'");
+        return comixAPI.browse(publisher, series, volume, issue);
     }
 
     @Override
     public float[] generateStatistics(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generateStatistics'");
+        return comixAPI.generateStatistics(user);
     }
     
     @Override
     public String createComic(Comic comic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createComic'");
+        return comixAPI.createComic(comic);
     }
-
-
-    
 }
