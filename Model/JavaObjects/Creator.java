@@ -1,19 +1,20 @@
-package model;
+package Model.JavaObjects;
 
-public class Publisher {
+public class Creator {
     private final int id ;
     private final String name ;
-
-    public Publisher(int id, String name) {
-        this.id = id ;
-        this.name = name ;
+    
+    public Creator(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return "Publisher [id=" + id + ", name=" + name + "]";
+    public int getId() {
+        return id;
     }
-
+    public String getName() {
+        return name;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -22,7 +23,6 @@ public class Publisher {
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -31,7 +31,7 @@ public class Publisher {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Publisher other = (Publisher) obj;
+        Creator other = (Creator) obj;
         if (id != other.id)
             return false;
         if (name == null) {
@@ -42,11 +42,7 @@ public class Publisher {
         return true;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public String getName() {
-        return name;
-    }
+
 }
+

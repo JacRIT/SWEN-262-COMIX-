@@ -1,4 +1,4 @@
-package JDBChelpers;
+package Controllers.Utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

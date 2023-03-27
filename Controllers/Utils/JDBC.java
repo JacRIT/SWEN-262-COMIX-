@@ -1,4 +1,4 @@
-package JDBChelpers;
+package Controllers.Utils;
 
 public abstract class JDBC {
     
