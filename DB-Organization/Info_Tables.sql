@@ -1,22 +1,22 @@
-CREATE TABLE publisher_info(
+CREATE TABLE IF NOT EXISTS publisher_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
     p_name          VARCHAR NOT NULL                                     --DD                           
 );
 
-CREATE TABLE creator_info(
+CREATE TABLE IF NOT EXISTS creator_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
     c_name          VARCHAR NOT NULL                                     --DD
 );
 
-CREATE TABLE character_info(
+CREATE TABLE IF NOT EXISTS character_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
     character_name  VARCHAR NOT NULL                                     --DD
 );
 
-CREATE TABLE comic_info(
+CREATE TABLE IF NOT EXISTS comic_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
     series          VARCHAR NOT NULL                                    ,--DD
@@ -30,7 +30,7 @@ CREATE TABLE comic_info(
     release_date    VARCHAR NOT NULL
 );
 
-CREATE TABLE user_info(
+CREATE TABLE IF NOT EXISTS user_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
     collection_fk   INTEGER NOT NULL                                    ,--FK
@@ -40,10 +40,14 @@ CREATE TABLE user_info(
     username        VARCHAR(12) NOT NULL                                
 );
 
-CREATE TABLE collection_info(
+CREATE TABLE IF NOT EXISTS collection_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
     nickname        VARCHAR                                              --DD
 );
 
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO swen262 ;
+CREATE TABLE IF NOT EXISTS signature_info(
+    id              SERIAL PRIMARY KEY                                  ,--PK
+
+    s_name          VARCHAR                                              --DD
+);

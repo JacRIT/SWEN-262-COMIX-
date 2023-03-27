@@ -1,12 +1,14 @@
 DROP TABLE IF EXISTS publisher_info ;
 DROP TABLE IF EXISTS creator_info ;
 DROP TABLE IF EXISTS character_info ;
+DROP TABLE IF EXISTS signature_info ;
 DROP TABLE IF EXISTS user_info ;
 DROP TABLE IF EXISTS comic_info ;
 DROP TABLE IF EXISTS collection_info ;
 DROP TABLE IF EXISTS publisher_refrence ;
 DROP TABLE IF EXISTS creator_refrence ;
 DROP TABLE IF EXISTS character_refrence ;
+DROP TABLE IF EXISTS signature_refrence ;
 DROP TABLE IF EXISTS collection_refrence ;
 DROP TABLE IF EXISTS subcollection_refrence ;
 DROP TABLE IF EXISTS comic_ownership ;
