@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class JDBCComicExtractor extends JDBC {
 
     private Comic getComicFromCopyId(int id) {
         
-        int         comic_id ;
+        int         comic_id =0;
         String      series ;
         String      title ;
         int         volume_number ;
@@ -46,10 +45,10 @@ public class JDBCComicExtractor extends JDBC {
         int grade ;
         boolean slabbed ;
 
-        List<Publisher> publishers = new ArrayList<Publisher>();
-        List<Creator> creators = new ArrayList<Creator>();
-        List<Character> characters = new ArrayList<Character>();
-        List<Signature> signatures = new ArrayList<Signature>();
+        ArrayList<Publisher> publishers = new ArrayList<Publisher>();
+        ArrayList<Creator> creators = new ArrayList<Creator>();
+        ArrayList<Character> characters = new ArrayList<Character>();
+        ArrayList<Signature> signatures = new ArrayList<Signature>();
 
         try {
             Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -60,6 +59,7 @@ public class JDBCComicExtractor extends JDBC {
             );
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+
             while(rs.next()){
                 
                 comic_id =              rs.getInt("id") ;
@@ -144,6 +144,7 @@ public class JDBCComicExtractor extends JDBC {
             stmt5.close();
         
             //organize information into java object
+            return new Comic(comic_id, publishers, series, title, volume_number, issue_number, release_date, null, null, description, initial_value, value, grade, slabbed)
 
         } catch (Exception e) {
             System.out.println( e.getMessage() );
