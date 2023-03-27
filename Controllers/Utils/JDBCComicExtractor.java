@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import Model.JavaObjects.*;
 import Model.JavaObjects.Character;
@@ -32,7 +32,7 @@ public class JDBCComicExtractor extends JDBC {
 
     private Comic getComicFromCopyId(int id) {
         
-        int         comic_id =0;
+        int         comic_id ;
         String      series ;
         String      title ;
         int         volume_number ;
@@ -55,12 +55,12 @@ public class JDBCComicExtractor extends JDBC {
 
             //get info from comic_info
             PreparedStatement stmt = conn.prepareStatement(
-                "SELECT * FROM comic_info INNER JOIN comic_ownership ON comic_ownership.comic_fk = comic_info.id WHERE comic_ownership.id = ?"
+                "SELECT * FROM comic_info INNER JOIN comic_ownership ON comic_ownership.comic_fk = comic_info.id WHERE comic_ownership.id = ? LIMIT 1"
             );
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            while(rs.next()){
+            if ( rs.next() ){
                 
                 comic_id =              rs.getInt("id") ;
                 series =                rs.getString("series") ;
@@ -75,6 +75,8 @@ public class JDBCComicExtractor extends JDBC {
                 grade =                 rs.getInt("grade") ;
                 slabbed =               rs.getBoolean("slabbed") ;
 
+            } else {
+                throw new SQLException() ;
             }
             stmt.close();
 
@@ -144,7 +146,7 @@ public class JDBCComicExtractor extends JDBC {
             stmt5.close();
         
             //organize information into java object
-            return new Comic(comic_id, publishers, series, title, volume_number, issue_number, release_date, null, null, description, initial_value, value, grade, slabbed)
+            return new Comic(comic_id, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, value, grade, slabbed) ;
 
         } catch (Exception e) {
             System.out.println( e.getMessage() );
