@@ -16,12 +16,12 @@ public class JDBCInsert extends JDBC {
         
         try (
             Connection conn = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement(statementDetails.sql) ;
+            PreparedStatement stmt = conn.prepareStatement(statementDetails.getSql()) ;
         ) {
 
             int x = 1 ;
             System.out.println("Preparing Statement...");
-            for (Object obj :statementDetails.objects) {
+            for (Object obj :statementDetails.getObjects()) {
                 stmt.setObject(x, obj);
                 x++ ;
                 System.out.println("Preparing Statement..." + obj);

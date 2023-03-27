@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PreparedStatementContainer {
-    public String sql;
-    public List<Object> objects ;
+    private String sql;
+    private List<Object> objects ;
     
     public PreparedStatementContainer() {
         this.sql = "";
@@ -21,5 +21,12 @@ public class PreparedStatementContainer {
     }
     public void appendToObjects(List<Object> objs) {
         this.objects.addAll(objs);
+    }
+
+    public String getSql() {
+        return this.sql;
+    }
+    public List<Object> getObjects() {
+        return objects;
     }
 }
