@@ -11,18 +11,18 @@ public class JDBCInsert extends JDBC {
 
 
     
-    public int executePreparedSQL(String SQL, ArrayList<Object> prepareds) {
+    public int executePreparedSQL(PreparedStatementContainer statementDetails) {
         System.out.println("Creating Connection...");
 
         
         try (
             Connection conn = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement(SQL) ;
+            PreparedStatement stmt = conn.prepareStatement(statementDetails.sql) ;
         ) {
 
             int x = 1 ;
             System.out.println("Preparing Statement...");
-            for (Object obj :prepareds) {
+            for (Object obj :statementDetails.objects) {
                 stmt.setObject(x, obj);
                 x++ ;
                 System.out.println("Preparing Statement..." + obj);
@@ -38,7 +38,7 @@ public class JDBCInsert extends JDBC {
         } 
 
     }
-    public int executeSQL(String SQL) {
+    public int executeSQL(String sql) {
 
         System.out.println("Creating Connection...");
 
@@ -49,7 +49,7 @@ public class JDBCInsert extends JDBC {
 
             System.out.println("Executing Command...");
 
-            stmt.executeUpdate(SQL);
+            stmt.executeUpdate(sql);
             System.out.println("Command Executed!");
             return 1;
 
