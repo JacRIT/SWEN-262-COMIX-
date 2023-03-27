@@ -1,18 +1,17 @@
 package Model.JavaObjects;
 
-public class Character {
+public class Signature {
     private final int id ;
     private final String name ;
     
-    public Character(int id, String name) {
+    public Signature(int id, String name) {
         this.id = id;
         this.name = name;
     }
-
+    
     public int getId() {
         return id;
     }
-
     public String getName() {
         return name;
     }
@@ -25,7 +24,6 @@ public class Character {
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -34,7 +32,7 @@ public class Character {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Character other = (Character) obj;
+        Signature other = (Signature) obj;
         if (id != other.id)
             return false;
         if (name == null) {
