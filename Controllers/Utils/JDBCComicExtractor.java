@@ -194,7 +194,7 @@ public class JDBCComicExtractor extends JDBC {
         stmt5.close();
     
         //organize information into java object
-        return new Comic(comic_id, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, value, grade, slabbed) ;
+        return new Comic(comic_id, copy_id, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, value, grade, slabbed) ;
     }
     
     public static void main(String[] args) {
