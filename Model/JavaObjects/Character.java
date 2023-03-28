@@ -1,8 +1,8 @@
 package Model.JavaObjects;
 
 public class Character {
-    private final int id ;
-    private final String name ;
+    private int id ;
+    private String name ;
     
     public Character(int id, String name) {
         this.id = id;
@@ -43,5 +43,13 @@ public class Character {
         } else if (!name.equals(other.name))
             return false;
         return true;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

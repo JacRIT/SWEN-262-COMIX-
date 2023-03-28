@@ -1,27 +1,44 @@
 package Model.JavaObjects;
 
 public class Signature {
-    private final int id ;
-    private final String name ;
+
+    private int id ;
+    private String name ;
+    private boolean authenticated ;
     
     public Signature(int id, String name) {
         this.id = id;
         this.name = name;
     }
-    
     public int getId() {
         return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
     public String getName() {
         return name;
     }
-
+    public void setName(String name) {
+        this.name = name;
+    }
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+    public void setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
+    }
+    @Override
+    public String toString() {
+        return "Signature [id=" + id + ", name=" + name + ", authenticated=" + authenticated + "]";
+    }
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + id;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + (authenticated ? 1231 : 1237);
         return result;
     }
     @Override
@@ -40,6 +57,9 @@ public class Signature {
                 return false;
         } else if (!name.equals(other.name))
             return false;
+        if (authenticated != other.authenticated)
+            return false;
         return true;
     }
+    
 }
