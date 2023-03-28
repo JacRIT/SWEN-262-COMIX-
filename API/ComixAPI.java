@@ -9,9 +9,7 @@ interface ComixAPI
 {
     /**
      * Sets the sort strategy of the current search strategy.
-     * 
-     * IMPORTANT : this sort strategy may be set somewhere else meaning that this will not need
-     * to be called
+     *
      * @param strategy the strategy being used bt the user.
      */
     void setSortStrategy (SortAlgorithm sortStrategy);
