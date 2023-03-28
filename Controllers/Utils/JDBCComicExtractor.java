@@ -132,8 +132,8 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt2 = this.conn.prepareStatement(
             "SELECT * FROM publisher_info INNER JOIN publisher_refrence ON publisher_refrence.publisher_fk = publisher_info.id WHERE publisher_refrence.comic_fk = ?"
         );
-        stmt.setInt(1, copy_id);
-        ResultSet rs2 = stmt.executeQuery();
+        stmt2.setInt(1, copy_id);
+        ResultSet rs2 = stmt2.executeQuery();
         while(rs2.next()){
             publishers.add(
                 new Publisher(
@@ -148,8 +148,8 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt3 = this.conn.prepareStatement(
             "SELECT * FROM creator_info INNER JOIN creator_refrence ON creator_refrence.creator_fk = creator_info.id WHERE creator_refrence.comic_fk = ?"
         );
-        stmt.setInt(1, copy_id);
-        ResultSet rs3 = stmt.executeQuery();
+        stmt3.setInt(1, copy_id);
+        ResultSet rs3 = stmt3.executeQuery();
         while(rs3.next()){
             creators.add(
                 new Creator(
@@ -164,8 +164,8 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt4 = this.conn.prepareStatement(
             "SELECT * FROM character_info INNER JOIN character_refrence ON character_refrence.character_fk = character_info.id WHERE character_refrence.comic_fk = ?"
         );
-        stmt.setInt(1, copy_id);
-        ResultSet rs4 = stmt.executeQuery();
+        stmt4.setInt(1, copy_id);
+        ResultSet rs4 = stmt4.executeQuery();
         while(rs4.next()){
             characters.add(
                 new Character(
@@ -180,8 +180,8 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt5 = this.conn.prepareStatement(
             "SELECT * FROM signature_info INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id WHERE signature_refrence.comic_fk = ?"
         );
-        stmt.setInt(1, copy_id);
-        ResultSet rs5 = stmt.executeQuery();
+        stmt5.setInt(1, copy_id);
+        ResultSet rs5 = stmt5.executeQuery();
         while(rs5.next()){
             signatures.add(
                 new Signature(
@@ -196,4 +196,13 @@ public class JDBCComicExtractor extends JDBC {
         return new Comic(copy_id, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, value, grade, slabbed) ;
     }
     
+    public static void main(String[] args) {
+        try {
+            JDBCComicExtractor comicExtractor = new JDBCComicExtractor() ;
+            Comic comic = comicExtractor.getComicFromCopyId(1) ;
+            System.out.println(comic);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
