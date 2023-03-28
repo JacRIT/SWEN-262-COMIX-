@@ -41,6 +41,10 @@ public class Creator {
             return false;
         return true;
     }
+    @Override
+    public String toString() {
+        return "Creator [id=" + id + ", name=" + name + "]";
+    }
 
 
 

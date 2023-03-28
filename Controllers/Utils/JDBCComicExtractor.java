@@ -14,7 +14,8 @@ import Model.JavaObjects.Character;
 
 public class JDBCComicExtractor extends JDBC {
     /*
-     * This class is meant to take sql input and return Comic[]
+     * This class is meant to take sql input which ONLY SELECTS copy_fk FROM collection_refrence!
+     * returns Comic[]
      */
     
      private Connection conn ;
@@ -37,7 +38,7 @@ public class JDBCComicExtractor extends JDBC {
         ResultSet rs = stmt.executeQuery(sql) ;
         while (rs.next()) {
             copy_ids.add(
-                rs.getInt("id")
+                rs.getInt("copy_fk")
             );
         }
 
@@ -65,7 +66,7 @@ public class JDBCComicExtractor extends JDBC {
         ResultSet rs = stmt.executeQuery() ;
         while (rs.next()) {
             copy_ids.add(
-                rs.getInt("id")
+                rs.getInt("copy_fk")
             );
         }
 
@@ -132,8 +133,8 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt2 = this.conn.prepareStatement(
             "SELECT * FROM publisher_info INNER JOIN publisher_refrence ON publisher_refrence.publisher_fk = publisher_info.id WHERE publisher_refrence.comic_fk = ?"
         );
-        stmt.setInt(1, copy_id);
-        ResultSet rs2 = stmt.executeQuery();
+        stmt2.setInt(1, copy_id);
+        ResultSet rs2 = stmt2.executeQuery();
         while(rs2.next()){
             publishers.add(
                 new Publisher(
@@ -148,8 +149,8 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt3 = this.conn.prepareStatement(
             "SELECT * FROM creator_info INNER JOIN creator_refrence ON creator_refrence.creator_fk = creator_info.id WHERE creator_refrence.comic_fk = ?"
         );
-        stmt.setInt(1, copy_id);
-        ResultSet rs3 = stmt.executeQuery();
+        stmt3.setInt(1, copy_id);
+        ResultSet rs3 = stmt3.executeQuery();
         while(rs3.next()){
             creators.add(
                 new Creator(
@@ -164,8 +165,8 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt4 = this.conn.prepareStatement(
             "SELECT * FROM character_info INNER JOIN character_refrence ON character_refrence.character_fk = character_info.id WHERE character_refrence.comic_fk = ?"
         );
-        stmt.setInt(1, copy_id);
-        ResultSet rs4 = stmt.executeQuery();
+        stmt4.setInt(1, copy_id);
+        ResultSet rs4 = stmt4.executeQuery();
         while(rs4.next()){
             characters.add(
                 new Character(
@@ -180,8 +181,8 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt5 = this.conn.prepareStatement(
             "SELECT * FROM signature_info INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id WHERE signature_refrence.comic_fk = ?"
         );
-        stmt.setInt(1, copy_id);
-        ResultSet rs5 = stmt.executeQuery();
+        stmt5.setInt(1, copy_id);
+        ResultSet rs5 = stmt5.executeQuery();
         while(rs5.next()){
             signatures.add(
                 new Signature(
@@ -196,4 +197,16 @@ public class JDBCComicExtractor extends JDBC {
         return new Comic(copy_id, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, value, grade, slabbed) ;
     }
     
+    public static void main(String[] args) {
+        try {
+            JDBCComicExtractor comicExtractor = new JDBCComicExtractor() ;
+
+            Comic[] comics = comicExtractor.getComic("SELECT copy_fk FROM collection_refrence INNER JOIN user_info ON user_info.collection_fk = collection_refrence.collection_fk WHERE user_info.id = 1 LIMIT 10") ; // gets the first 10 comics from the database users collection 
+            for (Comic c: comics) {
+                System.out.println(c);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
