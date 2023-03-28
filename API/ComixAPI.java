@@ -1,5 +1,8 @@
 package Api ;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
@@ -9,7 +12,6 @@ interface ComixAPI
 {
     /**
      * Sets the sort strategy of the current search strategy.
-     *
      * @param strategy the strategy being used bt the user.
      */
     void setSortStrategy (SortAlgorithm sortStrategy);
@@ -23,25 +25,34 @@ interface ComixAPI
 
 
     /**
-     * Executes a given search for a user given a keyword.
-     * The implementation for search methods is within each search strategy.
-     * @param userId id of user.
+     * Executes a search given a keyword.
+     * Note : The user must be logged in to search a Personal Collection
+     * Note : The implementation for search methods is within each search strategy.
+     * 
+     * @param isSearchingPersonalCollection whether or not the personal Collection is being searched. 
+     * If the personal collection is not being searched, all comics will be searched.
+     * 
      * @param keyword word being searched.
-     * @return
+     * @return list of comics that match the search executed
      */
-    Comic[] executeSearch(int userId, Comic[] keyword);
+    Comic[] searchComics(Boolean isSearchingPersonalCollection, String keyword);
 
     /**
-     * Executes a search of the Comic Database given any of the parameters and returns
-     * results based on the strategy of search and sort.
-     * TODO : Contact J about a search/sort implementation that takes in these parameters?
-     * @param publisher 
-     * @param series
-     * @param volume
-     * @param issue
-     * @return
+     * Constructs a hierarchy for the personal collection.
+     * Ex: ArrayList<Comic> comicsInPersonalCollection = personalCollectionHierarchy.get("publisher").get("series").get("volume");
+     * Note : instead of issue being the last tier, a Comic is the last tier, but the issue can be gotten from a comic.
+     * @param publisher publisher in personal collection.
+     * @param series series in personal collection.
+     * @param volume volume in personal collection.
+     * @param issue issue in personal collection.
+     * @return  A Personal Collection with the heirarchical structure :
+     *              - publisher
+     *                  - series
+     *                      - volume
+     *                          - issue
+     * 
      */
-    Comic[] browse (String publisher, String series, String volume, String issue);
+    HashMap<String, HashMap<String, HashMap<String, ArrayList<Comic>>>>  browsePersonalCollectionHierarchy ();
 
     /**
      * TODO : Figure out specific requirements on what statistics need to be generated.
@@ -52,8 +63,8 @@ interface ComixAPI
 
     /**
      * Creates a comic in the database.
-     * @param comic
-     * @return
+     * @param comic comic being created
+     * @return TODO : why is this returning a string?
      */
     String createComic (Comic comic);
     
