@@ -18,9 +18,8 @@ public class ComixAPIFacade implements ComixAPI{
     }
     
     
-    public User authenticate(String username, int id) { 
-        // just take in the username not id, and then use userController.getByUsername(username)
-        User user = userController.get(id);
+    public User authenticate(String username) { 
+        User user = userController.getByUsername(username);
         if (user != null)
         {
             this.comixAPI = userComixAPI;
