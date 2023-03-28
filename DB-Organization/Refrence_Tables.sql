@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS signature_refrence(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
     signature_fk    INTEGER NOT NULL                                    ,--FK
-    comic_fk        INTEGER NOT NULL                                    
+    copy_fk        INTEGER NOT NULL                                    
 );
 
 CREATE TABLE IF NOT EXISTS comic_ownership(

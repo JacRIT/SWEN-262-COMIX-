@@ -80,9 +80,9 @@ public class JDBCComicExtractor extends JDBC {
         return comics.toArray(new Comic[0]) ;
     }
 
-    private Comic getComicFromCopyId(int id) throws Exception {
+    private Comic getComicFromCopyId(int copy_id) throws Exception {
         
-        int         copy_id ;
+        int         comic_id ;
         String      series ;
         String      title ;
         int         volume_number ;
@@ -105,12 +105,12 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt = this.conn.prepareStatement(
             "SELECT * FROM comic_info INNER JOIN comic_ownership ON comic_ownership.comic_fk = comic_info.id WHERE comic_ownership.id = ? LIMIT 1"
         );
-        stmt.setInt(1, id);
+        stmt.setInt(1, copy_id);
         ResultSet rs = stmt.executeQuery();
 
         if ( rs.next() ){
             
-            copy_id =              rs.getInt("id") ;
+            comic_id =              rs.getInt("comic_fk") ;
             series =                rs.getString("series") ;
             title =                 rs.getString("title") ;
             volume_number =         rs.getInt("volume_num") ;
@@ -133,7 +133,7 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt2 = this.conn.prepareStatement(
             "SELECT * FROM publisher_info INNER JOIN publisher_refrence ON publisher_refrence.publisher_fk = publisher_info.id WHERE publisher_refrence.comic_fk = ?"
         );
-        stmt2.setInt(1, copy_id);
+        stmt2.setInt(1, comic_id);
         ResultSet rs2 = stmt2.executeQuery();
         while(rs2.next()){
             publishers.add(
@@ -149,7 +149,7 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt3 = this.conn.prepareStatement(
             "SELECT * FROM creator_info INNER JOIN creator_refrence ON creator_refrence.creator_fk = creator_info.id WHERE creator_refrence.comic_fk = ?"
         );
-        stmt3.setInt(1, copy_id);
+        stmt3.setInt(1, comic_id);
         ResultSet rs3 = stmt3.executeQuery();
         while(rs3.next()){
             creators.add(
@@ -165,7 +165,7 @@ public class JDBCComicExtractor extends JDBC {
         PreparedStatement stmt4 = this.conn.prepareStatement(
             "SELECT * FROM character_info INNER JOIN character_refrence ON character_refrence.character_fk = character_info.id WHERE character_refrence.comic_fk = ?"
         );
-        stmt4.setInt(1, copy_id);
+        stmt4.setInt(1, comic_id);
         ResultSet rs4 = stmt4.executeQuery();
         while(rs4.next()){
             characters.add(
@@ -179,7 +179,7 @@ public class JDBCComicExtractor extends JDBC {
 
         //get info from signature_info
         PreparedStatement stmt5 = this.conn.prepareStatement(
-            "SELECT * FROM signature_info INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id WHERE signature_refrence.comic_fk = ?"
+            "SELECT * FROM signature_info INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id WHERE signature_refrence.copy_fk = ?"
         );
         stmt5.setInt(1, copy_id);
         ResultSet rs5 = stmt5.executeQuery();
@@ -194,7 +194,7 @@ public class JDBCComicExtractor extends JDBC {
         stmt5.close();
     
         //organize information into java object
-        return new Comic(copy_id, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, value, grade, slabbed) ;
+        return new Comic(comic_id, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, value, grade, slabbed) ;
     }
     
     public static void main(String[] args) {
