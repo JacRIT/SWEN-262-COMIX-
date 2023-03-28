@@ -13,11 +13,11 @@ public class ComixAPIFacade implements ComixAPI{
     // ComicController ComixController;
     private UserController userController;
     private GuestComixAPI guestComixAPI;
-    private UserComixAPI userComixAPI;
     private ComixAPI comixAPI;
 
     
     public ComixAPIFacade() {
+        guestComixAPI = new GuestComixAPI();
         comixAPI = guestComixAPI;
     }
     
@@ -26,13 +26,13 @@ public class ComixAPIFacade implements ComixAPI{
         User user = userController.getByUsername(username);
         if (user != null)
         {
-            this.comixAPI = new  UserComixAPI(user.getId());
+            this.comixAPI = new UserComixAPI(user.getId());
         }
         else
         {
             user = new User(-1, username);
             userController.create(user);
-            this.comixAPI = userComixAPI;
+            this.comixAPI = new UserComixAPI(user.getId());
         }
         return user;
     }
