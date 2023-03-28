@@ -19,8 +19,7 @@ public class UserController{
 
     public User create (User newUser){  // change to just take username?
         // add a row to collection_info (SERIAL id, nickname)
-        // get the id of the new collection (how?)
-        // add a row to collection_reference (SERIAL id, collection_fk, copy_fk(?))   
+        // get the id of the new collection (how?) 
         // add a row to user_info (SERIAL id, collection_fk, last_name(?), first_name(?), username)
         // get the id of the new user, put it into a User, return it
         return null;
@@ -31,7 +30,7 @@ public class UserController{
     }
 
     public User getByUsername(String username) {
-        // get all user information where the username matches, we are having usernames be unique
+        // get the id where the username matches, we are having usernames be unique
         // put that information into a User instance and return it
 
         // String sql = "SELECT id FROM user_info WHERE username = %s;";
