@@ -37,7 +37,7 @@ public class JDBCComicExtractor extends JDBC {
         ResultSet rs = stmt.executeQuery(sql) ;
         while (rs.next()) {
             copy_ids.add(
-                rs.getInt("id")
+                rs.getInt("copy_fk") //TODO will depend on the sql statement
             );
         }
 
@@ -65,7 +65,7 @@ public class JDBCComicExtractor extends JDBC {
         ResultSet rs = stmt.executeQuery() ;
         while (rs.next()) {
             copy_ids.add(
-                rs.getInt("id")
+                rs.getInt("copy_fk")
             );
         }
 
@@ -199,8 +199,11 @@ public class JDBCComicExtractor extends JDBC {
     public static void main(String[] args) {
         try {
             JDBCComicExtractor comicExtractor = new JDBCComicExtractor() ;
-            Comic comic = comicExtractor.getComicFromCopyId(1) ;
-            System.out.println(comic);
+
+            Comic[] comics = comicExtractor.getComic("SELECT copy_fk FROM collection_refrence INNER JOIN user_info ON user_info.collection_fk = collection_refrence.collection_fk WHERE user_info.id = 1 LIMIT 10") ; // gets the first 10 comics from the database users collection 
+            for (Comic c: comics) {
+                System.out.println(c);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
