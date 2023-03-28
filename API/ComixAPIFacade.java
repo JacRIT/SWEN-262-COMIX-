@@ -41,12 +41,12 @@ public class ComixAPIFacade implements ComixAPI{
 
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
-        this.searchStrategy.setSort(sortStrategy);
+        this.comixAPI.setSortStrategy(sortStrategy);
     }
 
     @Override
     public void setSearchStrategy(SearchAlgorithm searchStrategy) {
-        this.searchStrategy = searchStrategy;
+        this.comixAPI.setSearchStrategy(searchStrategy);
     }
 
     @Override

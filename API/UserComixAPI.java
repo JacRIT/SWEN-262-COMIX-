@@ -4,18 +4,22 @@ import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
+import Model.Search.ConcreteSearches.ExactKeywordSearch;
 
 public class UserComixAPI implements ComixAPI {
+    private SearchAlgorithm searchStrategy; 
+
+    public UserComixAPI() {
+        this.searchStrategy = new ExactKeywordSearch();
+    }
 
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSortStrategy'");
+        this.searchStrategy.setSort(sortStrategy);
     }
     @Override
     public void setSearchStrategy(SearchAlgorithm searchStrategy) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSearchStrategy'");
+        this.searchStrategy = searchStrategy;
     }
     @Override
     public Comic[] executeSearch(int userId, Comic[] keyword) {
