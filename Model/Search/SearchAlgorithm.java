@@ -1,10 +1,11 @@
 package Model.Search;
 
+import Controllers.Utils.PreparedStatementContainer;
+
 public abstract class SearchAlgorithm {
     
     private SortAlgorithm sort ;
 
-    SearchAlgorithm() {}
 
     public void setSort(SortAlgorithm sort) {
         this.sort = sort;
