@@ -6,6 +6,12 @@ import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 
 public class UserComixAPI implements ComixAPI {
+    private int userId;
+
+
+    public UserComixAPI(int userId) {
+        this.userId = userId;
+    }
 
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
