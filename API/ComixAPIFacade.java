@@ -8,10 +8,12 @@ import Model.Search.SortAlgorithm;
 
 public class ComixAPIFacade implements ComixAPI{
     // ComicController ComixController;
-    UserController userController;
+    private UserController userController;
     private GuestComixAPI guestComixAPI;
     private UserComixAPI userComixAPI;
-    ComixAPI comixAPI;
+    private ComixAPI comixAPI;
+
+    private SearchAlgorithm searchStrategy; 
     
     public ComixAPIFacade() {
         comixAPI = guestComixAPI;
@@ -39,12 +41,12 @@ public class ComixAPIFacade implements ComixAPI{
 
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
-        comixAPI.setSearchStrategy(null);
+        this.searchStrategy.setSort(sortStrategy);
     }
 
     @Override
     public void setSearchStrategy(SearchAlgorithm searchStrategy) {
-        comixAPI.setSearchStrategy(searchStrategy);
+        this.searchStrategy = searchStrategy;
     }
 
     @Override
