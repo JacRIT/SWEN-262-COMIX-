@@ -14,7 +14,8 @@ import Model.JavaObjects.Character;
 
 public class JDBCComicExtractor extends JDBC {
     /*
-     * This class is meant to take sql input and return Comic[]
+     * This class is meant to take sql input which ONLY SELECTS copy_fk FROM collection_refrence!
+     * returns Comic[]
      */
     
      private Connection conn ;
@@ -37,7 +38,7 @@ public class JDBCComicExtractor extends JDBC {
         ResultSet rs = stmt.executeQuery(sql) ;
         while (rs.next()) {
             copy_ids.add(
-                rs.getInt("copy_fk") //TODO will depend on the sql statement
+                rs.getInt("copy_fk")
             );
         }
 
