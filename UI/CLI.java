@@ -3,14 +3,17 @@ package UI;
 import java.util.Scanner;
 
 import Api.ComixAPIFacade;
+import Model.JavaObjects.User;
 
 public class CLI {
 
   private String previousInput;
   private ComixAPIFacade api;
+  private User currentUser;
 
   public CLI() {
     this.api = new ComixAPIFacade();
+    this.currentUser = null;
   }
 
   /**
@@ -76,26 +79,45 @@ public class CLI {
     this.log("Input:", false);
     this.log(input);
 
+    // login a user with provided username
+    if (previousInput.equals("L") || previousInput.equals("l")) {
+      this.login(input);
+      return false;
+    }
+
+    // print instructions
     if (input.equals("I") || input.equals("i")) {
       this.previousInput = null;
       this.instructions();
       return false;
     }
 
+    // start accepting a user name to login a user
     if (input.equals("L") || input.equals("l")) {
+
+      // user allready logged in cannot try again
+      if (this.currentUser != null) {
+        this.log("Allready Logged in " + this.currentUser.getName(), false);
+        this.log("Type: \"logout\" to logout");
+        return false;
+      }
+
       this.previousInput = input;
       this.loginInstructions();
       return false;
     }
 
+    // logout a user
+    if (input.equals("logout") || input.equals("Logout")) {
+      this.previousInput = null;
+      this.logout();
+      return false;
+    }
+
+    // stop the application
     if (input.equals("Exit")) {
       this.previousInput = null;
       return true;
-    }
-
-    if (previousInput.equals("L") || previousInput.equals("l")) {
-      this.login(input);
-      return false;
     }
 
     this.log("Command (" + input + ") not found");
@@ -129,9 +151,18 @@ public class CLI {
    * TODO: take away id from authenticate paramater
    */
   private void login(String userName) {
-    this.api.authenticate(userName, 0);
+    this.currentUser = this.api.authenticate(userName, 0);
     this.log("Welcome, " + userName);
     this.previousInput = null;
+  }
+
+  /**
+   * Send a logout request to the API and clear the current user
+   */
+  private void logout() {
+    this.api.unAuthenticate();
+    this.log("Goodbye " + this.currentUser.getName());
+    this.currentUser = null;
   }
 
 }
