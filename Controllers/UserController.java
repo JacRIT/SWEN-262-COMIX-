@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import Controllers.Utils.JDBCInsert;
 import Controllers.Utils.JDBCRead;
 import Model.JavaObjects.User;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 
 public class UserController{
     JDBCRead jdbcRead;
@@ -42,16 +44,14 @@ public class UserController{
 
     public User get(int id){
         /*Get a user using the id */
-        String sql = "SELECT * FROM user_info WHERE id = (?);";
+        String sql = "SELECT id, username FROM user_info WHERE id = ?;";
         ArrayList<Object> var = new ArrayList<>();
         var.add(id);
-        ResultSet rs = jdbcRead.executePreparedSQL(sql, var);
-        try {
-            return new User(rs.getInt("id"), rs.getString("username"));
-        } catch (SQLException e){
-        }
-    
-        return null;
+        ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, var);   // should be [id]
+        if (result.size() == 1)
+            return new User((int) result.get(0), (String) result.get(1));
+        else
+            return null;
     }
 
     /**
