@@ -31,6 +31,7 @@ public class CLI {
   public CLI() {
     this.api = new ComixAPIFacade();
     this.currentUser = null;
+    this.previousInput = "";
   }
 
   /**
@@ -102,19 +103,39 @@ public class CLI {
       return false;
     }
 
+    // register a user with provided username
+    if (previousInput.equals("R") || previousInput.equals("r")) {
+      this.register(input);
+      return false;
+    }
+
     // print instructions
     if (input.equals("I") || input.equals("i")) {
-      this.previousInput = null;
+      this.previousInput = "";
       this.instructions();
+      return false;
+    }
+
+    // start accepting a user name to register user
+    if (input.equals("R") || input.equals("r")) {
+      // user already logged in cannot register inside account
+      if (this.currentUser != null) {
+        this.log("Already Logged in " + this.currentUser.getName(), false);
+        this.log("Type: \"logout\" to logout");
+        return false;
+      }
+
+      this.previousInput = input;
+      this.registerInstructions();
       return false;
     }
 
     // start accepting a user name to login a user
     if (input.equals("L") || input.equals("l")) {
 
-      // user allready logged in cannot try again
+      // user already logged in cannot try again
       if (this.currentUser != null) {
-        this.log("Allready Logged in " + this.currentUser.getName(), false);
+        this.log("Already Logged in " + this.currentUser.getName(), false);
         this.log("Type: \"logout\" to logout");
         return false;
       }
@@ -126,14 +147,14 @@ public class CLI {
 
     // logout a user
     if (input.equals("logout") || input.equals("Logout")) {
-      this.previousInput = null;
+      this.previousInput = "";
       this.logout();
       return false;
     }
 
     // stop the application
     if (input.equals("Exit") || input.equals("exit")) {
-      this.previousInput = null;
+      this.previousInput = "";
       return true;
     }
 
@@ -189,7 +210,9 @@ public class CLI {
   private void instructions() {
     this.log("Welcome to the Comix Application");
     this.log("I - Instructions to use the comix application");
+    this.log("R - Register a new account");
     this.log("L - Log into your account");
+    this.log("Logout - Log out of your account");
     this.log("Browse - Browse all Comics");
     this.log("\t[--sort=<value>] - sort results by\n\t\t\"title\", \"publication\", \"issue\", \"volume\"");
     this.log("Exit - Exit Comix");
@@ -197,18 +220,32 @@ public class CLI {
     return;
   }
 
+  private void registerInstructions() {
+    this.log("Please enter your preferred username:");
+  }
+
+  private void register(String username) {
+    User existingUser = this.api.authenticate(username);
+    if (existingUser == null) {
+      this.currentUser = this.api.register(username);
+      this.log("Welcome, " + username);
+      this.previousInput = "";
+    } else {
+      this.log("Username already taken. Please try a different username.");
+    }
+
+  }
+
   /**
    * Print the instructions for a user to log into the system
    */
   private void loginInstructions() {
     this.log("Please enter your username:");
-    // this.log("Username");
   }
 
   /**
    * Send the users username to the facade
    * and print welcome message if a user is returned from the facade
-   * TODO: take away id from authenticate paramater
    */
   private void login(String userName) {
     if (this.currentUser != null) {
@@ -216,8 +253,13 @@ public class CLI {
       return;
     }
     this.currentUser = this.api.authenticate(userName);
-    this.log("Welcome, " + userName);
-    this.previousInput = null;
+    if(this.currentUser == null) {
+      this.log("This does not seem to be a valid username.");
+      this.log("Consider typeing 'R' to register a new account.");
+    } else {
+      this.log("Welcome, " + userName);
+    }
+    this.previousInput = "";
   }
 
   /**
@@ -228,7 +270,6 @@ public class CLI {
       this.log("Must be logged in to logout");
       return;
     }
-    this.api.unAuthenticate();
     this.log("Goodbye " + this.currentUser.getName());
     this.currentUser = null;
   }
