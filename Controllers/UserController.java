@@ -1,7 +1,5 @@
 package Controllers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Controllers.Utils.JDBCInsert;
@@ -17,34 +15,62 @@ public class UserController{
         this.jdbcInsert = new JDBCInsert();
     }
 
-    public User create (User newUser){  // change to just take username?
+    /**
+     * Creates a new user in the database with the given username.
+     * Involves creating a new row in user_info and in collection_info.
+     * Does not check for the username already existing in the database.
+     * @param username the username of the user being added to the database
+     * @return a User object with the id of the new user entry in the database and the given username
+     */
+    public User create(String username){
         // add a row to collection_info (SERIAL id, nickname)
-        // get the id of the new collection (how?) 
+        // get the id of the new collection
+        String sql = "INSERT INTO collection_info (nickname) VALUES (?);";
+        ArrayList<Object> vars = new ArrayList<>();
+        vars.add(username+"'s Personal Collection");
+        int collection_id = jdbcInsert.executePreparedSQLGetId(sql, vars);
+        System.out.println("collection done");
         // add a row to user_info (SERIAL id, collection_fk, last_name(?), first_name(?), username)
+        sql = "INSERT INTO user_info (collection_fk, username) VALUES (?, ?);";
+        vars.clear();
+        vars.add(collection_id);
+        vars.add(username);
+        int user_id = jdbcInsert.executePreparedSQLGetId(sql, vars);
         // get the id of the new user, put it into a User, return it
-        return null;
+        return new User(user_id, username);
     }
 
+    /**
+     * Creates a User object for the user with the given id.
+     * @param id the id in the database of the user whose information is being retrieved
+     * @return a User oject with the id and username for the user with the given id
+     */
     public User get(int id){
-        return null;
+        /*Get a user using the id */
+        String sql = "SELECT id, username FROM user_info WHERE id = ?;";
+        ArrayList<Object> var = new ArrayList<>();
+        var.add(id);
+        ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, var);   // should be [id, username]
+        if (result.size() == 1)
+            return new User((int) result.get(0), (String) result.get(1));
+        else
+            return null;
     }
 
+    /**
+     * Creates a User object for the user with the given username.
+     * Usernames are assumed to be unique.
+     * @param username the username of the user being retrieved from the database
+     * @return a User object with the matching id for the username given
+     */
     public User getByUsername(String username) {
-        // get the id where the username matches, we are having usernames be unique
-        // put that information into a User instance and return it
-
-        // String sql = "SELECT id FROM user_info WHERE username = %s;";
-        // ArrayList<Object> var = new ArrayList<>();
-        // var.add(username);
-        // ResultSet rs = jdbcRead.executePreparedSQL(sql, var);
-        // try {
-        //     return new User(rs.getInt("id"), username);
-        // } catch (SQLException e) {
-        //     System.out.println(e);
-        //     return null;
-        // }
-
-        // mock return data
-        return new User(2, username);
+        String sql = "SELECT id FROM user_info WHERE username = ?;";
+        ArrayList<Object> var = new ArrayList<>();
+        var.add(username);
+        ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, var);   // should be [id]
+        if (result.size() == 1)
+            return new User((int) result.get(0), username);
+        else
+            return null;
     }
 }
