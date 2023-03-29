@@ -1,8 +1,8 @@
 package Model.JavaObjects;
 
 public class Creator {
-    private final int id ;
-    private final String name ;
+    private int id ;
+    private String name ;
     
     public Creator(int id, String name) {
         this.id = id;
@@ -44,6 +44,12 @@ public class Creator {
     @Override
     public String toString() {
         return "Creator [id=" + id + ", name=" + name + "]";
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 
 

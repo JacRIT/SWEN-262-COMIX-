@@ -49,5 +49,6 @@ CREATE TABLE IF NOT EXISTS collection_info(
 CREATE TABLE IF NOT EXISTS signature_info(
     id              SERIAL PRIMARY KEY                                  ,--PK
 
-    s_name          VARCHAR                                              --DD
+    s_name          VARCHAR                                             ,--DD
+    authenticated   BOOLEAN
 );

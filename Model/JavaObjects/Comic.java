@@ -4,47 +4,47 @@ import java.util.ArrayList;
 
 public class Comic {
    
-    private final int                       id;
-    private final ArrayList<Publisher>      publisher;
-    private final String                    series;
-    private final String                    title;
-    private final int                       volumeNumber;
-    private final String                    issueNumber;
-    private final String                    publicationDate;
-    private final ArrayList<Creator>        creators;
-    private final ArrayList<Character>      principlCharacters;
-    private final String                    description;
-    private final float                     initial_value;
-    private final float                     value;
-    private final int                       grade;
-    private final boolean                   isSlabbed;
+    private  int                       id;
+    private  int                       copyId;
+    private  ArrayList<Publisher>      publisher;
+    private  String                    series;
+    private  String                    title;
+    private  int                       volumeNumber;
+    private  String                    issueNumber;
+    private  String                    publicationDate;
+    private  ArrayList<Creator>        creators;
+    private  ArrayList<Character>      principlCharacters;
+    private  String                    description;
+    private  float                     initialValue;
+    private  float                     value;
+    private  int                       grade;
+    private  boolean                   isSlabbed;
 
-    public Comic(
-                int id, ArrayList<Publisher> publisher, String series, 
-                String title, int volumeNumber, String issueNumber, 
-                String publicationDate, ArrayList<Creator> creators, 
-                ArrayList<Character> principlCharacters, String description,
-                float initial_value, float value, int grade, boolean isSlabbed) 
-    {
-        this.id = id ;
-        this.publisher = publisher ;
-        this.series = series ;
-        this.title = title ;
-        this.volumeNumber = volumeNumber ;
-        this.issueNumber = issueNumber ;
-        this.publicationDate = publicationDate ;
-        this.creators = creators ;
-        this.principlCharacters = principlCharacters ;
-        this.description = description ;
-        this.initial_value = initial_value ;
-        this.value = value ;
-        this.grade = grade ;
-        this.isSlabbed = isSlabbed ;
+    public Comic(int id, int copyId, ArrayList<Publisher> publisher, String series, String title, int volumeNumber,
+            String issueNumber, String publicationDate, ArrayList<Creator> creators,
+            ArrayList<Character> principlCharacters, String description, float initialValue, float value, int grade,
+            boolean isSlabbed) {
+        this.id = id;
+        this.copyId = copyId;
+        this.publisher = publisher;
+        this.series = series;
+        this.title = title;
+        this.volumeNumber = volumeNumber;
+        this.issueNumber = issueNumber;
+        this.publicationDate = publicationDate;
+        this.creators = creators;
+        this.principlCharacters = principlCharacters;
+        this.description = description;
+        this.initialValue = initialValue;
+        this.value = value;
+        this.grade = grade;
+        this.isSlabbed = isSlabbed;
     }
 
     @Override
     public String toString() {
         return "Comic [\n\tid=                 " + id 
+                    + "\n\tcopyId=             " + copyId
                     + "\n\tpublisher=          " + publisher 
                     + "\n\tseries=             " + series 
                     + "\n\ttitle=              " + title
@@ -54,7 +54,7 @@ public class Comic {
                     + "\n\tcreators=           " + creators 
                     + "\n\tprinciplCharacters= " + principlCharacters
                     + "\n\tdescription=        " + description 
-                    + "\n\tinitial_value=      " + initial_value 
+                    + "\n\tinitialValue=       " + initialValue 
                     + "\n\tvalue=              " + value 
                     + "\n\tgrade=              " + grade 
                     + "\n\tisSlabbed=          " + isSlabbed 
@@ -62,11 +62,132 @@ public class Comic {
 
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getCopyId() {
+        return copyId;
+    }
+
+    public void setCopyId(int copyId) {
+        this.copyId = copyId;
+    }
+
+    public ArrayList<Publisher> getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(ArrayList<Publisher> publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getSeries() {
+        return series;
+    }
+
+    public void setSeries(String series) {
+        this.series = series;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getVolumeNumber() {
+        return volumeNumber;
+    }
+
+    public void setVolumeNumber(int volumeNumber) {
+        this.volumeNumber = volumeNumber;
+    }
+
+    public String getIssueNumber() {
+        return issueNumber;
+    }
+
+    public void setIssueNumber(String issueNumber) {
+        this.issueNumber = issueNumber;
+    }
+
+    public String getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void setPublicationDate(String publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
+    public ArrayList<Creator> getCreators() {
+        return creators;
+    }
+
+    public void setCreators(ArrayList<Creator> creators) {
+        this.creators = creators;
+    }
+
+    public ArrayList<Character> getPrinciplCharacters() {
+        return principlCharacters;
+    }
+
+    public void setPrinciplCharacters(ArrayList<Character> principlCharacters) {
+        this.principlCharacters = principlCharacters;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public float getInitialValue() {
+        return initialValue;
+    }
+
+    public void setInitialValue(float initialValue) {
+        this.initialValue = initialValue;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public boolean isSlabbed() {
+        return isSlabbed;
+    }
+
+    public void setSlabbed(boolean isSlabbed) {
+        this.isSlabbed = isSlabbed;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + id;
+        result = prime * result + copyId;
         result = prime * result + ((publisher == null) ? 0 : publisher.hashCode());
         result = prime * result + ((series == null) ? 0 : series.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
@@ -76,7 +197,7 @@ public class Comic {
         result = prime * result + ((creators == null) ? 0 : creators.hashCode());
         result = prime * result + ((principlCharacters == null) ? 0 : principlCharacters.hashCode());
         result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + Float.floatToIntBits(initial_value);
+        result = prime * result + Float.floatToIntBits(initialValue);
         result = prime * result + Float.floatToIntBits(value);
         result = prime * result + grade;
         result = prime * result + (isSlabbed ? 1231 : 1237);
@@ -93,6 +214,8 @@ public class Comic {
             return false;
         Comic other = (Comic) obj;
         if (id != other.id)
+            return false;
+        if (copyId != other.copyId)
             return false;
         if (publisher == null) {
             if (other.publisher != null)
@@ -136,7 +259,7 @@ public class Comic {
                 return false;
         } else if (!description.equals(other.description))
             return false;
-        if (Float.floatToIntBits(initial_value) != Float.floatToIntBits(other.initial_value))
+        if (Float.floatToIntBits(initialValue) != Float.floatToIntBits(other.initialValue))
             return false;
         if (Float.floatToIntBits(value) != Float.floatToIntBits(other.value))
             return false;
@@ -145,62 +268,6 @@ public class Comic {
         if (isSlabbed != other.isSlabbed)
             return false;
         return true;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public ArrayList<Publisher> getPublisher() {
-        return publisher;
-    }
-
-    public String getSeries() {
-        return series;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public int getVolumeNumber() {
-        return volumeNumber;
-    }
-
-    public String getIssueNumber() {
-        return issueNumber;
-    }
-
-    public String getPublicationDate() {
-        return publicationDate;
-    }
-
-    public ArrayList<Creator> getCreators() {
-        return creators;
-    }
-
-    public ArrayList<Character> getPrinciplCharacters() {
-        return principlCharacters;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public float getInitial_value() {
-        return initial_value;
-    }
-
-    public float getValue() {
-        return value;
-    }
-
-    public int getGrade() {
-        return grade;
-    }
-
-    public boolean isSlabbed() {
-        return isSlabbed;
     }
 
 }

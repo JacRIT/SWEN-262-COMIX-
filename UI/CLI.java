@@ -1,11 +1,28 @@
 package UI;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 import Api.ComixAPIFacade;
+import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 
 public class CLI {
+
+  public static enum SortingStrategy {
+    Title("Title"), Issue("Issue"), Publication("Publication"), Volume("Volume");
+
+    private String value;
+
+    private SortingStrategy(String value) {
+      this.value = value;
+    }
+
+    @Override
+    public String toString() {
+      return this.value;
+    }
+  }
 
   private String previousInput;
   private ComixAPIFacade api;
@@ -136,14 +153,55 @@ public class CLI {
     }
 
     // stop the application
-    if (input.equals("Exit")) {
+    if (input.equals("Exit") || input.equals("exit")) {
       this.previousInput = "";
       return true;
+    }
+
+    // Only commands that contain flags make it to this point
+
+    String[] flags = this.seperateFlags(input);
+
+    // Input was empty
+    if (flags.length == 0) {
+      this.log("Command (" + input + ") is missing...?");
+      return false;
+    }
+
+    String baseCommand = flags[0];
+
+    // remove base command from flags
+    flags = Arrays.stream(flags).filter((flag) -> {
+      return !baseCommand.equals(flag);
+    }).toArray(String[]::new);
+
+    // Browse comics with possibly specified command
+    if (baseCommand.equals("B") || baseCommand.equals("b")) {
+      String sortFlag = SortingStrategy.Title.toString();
+
+      if (flags.length > 1) {
+        String flag = flags[1];
+        // sortFlag = flag.s
+      }
+
+      this.browseComics(input);
+      return false;
     }
 
     this.log("Command (" + input + ") not found");
 
     return false;
+  }
+
+  /**
+   * Destructure the input to find flags marked as --<flag>=<value>
+   */
+  private String[] seperateFlags(String input) {
+    String[] flags = input.split("--");
+    flags = Arrays.stream(flags).map((flag) -> {
+      return flag.trim();
+    }).toArray(String[]::new);
+    return flags;
   }
 
   /**
@@ -155,6 +213,8 @@ public class CLI {
     this.log("R - Register a new account");
     this.log("L - Log into your account");
     this.log("Logout - Log out of your account");
+    this.log("Browse - Browse all Comics");
+    this.log("\t[--sort=<value>] - sort results by\n\t\t\"title\", \"publication\", \"issue\", \"volume\"");
     this.log("Exit - Exit Comix");
 
     return;
@@ -188,6 +248,10 @@ public class CLI {
    * and print welcome message if a user is returned from the facade
    */
   private void login(String userName) {
+    if (this.currentUser != null) {
+      this.log("Please logout first...");
+      return;
+    }
     this.currentUser = this.api.authenticate(userName);
     if(this.currentUser == null) {
       this.log("This does not seem to be a valid username.");
@@ -202,9 +266,34 @@ public class CLI {
    * Send a logout request to the API and clear the current user
    */
   private void logout() {
-    //this.api.unAuthenticate();    no longer in ComixAPIFacade
+    if (this.currentUser == null) {
+      this.log("Must be logged in to logout");
+      return;
+    }
     this.log("Goodbye " + this.currentUser.getName());
     this.currentUser = null;
+  }
+
+  /**
+   * Send a request to gather all the comics in the database
+   * then prints them to the command line
+   */
+  private void browseComics(String inputSortStrategy) {
+    String sortStrategy = "partial";
+    if (inputSortStrategy.length() > 0) {
+      sortStrategy = inputSortStrategy;
+    }
+    Comic[] allComics = this.searchComics("", "null", inputSortStrategy);
+    this.log(Arrays.toString(allComics));
+  }
+
+  /**
+   * Send a search request to search the entire database using
+   * using the search type and sort type that the user specifies
+   */
+  private Comic[] searchComics(String keyword, String searchType, String sortType) {
+
+    return new Comic[1];
   }
 
 }

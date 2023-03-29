@@ -1,5 +1,8 @@
 package Api;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import Controllers.UserController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -8,10 +11,10 @@ import Model.Search.SortAlgorithm;
 
 public class ComixAPIFacade implements ComixAPI{
     // ComicController ComixController;
-    UserController userController;
+    private UserController userController;
     private GuestComixAPI guestComixAPI;
-    private UserComixAPI userComixAPI;
-    ComixAPI comixAPI;
+    private ComixAPI comixAPI;
+
     
     public ComixAPIFacade() {
         guestComixAPI = new GuestComixAPI();
@@ -20,6 +23,7 @@ public class ComixAPIFacade implements ComixAPI{
         this.userController = new UserController();
     }
     
+
     /**
      * Authenticates a user by allowing access to extra functionality from ComixAPI once successfully authenticated.
      * @param username
@@ -30,7 +34,7 @@ public class ComixAPIFacade implements ComixAPI{
         User user = userController.getByUsername(username);
         if (user != null)
         {
-            this.comixAPI = userComixAPI;
+            this.comixAPI = new UserComixAPI(user.getId());
         }
         else
         {
@@ -55,22 +59,22 @@ public class ComixAPIFacade implements ComixAPI{
 
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
-        comixAPI.setSearchStrategy(null);
+        this.comixAPI.setSortStrategy(sortStrategy);
     }
 
     @Override
     public void setSearchStrategy(SearchAlgorithm searchStrategy) {
-        comixAPI.setSearchStrategy(searchStrategy);
+        this.comixAPI.setSearchStrategy(searchStrategy);
     }
 
     @Override
-    public Comic[] executeSearch(int userId, Comic[] keyword) {
-        return comixAPI.executeSearch(userId, keyword);
+    public Comic[] searchComics(Boolean isSearchingPersonalCollection, String keyword) {
+        return comixAPI.searchComics(isSearchingPersonalCollection, keyword);
     }
 
     @Override
-    public Comic[] browse(String publisher, String series, String volume, String issue) {
-        return comixAPI.browse(publisher, series, volume, issue);
+    public HashMap<String, HashMap<String, HashMap<String, ArrayList<Comic>>>> browsePersonalCollectionHierarchy() {
+        return comixAPI.browsePersonalCollectionHierarchy();
     }
 
     @Override
