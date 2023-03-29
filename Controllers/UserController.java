@@ -41,6 +41,7 @@ public class UserController{
     }
 
     public User get(int id){
+        /*Get a user using the id */
         return null;
     }
 
