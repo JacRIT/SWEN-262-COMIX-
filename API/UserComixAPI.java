@@ -6,7 +6,6 @@ import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 
 public class UserComixAPI implements ComixAPI {
-
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
         // TODO Auto-generated method stub

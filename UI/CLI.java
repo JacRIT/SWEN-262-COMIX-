@@ -14,6 +14,7 @@ public class CLI {
   public CLI() {
     this.api = new ComixAPIFacade();
     this.currentUser = null;
+    this.previousInput = "";
   }
 
   /**
@@ -85,19 +86,39 @@ public class CLI {
       return false;
     }
 
+    // register a user with provided username
+    if (previousInput.equals("R") || previousInput.equals("r")) {
+      this.register(input);
+      return false;
+    }
+
     // print instructions
     if (input.equals("I") || input.equals("i")) {
-      this.previousInput = null;
+      this.previousInput = "";
       this.instructions();
+      return false;
+    }
+
+    // start accepting a user name to register user
+    if (input.equals("R") || input.equals("r")) {
+      // user already logged in cannot register inside account
+      if (this.currentUser != null) {
+        this.log("Already Logged in " + this.currentUser.getName(), false);
+        this.log("Type: \"logout\" to logout");
+        return false;
+      }
+
+      this.previousInput = input;
+      this.registerInstructions();
       return false;
     }
 
     // start accepting a user name to login a user
     if (input.equals("L") || input.equals("l")) {
 
-      // user allready logged in cannot try again
+      // user already logged in cannot try again
       if (this.currentUser != null) {
-        this.log("Allready Logged in " + this.currentUser.getName(), false);
+        this.log("Already Logged in " + this.currentUser.getName(), false);
         this.log("Type: \"logout\" to logout");
         return false;
       }
@@ -109,14 +130,14 @@ public class CLI {
 
     // logout a user
     if (input.equals("logout") || input.equals("Logout")) {
-      this.previousInput = null;
+      this.previousInput = "";
       this.logout();
       return false;
     }
 
     // stop the application
     if (input.equals("Exit")) {
-      this.previousInput = null;
+      this.previousInput = "";
       return true;
     }
 
@@ -131,10 +152,28 @@ public class CLI {
   private void instructions() {
     this.log("Welcome to the Comix Application");
     this.log("I - Instructions to use the comix application");
+    this.log("R - Register a new account");
     this.log("L - Log into your account");
+    this.log("Logout - Log out of your account");
     this.log("Exit - Exit Comix");
 
     return;
+  }
+
+  private void registerInstructions() {
+    this.log("Please enter your preferred username:");
+  }
+
+  private void register(String username) {
+    User existingUser = this.api.authenticate(username);
+    if (existingUser == null) {
+      this.currentUser = this.api.register(username);
+      this.log("Welcome, " + username);
+      this.previousInput = "";
+    } else {
+      this.log("Username already taken. Please try a different username.");
+    }
+
   }
 
   /**
@@ -142,25 +181,28 @@ public class CLI {
    */
   private void loginInstructions() {
     this.log("Please enter your username:");
-    // this.log("Username");
   }
 
   /**
    * Send the users username to the facade
    * and print welcome message if a user is returned from the facade
-   * TODO: take away id from authenticate paramater
    */
   private void login(String userName) {
-    this.currentUser = this.api.authenticate(userName, 0);
-    this.log("Welcome, " + userName);
-    this.previousInput = null;
+    this.currentUser = this.api.authenticate(userName);
+    if(this.currentUser == null) {
+      this.log("This does not seem to be a valid username.");
+      this.log("Consider typeing 'R' to register a new account.");
+    } else {
+      this.log("Welcome, " + userName);
+    }
+    this.previousInput = "";
   }
 
   /**
    * Send a logout request to the API and clear the current user
    */
   private void logout() {
-    this.api.unAuthenticate();
+    //this.api.unAuthenticate();    no longer in ComixAPIFacade
     this.log("Goodbye " + this.currentUser.getName());
     this.currentUser = null;
   }
