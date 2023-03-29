@@ -37,6 +37,15 @@ public class UserController{
 
     public User get(int id){
         /*Get a user using the id */
+        String sql = "SELECT * FROM user_info WHERE id = (?);";
+        ArrayList<Object> var = new ArrayList<>();
+        var.add(id);
+        ResultSet rs = jdbcRead.executePreparedSQL(sql, var);
+        try {
+            return new User(rs.getInt("id"), rs.getString("username"));
+        } catch (SQLException e){
+        }
+    
         return null;
     }
 
