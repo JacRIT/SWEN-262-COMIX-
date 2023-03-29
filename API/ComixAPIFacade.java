@@ -33,12 +33,7 @@ public class ComixAPIFacade implements ComixAPI{
         }
         else
         {
-<<<<<<< HEAD
            return null; 
-=======
-            user = userController.create(username);
-            this.comixAPI = new UserComixAPI(user.getId());
->>>>>>> 06dce6ecb65e92cd5e94309581cb015af37b2033
         }
         return user;
     }
@@ -49,8 +44,7 @@ public class ComixAPIFacade implements ComixAPI{
      * @param username
      */
     public void register(String username) {
-        User user = new User(-1, username);
-        userController.create(user);
+        userController.create(username);
     }
     
     public void logout() {
