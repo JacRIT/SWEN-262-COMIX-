@@ -1,11 +1,5 @@
 package Api;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
@@ -14,8 +8,7 @@ import Model.Search.ConcreteSearches.ExactKeywordSearch;
 
 public class GuestComixAPI implements ComixAPI{
     private SearchAlgorithm searchStrategy; 
-    private ComicController comicController;
-    private int noUser = -1;
+    // private ComicController comicController;
 
     public GuestComixAPI() {
         searchStrategy = new ExactKeywordSearch();
@@ -31,13 +24,10 @@ public class GuestComixAPI implements ComixAPI{
     }
 
     @Override
-    public Comic[] searchComics(String keyword) {
-        return comicController.search(noUser, keyword);
-    }
-
-    @Override
-    public HashMap<String, HashMap<String, HashMap<String, ArrayList<Comic>>>> browsePersonalCollectionHierarchy() {
-        return null;
+    public Comic[] searchComics(int userId, String keyword) {
+        // return comicController.search(userId, keyword);
+        throw new UnsupportedOperationException("Unimplemented method 'searchComics'");
+        
     }
 
     @Override
@@ -50,5 +40,12 @@ public class GuestComixAPI implements ComixAPI{
     public String createComic(Comic comic) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createComic'");
+    }
+
+    @Override
+    public Comic[] browsePersonalCollectionHierarchy(int userId, String publish, String series, String volumes,
+            String issue) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'browsePersonalCollectionHierarchy'");
     }
 }

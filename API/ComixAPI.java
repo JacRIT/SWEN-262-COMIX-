@@ -35,7 +35,7 @@ interface ComixAPI
      * @param keyword word being searched.
      * @return list of comics that match the search executed
      */
-    Comic[] searchComics(Boolean isSearchingPersonalCollection, String keyword);
+    Comic[] searchComics(int userId, String keyword);
 
     /**
      * Constructs a hierarchy for the personal collection.
@@ -45,14 +45,9 @@ interface ComixAPI
      * @param series series in personal collection.
      * @param volume volume in personal collection.
      * @param issue issue in personal collection.
-     * @return  A Personal Collection with the heirarchical structure :
-     *              - publisher
-     *                  - series
-     *                      - volume
-     *                          - issue
-     * 
+     * @return  A personal collection.
      */
-    HashMap<String, HashMap<String, HashMap<String, ArrayList<Comic>>>>  browsePersonalCollectionHierarchy ();
+    Comic[]  browsePersonalCollectionHierarchy (int userId, String publish, String series, String volumes,  String issue);
 
     /**
      * TODO : Figure out specific requirements on what statistics need to be generated.

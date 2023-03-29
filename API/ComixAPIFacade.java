@@ -1,8 +1,5 @@
 package Api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import Controllers.UserController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -13,14 +10,15 @@ public class ComixAPIFacade implements ComixAPI{
     // ComicController ComixController;
     private UserController userController;
     private GuestComixAPI guestComixAPI;
+    private UserComixAPI userComixAPI;
     private ComixAPI comixAPI;
 
     
     public ComixAPIFacade() {
-        guestComixAPI = new GuestComixAPI();
-        userComixAPI = new UserComixAPI();
-        comixAPI = guestComixAPI;
+        this.guestComixAPI = new GuestComixAPI();
+        this.userComixAPI = new UserComixAPI();
         this.userController = new UserController();
+        comixAPI = guestComixAPI;
     }
     
 
@@ -34,7 +32,7 @@ public class ComixAPIFacade implements ComixAPI{
         User user = userController.getByUsername(username);
         if (user != null)
         {
-            this.comixAPI = new UserComixAPI(user.getId());
+            this.comixAPI = userComixAPI;
         }
         else
         {
@@ -68,13 +66,8 @@ public class ComixAPIFacade implements ComixAPI{
     }
 
     @Override
-    public Comic[] searchComics(Boolean isSearchingPersonalCollection, String keyword) {
-        return comixAPI.searchComics(isSearchingPersonalCollection, keyword);
-    }
-
-    @Override
-    public HashMap<String, HashMap<String, HashMap<String, ArrayList<Comic>>>> browsePersonalCollectionHierarchy() {
-        return comixAPI.browsePersonalCollectionHierarchy();
+    public Comic[] searchComics(int userId, String keyword) {
+        return comixAPI.searchComics(userId, keyword);
     }
 
     @Override
@@ -85,5 +78,13 @@ public class ComixAPIFacade implements ComixAPI{
     @Override
     public String createComic(Comic comic) {
         return comixAPI.createComic(comic);
+    }
+
+
+    @Override
+    public Comic[] browsePersonalCollectionHierarchy(int userId, String publish, String series, String volumes,
+            String issue) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'browsePersonalCollectionHierarchy'");
     }
 }
