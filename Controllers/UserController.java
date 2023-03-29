@@ -17,12 +17,22 @@ public class UserController{
         this.jdbcInsert = new JDBCInsert();
     }
 
-    public User create (User newUser){  // change to just take username?
+    public User create(String username){
         // add a row to collection_info (SERIAL id, nickname)
-        // get the id of the new collection (how?) 
+        // get the id of the new collection
+        String sql = "INSERT INTO collection_info (nickname) VALUES (?);";
+        ArrayList<Object> vars = new ArrayList<>();
+        vars.add(username+"'s Personal Collection");
+        int collection_id = jdbcInsert.executePreparedSQLGetId(sql, vars);
+        System.out.println("collection done");
         // add a row to user_info (SERIAL id, collection_fk, last_name(?), first_name(?), username)
+        sql = "INSERT INTO user_info (collection_fk, username) VALUES (?, ?);";
+        vars.clear();
+        vars.add(collection_id);
+        vars.add(username);
+        int user_id = jdbcInsert.executePreparedSQLGetId(sql, vars);
         // get the id of the new user, put it into a User, return it
-        return null;
+        return new User(user_id, username);
     }
 
     public User get(int id){
@@ -33,9 +43,9 @@ public class UserController{
         // get the id where the username matches, we are having usernames be unique
         // put that information into a User instance and return it
 
-        // String sql = "SELECT id FROM user_info WHERE username = %s;";
+        // String sql = "SELECT id FROM user_info WHERE username = ?;";
         // ArrayList<Object> var = new ArrayList<>();
-        // var.add(username);
+        // var.add("username");
         // ResultSet rs = jdbcRead.executePreparedSQL(sql, var);
         // try {
         //     return new User(rs.getInt("id"), username);
@@ -46,5 +56,15 @@ public class UserController{
 
         // mock return data
         return new User(2, username);
+    }
+
+    public static void main(String[] args) {
+        UserController uc = new UserController();
+        // User user = uc.create("fred");
+        User user = uc.getByUsername("fred");
+        if (user != null)
+            System.out.println(user.getId()+" "+user.getName());
+        else
+            System.out.println("User is null");
     }
 }
