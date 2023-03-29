@@ -151,7 +151,7 @@ public class CLI {
    * TODO: take away id from authenticate paramater
    */
   private void login(String userName) {
-    this.currentUser = this.api.authenticate(userName, 0);
+    this.currentUser = this.api.authenticate(userName);
     this.log("Welcome, " + userName);
     this.previousInput = null;
   }
