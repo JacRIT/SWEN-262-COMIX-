@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import Controllers.Utils.JDBCInsert;
 import Controllers.Utils.JDBCRead;
 import Model.JavaObjects.User;
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
 
 public class UserController{
     JDBCRead jdbcRead;
@@ -18,11 +16,11 @@ public class UserController{
     }
 
     /**
-     * Creates a new user in the database.
+     * Creates a new user in the database with the given username.
      * Involves creating a new row in user_info and in collection_info.
      * Does not check for the username already existing in the database.
      * @param username the username of the user being added to the database
-     * @return an User object with the id of the new user entry in the database and the given username
+     * @return a User object with the id of the new user entry in the database and the given username
      */
     public User create(String username){
         // add a row to collection_info (SERIAL id, nickname)
@@ -42,12 +40,17 @@ public class UserController{
         return new User(user_id, username);
     }
 
+    /**
+     * Creates a User object for the user with the given id.
+     * @param id the id in the database of the user whose information is being retrieved
+     * @return a User oject with the id and username for the user with the given id
+     */
     public User get(int id){
         /*Get a user using the id */
         String sql = "SELECT id, username FROM user_info WHERE id = ?;";
         ArrayList<Object> var = new ArrayList<>();
         var.add(id);
-        ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, var);   // should be [id]
+        ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, var);   // should be [id, username]
         if (result.size() == 1)
             return new User((int) result.get(0), (String) result.get(1));
         else
@@ -55,10 +58,10 @@ public class UserController{
     }
 
     /**
-     * Creates a User object based on the information in the database for the user with the given username.
+     * Creates a User object for the user with the given username.
      * Usernames are assumed to be unique.
      * @param username the username of the user being retrieved from the database
-     * @return an User object with the matching id for the username given
+     * @return a User object with the matching id for the username given
      */
     public User getByUsername(String username) {
         String sql = "SELECT id FROM user_info WHERE username = ?;";
