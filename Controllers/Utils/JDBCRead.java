@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class JDBCRead extends JDBC {
-    public ResultSet executePreparedSQL(String SQL, ArrayList<Object> prepareds) {
+    public ArrayList<Object> executePreparedSQL(String SQL, ArrayList<Object> prepareds) {
         System.out.println("Creating Connection...");
         try (
             Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -26,7 +26,13 @@ public class JDBCRead extends JDBC {
 
             ResultSet rs = stmt.executeQuery();
             System.out.println("Command Executed!");
-            return rs;
+
+            ArrayList<Object> result = new ArrayList<>();
+            while(rs.next()) {
+                result.add(rs.getObject(1));
+            }
+
+            return result;
 
         } catch (SQLException e) {
             throw new Error("Outer Problem", e);

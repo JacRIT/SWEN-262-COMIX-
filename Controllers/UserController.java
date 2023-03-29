@@ -1,7 +1,5 @@
 package Controllers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Controllers.Utils.JDBCInsert;
@@ -17,6 +15,13 @@ public class UserController{
         this.jdbcInsert = new JDBCInsert();
     }
 
+    /**
+     * Creates a new user in the database.
+     * Involves creating a new row in user_info and in collection_info.
+     * Does not check for the username already existing in the database.
+     * @param username the username of the user being added to the database
+     * @return an User object with the id of the new user entry in the database and the given username
+     */
     public User create(String username){
         // add a row to collection_info (SERIAL id, nickname)
         // get the id of the new collection
@@ -39,32 +44,20 @@ public class UserController{
         return null;
     }
 
+    /**
+     * Creates a User object based on the information in the database for the user with the given username.
+     * Usernames are assumed to be unique.
+     * @param username the username of the user being retrieved from the database
+     * @return an User object with the matching id for the username given
+     */
     public User getByUsername(String username) {
-        // get the id where the username matches, we are having usernames be unique
-        // put that information into a User instance and return it
-
-        // String sql = "SELECT id FROM user_info WHERE username = ?;";
-        // ArrayList<Object> var = new ArrayList<>();
-        // var.add("username");
-        // ResultSet rs = jdbcRead.executePreparedSQL(sql, var);
-        // try {
-        //     return new User(rs.getInt("id"), username);
-        // } catch (SQLException e) {
-        //     System.out.println(e);
-        //     return null;
-        // }
-
-        // mock return data
-        return new User(2, username);
-    }
-
-    public static void main(String[] args) {
-        UserController uc = new UserController();
-        // User user = uc.create("fred");
-        User user = uc.getByUsername("fred");
-        if (user != null)
-            System.out.println(user.getId()+" "+user.getName());
+        String sql = "SELECT id FROM user_info WHERE username = ?;";
+        ArrayList<Object> var = new ArrayList<>();
+        var.add(username);
+        ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, var);   // should be [id]
+        if (result.size() == 1)
+            return new User((int) result.get(0), username);
         else
-            System.out.println("User is null");
+            return null;
     }
 }
