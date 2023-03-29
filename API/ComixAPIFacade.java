@@ -10,30 +10,45 @@ public class ComixAPIFacade implements ComixAPI{
     // ComicController ComixController;
     UserController userController;
     private GuestComixAPI guestComixAPI;
+    private UserComixAPI userComixAPI;
     ComixAPI comixAPI;
     
     public ComixAPIFacade() {
-        
+        guestComixAPI = new GuestComixAPI();
+        userComixAPI = new UserComixAPI();
         comixAPI = guestComixAPI;
     }
     
-    
+    /**
+     * Authenticates a user by allowing access to extra functionality from ComixAPI once successfully authenticated.
+     * @param username
+     * @return  Success : User
+     *          Fail    : Null
+     */
     public User authenticate(String username) { 
         User user = userController.getByUsername(username);
         if (user != null)
         {
-            this.comixAPI = new UserComixAPI(user.getId());
+            this.comixAPI = userComixAPI;
         }
         else
         {
-            user = new User(-1, username);
-            userController.create(user);
-            this.comixAPI = new UserComixAPI(user.getId());
+           return null; 
         }
         return user;
     }
+
+    /**
+     * Creates and registers a new user.
+     * You can now be authenticated with this new username.
+     * @param username
+     */
+    public void register(String username) {
+        User user = new User(-1, username);
+        userController.create(user);
+    }
     
-    public void unAuthenticate() {
+    public void logout() {
         comixAPI = guestComixAPI;
     }
 
