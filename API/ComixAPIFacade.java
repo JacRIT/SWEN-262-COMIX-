@@ -26,8 +26,7 @@ public class ComixAPIFacade implements ComixAPI{
         }
         else
         {
-            user = new User(-1, username);
-            userController.create(user);
+            user = userController.create(username);
             this.comixAPI = new UserComixAPI(user.getId());
         }
         return user;
