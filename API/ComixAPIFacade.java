@@ -17,6 +17,7 @@ public class ComixAPIFacade implements ComixAPI{
         guestComixAPI = new GuestComixAPI();
         userComixAPI = new UserComixAPI();
         comixAPI = guestComixAPI;
+        this.userController = new UserController();
     }
     
     /**
@@ -42,9 +43,10 @@ public class ComixAPIFacade implements ComixAPI{
      * Creates and registers a new user.
      * You can now be authenticated with this new username.
      * @param username
+     * @return a User object with the id and username of the newly created user
      */
-    public void register(String username) {
-        userController.create(username);
+    public User register(String username) {
+        return userController.create(username);
     }
     
     public void logout() {
