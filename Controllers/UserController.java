@@ -30,6 +30,14 @@ public class UserController{
         vars.add(username+"'s Personal Collection");
         int collection_id = jdbcInsert.executePreparedSQLGetId(sql, vars);
         System.out.println("collection done");
+
+        //add the new collection to its own subcollection (for reursive searching)
+        vars.clear();
+        vars.add(collection_id);
+        vars.add(collection_id);
+        sql = "INSERT INTO subcollection_refrence(collect_fk, subcollect_fk) VALUES (?, ?)" ;
+        jdbcInsert.executePreparedSQLGetId(sql, vars) ;
+
         // add a row to user_info (SERIAL id, collection_fk, last_name(?), first_name(?), username)
         sql = "INSERT INTO user_info (collection_fk, username) VALUES (?, ?);";
         vars.clear();
