@@ -66,8 +66,8 @@ public class ComixAPIFacade implements ComixAPI{
     }
 
     @Override
-    public Comic[] searchComics(int userId, String keyword) {
-        return comixAPI.searchComics(userId, keyword);
+    public Comic[] searchComics(String keyword) {
+        return comixAPI.searchComics(keyword);
     }
 
     @Override
@@ -82,9 +82,8 @@ public class ComixAPIFacade implements ComixAPI{
 
 
     @Override
-    public Comic[] browsePersonalCollection(int userId, String publish, String series, String volumes,
+    public Comic[] browsePersonalCollection(int userId, String publisher, String series, String volume,
             String issue) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'browsePersonalCollectionHierarchy'");
+        return comixAPI.browsePersonalCollection(userId, publisher, series, volume, issue);
     }
 }

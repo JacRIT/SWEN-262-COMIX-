@@ -1,5 +1,6 @@
 package Api;
 
+import Controllers.ComicController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
@@ -8,7 +9,7 @@ import Model.Search.ConcreteSearches.ExactKeywordSearch;
 
 public class GuestComixAPI implements ComixAPI{
     private SearchAlgorithm searchStrategy; 
-    // private ComicController comicController;
+    private ComicController comicController;
 
     public GuestComixAPI() {
         searchStrategy = new ExactKeywordSearch();
@@ -20,14 +21,12 @@ public class GuestComixAPI implements ComixAPI{
     }
     @Override
     public void setSearchStrategy(SearchAlgorithm searchStrategy) {
-        this.searchStrategy = searchStrategy;
+        this.comicController.setSearch(searchStrategy);
     }
 
     @Override
-    public Comic[] searchComics(int userId, String keyword) {
-        // return comicController.search(userId, keyword);
-        throw new UnsupportedOperationException("Unimplemented method 'searchComics'");
-        
+    public Comic[] searchComics(String keyword) {
+        return comicController.search(1, keyword);
     }
 
     @Override

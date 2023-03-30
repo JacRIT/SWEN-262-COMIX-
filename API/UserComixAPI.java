@@ -24,13 +24,12 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public void setSearchStrategy(SearchAlgorithm searchStrategy) {
-        this.searchStrategy = searchStrategy;
+        comicController.setSearch(searchStrategy);
     }
 
     @Override
-    public Comic[] searchComics(int userId, String keyword) {
-        // return comicController.search(userId, keyword);
-        throw new UnsupportedOperationException("Unimplemented method 'searchComics'");
+    public Comic[] searchComics(String keyword) {
+        return comicController.search(1, keyword);
     }
 
     @Override

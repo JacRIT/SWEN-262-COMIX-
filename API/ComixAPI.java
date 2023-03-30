@@ -21,29 +21,25 @@ interface ComixAPI
 
 
     /**
-     * Executes a search given a keyword.
-     * Note : The user must be logged in to search a Personal Collection
-     * Note : The implementation for search methods is within each search strategy.
-     * 
-     * @param isSearchingPersonalCollection whether or not the personal Collection is being searched. 
-     * If the personal collection is not being searched, all comics will be searched.
+     * Executes a search on all comics in database given a keyword.
      * 
      * @param keyword word being searched.
      * @return list of comics that match the search executed
      */
-    Comic[] searchComics(int userId, String keyword);
+    Comic[] searchComics(String keyword);
 
     /**
-     * Constructs a hierarchy for the personal collection.
-     * Ex: ArrayList<Comic> comicsInPersonalCollection = personalCollectionHierarchy.get("publisher").get("series").get("volume");
-     * Note : instead of issue being the last tier, a Comic is the last tier, but the issue can be gotten from a comic.
-     * @param publisher publisher in personal collection.
-     * @param series series in personal collection.
-     * @param volume volume in personal collection.
-     * @param issue issue in personal collection.
-     * @return  A personal collection.
+     * 
+     * @param userId Determines whether a personal collection is being searched within the database
+     *          if userId == 1 then it well search all comics
+     *          if userId > 1 then it will search the personal collection of the user with that id.
+     * @param publish
+     * @param series
+     * @param volumes
+     * @param issue
+     * @return All the comics in a given personal collection from the given parameters sorted by publisher, series, volumes, and issue#
      */
-    Comic[]  browsePersonalCollection(int userId, String publish, String series, String volumes,  String issue);
+    Comic[]  browsePersonalCollection(int userId, String publisher, String series, String volume,  String issue);
 
     /**
      * TODO : Figure out specific requirements on what statistics need to be generated.
@@ -55,7 +51,7 @@ interface ComixAPI
     /**
      * Creates a comic in the database.
      * @param comic comic being created
-     * @return TODO : why is this returning a string?
+     * @return Name of comic created.
      */
     String createComic (Comic comic);
     
