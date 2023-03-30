@@ -99,7 +99,12 @@ public class PartialKeywordSearch extends SearchAlgorithm {
                             comic_info
                         INNER JOIN 
                             comic_ownership ON comic_ownership.comic_fk = comic_info.id
-                        WHERE comic_info.series LIKE (CONCAT('%',?,'%')) OR comic_info.title LIKE (CONCAT('%',?,'%')) OR comic_info.descrip LIKE (CONCAT('%',?,'%'))
+                        WHERE 
+                                comic_info.series LIKE (CONCAT('%',?,'%')) 
+                            OR 
+                                comic_info.title LIKE (CONCAT('%',?,'%')) 
+                            OR 
+                                comic_info.descrip LIKE (CONCAT('%',?,'%'))
                     )
                 )
             """
