@@ -46,7 +46,7 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Comic[] browsePersonalCollectionHierarchy(int userId, String publish, String series, String volumes,
+    public Comic[] browsePersonalCollection(int userId, String publish, String series, String volumes,
             String issue) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'browsePersonalCollectionHierarchy'");

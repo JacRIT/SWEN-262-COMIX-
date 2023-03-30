@@ -1,8 +1,4 @@
 package Api ;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
@@ -47,7 +43,7 @@ interface ComixAPI
      * @param issue issue in personal collection.
      * @return  A personal collection.
      */
-    Comic[]  browsePersonalCollectionHierarchy (int userId, String publish, String series, String volumes,  String issue);
+    Comic[]  browsePersonalCollection(int userId, String publish, String series, String volumes,  String issue);
 
     /**
      * TODO : Figure out specific requirements on what statistics need to be generated.
