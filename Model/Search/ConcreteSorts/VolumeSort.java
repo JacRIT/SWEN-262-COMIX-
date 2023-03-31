@@ -6,8 +6,7 @@ public class VolumeSort implements SortAlgorithm {
 
     @Override
     public String sort() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sort'");
+        return "ORDER BY volume_num";
     }
     
 }
