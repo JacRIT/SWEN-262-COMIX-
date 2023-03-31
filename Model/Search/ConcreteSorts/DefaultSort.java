@@ -6,7 +6,7 @@ public class DefaultSort implements SortAlgorithm {
 
     @Override
     public String sort() {
-        return "";
+        return "ORDER BY series, title, issue_num" ;
     }
     
 }

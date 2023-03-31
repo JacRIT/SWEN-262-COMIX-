@@ -6,8 +6,7 @@ public class DateSort implements SortAlgorithm {
 
     @Override
     public String sort() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sort'");
+        return "ORDER BY release_year,release_month,release_day" ;
     }
     
 }
