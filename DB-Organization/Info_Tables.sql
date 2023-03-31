@@ -27,7 +27,10 @@ CREATE TABLE IF NOT EXISTS comic_info(
     initial_value   FLOAT                                               ,
     descrip         VARCHAR                                             ,
 
-    release_date    VARCHAR NOT NULL
+    release_date    VARCHAR NOT NULL									,
+	release_day		INTEGER 											,
+	release_month	INTEGER 											,
+	release_year	INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS user_info(
