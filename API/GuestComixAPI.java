@@ -7,11 +7,12 @@ import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 import Model.Search.ConcreteSearches.ExactKeywordSearch;
 
-public class GuestComixAPI implements ComixAPI{
-    private SearchAlgorithm searchStrategy; 
+public class GuestComixAPI implements ComixAPI {
+    private SearchAlgorithm searchStrategy;
     private ComicController comicController;
 
     public GuestComixAPI() {
+        comicController = new ComicController();
         searchStrategy = new ExactKeywordSearch();
     }
 
@@ -19,6 +20,7 @@ public class GuestComixAPI implements ComixAPI{
     public void setSortStrategy(SortAlgorithm sortStrategy) {
         this.searchStrategy.setSort(sortStrategy);
     }
+
     @Override
     public void setSearchStrategy(SearchAlgorithm searchStrategy) {
         this.comicController.setSearch(searchStrategy);
