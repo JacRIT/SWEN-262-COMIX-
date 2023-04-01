@@ -6,6 +6,21 @@ import java.util.Scanner;
 import Api.ComixAPIFacade;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
+// import Model.JavaObjects.User;
+import Model.Search.SearchAlgorithm;
+import Model.Search.SortAlgorithm;
+import Model.Search.ConcreteSearches.ExactKeywordSearch;
+import Model.Search.ConcreteSearches.ExactNumberSearch;
+import Model.Search.ConcreteSearches.GapSearch;
+import Model.Search.ConcreteSearches.PartialKeywordSearch;
+import Model.Search.ConcreteSorts.DateSort;
+// import Model.Search.SortAlgorithm;
+// import Model.Search.ConcreteSearches.PartialKeywordSearch;
+// import Model.Search.ConcreteSorts.DefaultSort;
+import Model.Search.ConcreteSorts.DefaultSort;
+import Model.Search.ConcreteSorts.IssueNumberSort;
+import Model.Search.ConcreteSorts.TitleSort;
+import Model.Search.ConcreteSorts.VolumeSort;
 
 public class CLI {
 
@@ -57,7 +72,11 @@ public class CLI {
           break;
 
       } catch (Error err) {
-        System.out.println("Something went wrong");
+        cli.log("Something went wrong", false);
+        cli.log(err.getLocalizedMessage(), false);
+        cli.log(err.getMessage(), false);
+        cli.log(err.getCause().toString(), false);
+        cli.log(err.getStackTrace().toString(), false);
         break;
       }
     }
@@ -94,8 +113,8 @@ public class CLI {
    */
   public Boolean reader(String input) {
 
-    this.log("Input:", false);
-    this.log(input);
+    // this.log("Input:", false);
+    // this.log(input);
 
     // login a user with provided username
     if (previousInput.equals("L") || previousInput.equals("l")) {
@@ -106,6 +125,20 @@ public class CLI {
     // register a user with provided username
     if (previousInput.equals("R") || previousInput.equals("r")) {
       this.register(input);
+      return false;
+    }
+
+    // search comics that match input
+    if (previousInput.equals("Search") | previousInput.equals("search")) {
+      Comic[] comics = this.searchComics(input.trim());
+
+      this.log("", false);
+      this.log("Search Results: ");
+      for (Comic comic : comics) {
+        this.log("\t" + comic.toString());
+      }
+
+      previousInput = "";
       return false;
     }
 
@@ -175,16 +208,46 @@ public class CLI {
       return !baseCommand.equals(flag);
     }).toArray(String[]::new);
 
-    // Browse comics with possibly specified command
-    if (baseCommand.equals("B") || baseCommand.equals("b")) {
-      String sortFlag = SortingStrategy.Title.toString();
+    // intiate a search through the comics
+    if (baseCommand.equals("Search") || baseCommand.equals("search")) {
+      String searchCommand = "";
+      String sortCommand = "";
 
-      if (flags.length > 1) {
-        String flag = flags[1];
-        // sortFlag = flag.s
+      // grab the value from inputed flags
+      for (String flag : flags) {
+        String[] seperatedCommand = flag.split("=");
+
+        // invalid syntax
+        if (seperatedCommand.length != 2) {
+          this.log("Flags must contain a name and value ie; \"--<name>=<value>", false);
+          this.log(flag);
+          return false;
+        }
+
+        String flagName = seperatedCommand[0].trim();
+        String flagValue = seperatedCommand[1].trim();
+
+        if (flagName.equals("searchBy")) {
+          searchCommand = flagValue;
+          continue;
+        }
+        if (flagName.equals("sortBy")) {
+          sortCommand = flagValue;
+          continue;
+        }
+
+        // invalid flag
+        this.log("Unkown flag, press \"I\" for instructions");
+        return false;
       }
 
-      this.browseComics(input);
+      // validate flags are correct
+      if (!this.setSearchOptions(searchCommand, sortCommand))
+        return false;
+
+      this.previousInput = baseCommand;
+      this.searchInstructions();
+
       return false;
     }
 
@@ -211,10 +274,15 @@ public class CLI {
     this.log("Welcome to the Comix Application");
     this.log("I - Instructions to use the comix application");
     this.log("R - Register a new account");
-    this.log("L - Log into your account");
-    this.log("Logout - Log out of your account");
-    this.log("Browse - Browse all Comics");
-    this.log("\t[--sort=<value>] - sort results by\n\t\t\"title\", \"publication\", \"issue\", \"volume\"");
+    if (this.currentUser == null)
+      this.log("L - Log into your account");
+    else
+      this.log("Logout - Log out of your account");
+    // this.log("Browse - Browse all Comics");
+    this.log("Search - Search through all Comics", false);
+    this.log("\t[--sortBy=<value>] - sort results by\n\t\t\"title\", \"publication\", \"issue\", \"volume\"", false);
+    this.log(
+        "\t[--searchBy=<value>] - search comics by\n\t\t\"partial-search\", \"exact-search\", \"exact-number\", \"gap-search\"");
     this.log("Exit - Exit Comix");
 
     return;
@@ -222,6 +290,39 @@ public class CLI {
 
   private void registerInstructions() {
     this.log("Please enter your preferred username:");
+  }
+
+  /**
+   * Print the instructions for a user to log into the system
+   */
+  private void loginInstructions() {
+    this.log("Please enter your username:");
+  }
+
+  /**
+   * Print small instructions for a user to enter a search phrase
+   */
+  private void searchInstructions() {
+    this.log("Enter keyphrase to search by:");
+  }
+
+  /**
+   * Send the users username to the facade
+   * and print welcome message if a user is returned from the facade
+   */
+  private void login(String userName) {
+    if (this.currentUser != null) {
+      this.log("Please logout first...");
+      return;
+    }
+    this.currentUser = this.api.authenticate(userName);
+    if (this.currentUser == null) {
+      this.log("This does not seem to be a valid username.");
+      this.log("Consider typeing 'R' to register a new account.");
+    } else {
+      this.log("Welcome, " + userName);
+    }
+    this.previousInput = "";
   }
 
   private void register(String username) {
@@ -237,32 +338,6 @@ public class CLI {
   }
 
   /**
-   * Print the instructions for a user to log into the system
-   */
-  private void loginInstructions() {
-    this.log("Please enter your username:");
-  }
-
-  /**
-   * Send the users username to the facade
-   * and print welcome message if a user is returned from the facade
-   */
-  private void login(String userName) {
-    if (this.currentUser != null) {
-      this.log("Please logout first...");
-      return;
-    }
-    this.currentUser = this.api.authenticate(userName);
-    if(this.currentUser == null) {
-      this.log("This does not seem to be a valid username.");
-      this.log("Consider typeing 'R' to register a new account.");
-    } else {
-      this.log("Welcome, " + userName);
-    }
-    this.previousInput = "";
-  }
-
-  /**
    * Send a logout request to the API and clear the current user
    */
   private void logout() {
@@ -275,25 +350,82 @@ public class CLI {
   }
 
   /**
-   * Send a request to gather all the comics in the database
-   * then prints them to the command line
-   */
-  private void browseComics(String inputSortStrategy) {
-    String sortStrategy = "partial";
-    if (inputSortStrategy.length() > 0) {
-      sortStrategy = inputSortStrategy;
-    }
-    Comic[] allComics = this.searchComics("", "null", inputSortStrategy);
-    this.log(Arrays.toString(allComics));
-  }
-
-  /**
    * Send a search request to search the entire database using
    * using the search type and sort type that the user specifies
    */
-  private Comic[] searchComics(String keyword, String searchType, String sortType) {
+  private Comic[] searchComics(String keyword) {
+    Comic[] comics = this.api.searchComics(keyword);
 
-    return new Comic[1];
+    this.log("Results Length: " + comics.length);
+    return comics;
+  }
+
+  /**
+   * Given a keyword for both a searching and sorting strategy this prepares the
+   * api to correctly perform the desired search
+   */
+  private boolean setSearchOptions(String searchType, String sortType) {
+    SearchAlgorithm searchStrategy = this.matchSearchStrategy(searchType);
+    SortAlgorithm sortStrategy = this.matchSortStrategy(sortType);
+
+    if (searchStrategy == null) {
+      this.log("Invalid searchBy value: " + searchType);
+      return false;
+    }
+
+    if (sortStrategy == null) {
+      this.log("Invalid sortBy value: " + sortType);
+      return false;
+    }
+
+    this.api.setSearchStrategy(searchStrategy);
+    this.api.setSortStrategy(sortStrategy);
+    return true;
+  }
+
+  /**
+   * Take an inputed string and match it to a specific Search Algorithm
+   * if a match cannot be made return null which specifies a wrong command
+   * defaults to partial PartialKeywordSearch if empty or null string
+   */
+  private SearchAlgorithm matchSearchStrategy(String searchType) {
+    if (searchType.equals("partial-search") || searchType.length() == 0 || searchType == null) {
+      return new PartialKeywordSearch();
+    }
+    if (searchType.equals("exact-search")) {
+      return new ExactKeywordSearch();
+    }
+    if (searchType.equals("exact-number")) {
+      return new ExactNumberSearch();
+    }
+    if (searchType.equals("gap-search")) {
+      return new GapSearch();
+    }
+    return null;
+  }
+
+  /**
+   * Take an inputed string and match it to a specific Sort Algorithm
+   * if a match cannot be made return null which specifies a wrong command
+   * defaults to partial DefaultSort if empty or null string
+   */
+  private SortAlgorithm matchSortStrategy(String sortType) {
+    if (sortType.length() == 0 || sortType == null) {
+      return new DefaultSort();
+    }
+    if (sortType.equals("title")) {
+      return new TitleSort();
+    }
+    if (sortType.equals("publication")) {
+      return new DateSort();
+    }
+    if (sortType.equals("issue")) {
+      return new IssueNumberSort();
+    }
+    if (sortType.equals("volume")) {
+      return new VolumeSort();
+    }
+    return null;
   }
 
 }
