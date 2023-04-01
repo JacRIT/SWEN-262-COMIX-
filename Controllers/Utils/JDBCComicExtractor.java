@@ -20,7 +20,7 @@ public class JDBCComicExtractor extends JDBC {
     
      private Connection conn ;
 
-    JDBCComicExtractor() throws Exception {
+    public JDBCComicExtractor() throws Exception {
         // when the object is created, the connection is started.
         this.conn = DriverManager.getConnection(URL, USER, PASS);
     }
