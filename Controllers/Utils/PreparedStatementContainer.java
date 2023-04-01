@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PreparedStatementContainer {
     private String sql;
-    private List<Object> objects ;
+    private ArrayList<Object> objects ;
     
     public PreparedStatementContainer() {
         this.sql = "";
@@ -26,7 +26,7 @@ public class PreparedStatementContainer {
     public String getSql() {
         return this.sql;
     }
-    public List<Object> getObjects() {
+    public ArrayList<Object> getObjects() {
         return objects;
     }
 }

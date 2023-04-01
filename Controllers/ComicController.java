@@ -1,10 +1,13 @@
 package Controllers;
 import Model.Search.SearchAlgorithm;
-
+import Model.Search.ConcreteSearches.PartialKeywordSearch;
 import Model.JavaObjects.*;
 
 import Controllers.Utils.JDBCInsert;
 import Controllers.Utils.JDBCRead;
+import Controllers.Utils.PreparedStatementContainer;
+
+import java.util.ArrayList;
 
 import Controllers.Utils.JDBCComicExtractor;
 
@@ -13,7 +16,7 @@ public class ComicController {
     JDBCInsert jdbcInsert;
     JDBCComicExtractor jdbcComicExtractor;
 
-    public ComicController() throws Exception{
+    public ComicController() throws Exception {
         this.jdbcRead = new JDBCRead();
         this.jdbcInsert = new JDBCInsert();
         this.jdbcComicExtractor = new JDBCComicExtractor();
@@ -30,13 +33,23 @@ public class ComicController {
     }
 
     /**
-     * Searches the database for a Comic
+     * Searches the database for all comics matching the search term owned by the given user.
+     * Based of the search set on the instance of ComicController, and the sort set on that search instance.
      * @param userId the user id to identify the collection
-     * @param searchTerm the type of search to execute
-     * @return 
+     * @param searchTerm the search term to look for
+     * @return an array of Comics matching the search request, sorted
      */
-    public Comic[] search(int userId, String searchTerm){
-        return null;
+    public Comic[] search(int userId, String searchTerm) throws Exception {
+        PreparedStatementContainer psc = this.searchStrategy.search(userId, searchTerm);
+        ArrayList<Object> copy_ids = this.jdbcRead.executePreparedSQL(psc.getSql(), psc.getObjects());
+        int i = 0;
+        Comic[] comics = new Comic[copy_ids.size()];
+        for(Object o : copy_ids) {
+            int copy_id = (int) o;
+            Comic c = get(copy_id);
+            comics[i++] = c;
+        }
+        return comics;
     }
 
     /**
@@ -116,4 +129,16 @@ public class ComicController {
     }
 
 
+    public static void main(String[] args) throws Exception{
+        ComicController cc = new ComicController();
+        // Comic comic = cc.get(1);
+        // System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
+        SearchAlgorithm sa = new PartialKeywordSearch();
+        cc.setSearch(sa);
+        Comic[] comics = cc.search(1, "Control");
+        for (Comic comic : comics) {
+            System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
+        }
+
+    }
 }
