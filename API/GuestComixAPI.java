@@ -1,5 +1,7 @@
 package Api;
 
+import java.io.IOException;
+
 import Controllers.ComicController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -11,7 +13,7 @@ public class GuestComixAPI implements ComixAPI {
     private SearchAlgorithm searchStrategy;
     private ComicController comicController;
 
-    public GuestComixAPI() {
+    public GuestComixAPI() throws Exception{
         comicController = new ComicController();
         searchStrategy = new ExactKeywordSearch();
     }
