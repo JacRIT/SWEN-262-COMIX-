@@ -80,16 +80,21 @@ public class ComicController {
      * @param comic The comic to be deleted
      */
     public void delete(int userId, Comic comic){
+        int copyId = comic.getCopyId();
+        //deletes references and then the copy
+        String deleteSql = "DELETE from signature_refrence, collection_refrence WHERE copy_fk = " + Integer.toString(copyId)
+        + "; DELETE from comic_ownership WHERE id = " + Integer.toString(copyId);
+        jdbcInsert.executeSQL(deleteSql);
     }
 
     /**
      * Creates a comic in a collection
      * @param userId the userId of the collection the comic will be in
-     * @param comic The comic to be created
+     * @param comic The comic to be inserted
      * @param collectionId The collection the comic is in
      */
     public void create(int userId, Comic comic, int collectionId){
-
+        //Jade note: Does it make more sense to just pass in the comic's id through these? 
     }
 
     /**
@@ -99,6 +104,11 @@ public class ComicController {
      * @param comic the comic to be added
      */
     public void addToCollection(int userId, int collectionId, Comic comic){
+        //does it need the userId if the collectionId is already personal?
+        String comicid = Integer.toString(comic.getId());
+        String sql = "INSERT INTO collection_refrence(collection_fk, copy_fk)" +
+        "VALUES(" + Integer.toString(collectionId) + ", " + comicid + ")";
+        jdbcInsert.executeSQL(sql);
     }
 
     /**
@@ -108,8 +118,12 @@ public class ComicController {
      * @param comic the comic to be removed
      */
     public void removeFromCollection(int userId, int collectionId, Comic comic){
-
+        String comicId = Integer.toString(comic.getId());
+        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = " + Integer.toString(collectionId)
+        + "AND copy_fk = " + comicId;
+        jdbcInsert.executeSQL(sql);
     }
+
 
     /**
      * Gets the statistics
