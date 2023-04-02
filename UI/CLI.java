@@ -43,7 +43,7 @@ public class CLI {
   private ComixAPIFacade api;
   private User currentUser;
 
-  public CLI() {
+  public CLI() throws Exception {
     this.api = new ComixAPIFacade();
     this.currentUser = null;
     this.previousInput = "";
@@ -53,35 +53,44 @@ public class CLI {
    * Command Line interface will be ran from this function
    */
   public static void main(String[] args) {
-    System.out.println("Welcome to the Comix Application");
-    System.out.println("Press \"I\" for instructions");
-    System.out.println();
+    System.out.println("Loading...");
 
     Scanner scanner = new Scanner(System.in);
-    CLI cli = new CLI();
 
-    // System.out.print("-> ");
-    while (true) {
-      try {
-        System.out.print("-> ");
-        String input = scanner.nextLine();
+    try {
 
-        Boolean exit = cli.reader(input.trim());
+      CLI cli = new CLI();
+      System.out.println("Welcome to the Comix Application");
+      System.out.println("Press \"I\" for instructions");
+      System.out.println();
 
-        if (exit)
+      // System.out.print("-> ");
+      while (true) {
+        try {
+          System.out.print("-> ");
+          String input = scanner.nextLine();
+
+          Boolean exit = cli.reader(input.trim());
+
+          if (exit)
+            break;
+
+        } catch (Exception err) {
+          cli.log("Something went wrong", false);
+          cli.log(err.getLocalizedMessage(), false);
+          cli.log(err.getMessage(), false);
+          cli.log(err.getCause().toString(), false);
+          cli.log(err.getStackTrace().toString(), false);
           break;
-
-      } catch (Error err) {
-        cli.log("Something went wrong", false);
-        cli.log(err.getLocalizedMessage(), false);
-        cli.log(err.getMessage(), false);
-        cli.log(err.getCause().toString(), false);
-        cli.log(err.getStackTrace().toString(), false);
-        break;
+        }
       }
+
+      scanner.close();
+
+    } catch (Exception e) {
+      System.out.println("CLI Creation Exception");
     }
 
-    scanner.close();
   }
 
   /**
@@ -111,7 +120,7 @@ public class CLI {
    * 
    * @param input : String entered by the user
    */
-  public Boolean reader(String input) {
+  public Boolean reader(String input) throws Exception {
 
     // this.log("Input:", false);
     // this.log(input);
@@ -353,7 +362,7 @@ public class CLI {
    * Send a search request to search the entire database using
    * using the search type and sort type that the user specifies
    */
-  private Comic[] searchComics(String keyword) {
+  private Comic[] searchComics(String keyword) throws Exception {
     Comic[] comics = this.api.searchComics(keyword);
 
     this.log("Results Length: " + comics.length);

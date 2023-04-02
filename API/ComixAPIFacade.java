@@ -6,37 +6,34 @@ import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 
-public class ComixAPIFacade implements ComixAPI{
+public class ComixAPIFacade implements ComixAPI {
     // ComicController ComixController;
     private UserController userController;
     private GuestComixAPI guestComixAPI;
     private UserComixAPI userComixAPI;
     private ComixAPI comixAPI;
 
-    
-    public ComixAPIFacade() {
+    public ComixAPIFacade() throws Exception {
         this.guestComixAPI = new GuestComixAPI();
         this.userComixAPI = new UserComixAPI();
         this.userController = new UserController();
-        comixAPI = guestComixAPI;
+        this.comixAPI = guestComixAPI;
     }
-    
 
     /**
-     * Authenticates a user by allowing access to extra functionality from ComixAPI once successfully authenticated.
+     * Authenticates a user by allowing access to extra functionality from ComixAPI
+     * once successfully authenticated.
+     * 
      * @param username
-     * @return  Success : User
-     *          Fail    : Null
+     * @return Success : User
+     *         Fail : Null
      */
-    public User authenticate(String username) { 
+    public User authenticate(String username) {
         User user = userController.getByUsername(username);
-        if (user != null)
-        {
+        if (user != null) {
             this.comixAPI = userComixAPI;
-        }
-        else
-        {
-           return null; 
+        } else {
+            return null;
         }
         return user;
     }
@@ -44,13 +41,14 @@ public class ComixAPIFacade implements ComixAPI{
     /**
      * Creates and registers a new user.
      * You can now be authenticated with this new username.
+     * 
      * @param username
      * @return a User object with the id and username of the newly created user
      */
     public User register(String username) {
         return userController.create(username);
     }
-    
+
     public void logout() {
         comixAPI = guestComixAPI;
     }
@@ -66,7 +64,7 @@ public class ComixAPIFacade implements ComixAPI{
     }
 
     @Override
-    public Comic[] searchComics(String keyword) {
+    public Comic[] searchComics(String keyword) throws Exception {
         return comixAPI.searchComics(keyword);
     }
 
@@ -74,12 +72,11 @@ public class ComixAPIFacade implements ComixAPI{
     public float[] generateStatistics(User user) {
         return comixAPI.generateStatistics(user);
     }
-    
+
     @Override
     public String createComic(Comic comic) {
         return comixAPI.createComic(comic);
     }
-
 
     @Override
     public Comic[] browsePersonalCollection(int userId, String publisher, String series, String volume,
