@@ -1,7 +1,5 @@
 package Api;
 
-
-
 import Controllers.ComicController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -10,7 +8,7 @@ import Model.Search.SortAlgorithm;
 import Model.Search.ConcreteSearches.ExactKeywordSearch;
 
 public class UserComixAPI implements ComixAPI {
-    private SearchAlgorithm searchStrategy; 
+    private SearchAlgorithm searchStrategy;
     private ComicController comicController;
 
     public UserComixAPI() {
@@ -28,7 +26,7 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Comic[] searchComics(String keyword) {
+    public Comic[] searchComics(String keyword) throws Exception {
         return comicController.search(1, keyword);
     }
 
