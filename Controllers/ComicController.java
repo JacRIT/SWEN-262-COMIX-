@@ -53,12 +53,14 @@ public class ComicController {
     }
 
     /**
-     * Gets the comic from the database
-     * @param id the id of the comic
+     * Gets the comic from the the database
+     * @param id the id of the COPY
      * @return the comic
      */
     public Comic get(int id) throws Exception{
         //I'm trying to use the jdbcComicExtractor here, since I saw that the copy_id = the id in the database, I'm using that here
+        //EDIT: create new method in jdbcComicExtractor, be able to get a copy using copyFK
+        //use last method in jdbccomicextractor
         String statement = "SELECT copy_fk FROM collection_refrence INNER JOIN user_info ON user_info.collection_fk = collection_refrence.collection_fk WHERE user_info.id = 1 AND copy_fk = " + Integer.toString(id);
         Comic[] comics = jdbcComicExtractor.getComic(statement);
         return (Comic) comics[0];
@@ -71,6 +73,8 @@ public class ComicController {
      * @param updatedComic the new comic replacing the old data
      */
     public void update(int userId, Comic comic, Comic updatedComic){
+
+        //We'll be doing two update methods
         
     }
 
@@ -95,12 +99,13 @@ public class ComicController {
      */
     public void create(int userId, Comic comic, int collectionId){
         //Jade note: Does it make more sense to just pass in the comic's id through these? 
+        //This is passing in a comic object, break it down to and create it into the database
     }
 
     /**
      * Adds a comic to a collection
      * @param userId the userId of the collection the comic will be in
-     * @param collectionId The collection the comic will be in
+     * @param collectionId The collection the comic will be in, basically user ids
      * @param comic the comic to be added
      */
     public void addToCollection(int userId, int collectionId, Comic comic){
@@ -131,6 +136,7 @@ public class ComicController {
      * @return
      */
     public String getStatistics(int userId){
+    //cpunts number of values and totals values of comics
         return null;
     }
 
