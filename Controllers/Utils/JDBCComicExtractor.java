@@ -80,7 +80,7 @@ public class JDBCComicExtractor extends JDBC {
         return comics.toArray(new Comic[0]) ;
     }
 
-    private Comic getComicFromCopyId(int copy_id) throws Exception {
+    public Comic getComicFromCopyId(int copy_id) throws Exception {
         
         int         comic_id ;
         String      series ;

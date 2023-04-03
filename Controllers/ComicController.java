@@ -58,12 +58,7 @@ public class ComicController {
      * @return the comic
      */
     public Comic get(int id) throws Exception{
-        //I'm trying to use the jdbcComicExtractor here, since I saw that the copy_id = the id in the database, I'm using that here
-        //EDIT: create new method in jdbcComicExtractor, be able to get a copy using copyFK
-        //use last method in jdbccomicextractor
-        String statement = "SELECT copy_fk FROM collection_refrence INNER JOIN user_info ON user_info.collection_fk = collection_refrence.collection_fk WHERE user_info.id = 1 AND copy_fk = " + Integer.toString(id);
-        Comic[] comics = jdbcComicExtractor.getComic(statement);
-        return (Comic) comics[0];
+        return jdbcComicExtractor.getComicFromCopyId(id);
     }
 
     /**
