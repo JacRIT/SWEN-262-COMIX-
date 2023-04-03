@@ -90,36 +90,40 @@ public class ComicController {
      * Creates a comic in a collection
      * @param userId the userId of the collection the comic will be in
      * @param comic The comic to be inserted
-     * @param collectionId The collection the comic is in
      */
-    public void create(int userId, Comic comic, int collectionId){
-        //Jade note: Does it make more sense to just pass in the comic's id through these? 
-        //This is passing in a comic object, break it down to and create it into the database
+    public void create(int userId, Comic comic){
+        //adding it to comic_ownership
+        String comicId = Integer.toString(comic.getId()) + ", ";
+        String comicValue = Float.toString(comic.getValue()) + ", "; //converting here since database uses INTEGER
+        String grade = Integer.toString(comic.getGrade()) + ", ";
+        String slabbed = Boolean.toString(comic.isSlabbed());
+        String sql = "INSERT INTO comic_ownership(comic_fk, comic_value, grade, slabbed)" +
+        "VALUES(" + comicId + comicValue + grade + slabbed + ")";
+        jdbcInsert.executeSQL(sql);
+        addToCollection(userId, comic);
+
     }
 
     /**
-     * Adds a comic to a collection
+     * Adds a comic copy to a collection
      * @param userId the userId of the collection the comic will be in
-     * @param collectionId The collection the comic will be in, basically user ids
      * @param comic the comic to be added
      */
-    public void addToCollection(int userId, int collectionId, Comic comic){
-        //does it need the userId if the collectionId is already personal?
-        String comicid = Integer.toString(comic.getId());
+    public void addToCollection(int userId, Comic comic){
+        String comicid = Integer.toString(comic.getCopyId());
         String sql = "INSERT INTO collection_refrence(collection_fk, copy_fk)" +
-        "VALUES(" + Integer.toString(collectionId) + ", " + comicid + ")";
+        "VALUES(" + Integer.toString(userId) + ", " + comicid + ")";
         jdbcInsert.executeSQL(sql);
     }
 
     /**
      * Removes a comic from a collection
      * @param userId the userId of the collection the comic will be removed from
-     * @param collectionId the collection the comic will be removed from
      * @param comic the comic to be removed
      */
-    public void removeFromCollection(int userId, int collectionId, Comic comic){
+    public void removeFromCollection(int userId, Comic comic){
         String comicId = Integer.toString(comic.getId());
-        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = " + Integer.toString(collectionId)
+        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = " + Integer.toString(userId)
         + "AND copy_fk = " + comicId;
         jdbcInsert.executeSQL(sql);
     }
