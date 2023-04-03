@@ -62,7 +62,7 @@ interface ComixAPI {
      *                if userId > 1 then it will search the personal collection of
      *                the user with that id.
      * @param comic Comic being created.
-     * @return TODO : Name of the Comic Created.
+     * @return Name of the Comic Created.
      */
     String createComic(int userId, Comic comic);
 
