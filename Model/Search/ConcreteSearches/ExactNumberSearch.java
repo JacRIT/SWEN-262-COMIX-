@@ -10,9 +10,7 @@ public class ExactNumberSearch extends SearchAlgorithm {
 
         PreparedStatementContainer result = new PreparedStatementContainer() ;
         result.appendToObjects(userId);
-        for (int i = 0; i<6; i++) {
-            result.appendToObjects(keyword);
-        }
+        result.appendToObjects(keyword);
 
         result.appendToSql( //this took so much brainpower
             """
