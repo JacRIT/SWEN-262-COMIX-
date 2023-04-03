@@ -6,14 +6,14 @@ import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 
-public class ComixAPIFacade implements ComixAPI {
+public class ComixCommonAPI implements ComixAPI {
     // ComicController ComixController;
     private UserController userController;
     private GuestComixAPI guestComixAPI;
     private UserComixAPI userComixAPI;
     private ComixAPI comixAPI;
 
-    public ComixAPIFacade() throws Exception {
+    public ComixCommonAPI() throws Exception {
         this.guestComixAPI = new GuestComixAPI();
         this.userComixAPI = new UserComixAPI();
         this.userController = new UserController();
@@ -74,8 +74,8 @@ public class ComixAPIFacade implements ComixAPI {
     }
 
     @Override
-    public String createComic(Comic comic) {
-        return comixAPI.createComic(comic);
+    public String createComic(int userId, Comic comic) {
+        return comixAPI.createComic(userId, comic);
     }
 
     @Override

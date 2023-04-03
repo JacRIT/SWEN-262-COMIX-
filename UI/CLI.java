@@ -3,7 +3,7 @@ package UI;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import Api.ComixAPIFacade;
+import Api.ComixCommonAPI;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 // import Model.JavaObjects.User;
@@ -40,11 +40,11 @@ public class CLI {
   }
 
   private String previousInput;
-  private ComixAPIFacade api;
+  private ComixCommonAPI api;
   private User currentUser;
 
   public CLI() throws Exception {
-    this.api = new ComixAPIFacade();
+    this.api = new ComixCommonAPI();
     this.currentUser = null;
     this.previousInput = "";
   }

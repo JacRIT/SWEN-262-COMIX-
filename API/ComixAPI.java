@@ -56,11 +56,14 @@ interface ComixAPI {
     float[] generateStatistics(User user);
 
     /**
-     * Creates a comic in the database.
-     * 
-     * @param comic comic being created
-     * @return Name of comic created.
+     * Creates a comic
+     * @param userId  Determines whether a comic is being created in a personal collection.
+     *                if userId == 1 then it well search all comics
+     *                if userId > 1 then it will search the personal collection of
+     *                the user with that id.
+     * @param comic Comic being created.
+     * @return TODO : Name of the Comic Created.
      */
-    String createComic(Comic comic);
+    String createComic(int userId, Comic comic);
 
 }

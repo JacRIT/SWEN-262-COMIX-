@@ -38,9 +38,9 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public String createComic(Comic comic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createComic'");
+    public String createComic(int userId, Comic comic) {
+        comicController.create(userId, comic);
+        return comic.getTitle();
     }
 
     @Override
