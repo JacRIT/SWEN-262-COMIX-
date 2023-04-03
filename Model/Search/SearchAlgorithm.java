@@ -1,10 +1,15 @@
 package Model.Search;
 
 import Controllers.Utils.PreparedStatementContainer;
+import Model.Search.ConcreteSorts.DefaultSort;
 
 public abstract class SearchAlgorithm {
     
-    private SortAlgorithm sort ;
+    protected SortAlgorithm sort ;
+
+    public SearchAlgorithm() {
+        this.sort = new DefaultSort() ;
+    }
 
 
     public void setSort(SortAlgorithm sort) {

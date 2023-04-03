@@ -2,7 +2,6 @@ package Model.Search.ConcreteSearches;
 
 import Controllers.Utils.PreparedStatementContainer;
 import Model.Search.SearchAlgorithm;
-import Model.Search.SortAlgorithm;
 
 public class PartialKeywordSearch extends SearchAlgorithm {
 
@@ -152,6 +151,8 @@ public class PartialKeywordSearch extends SearchAlgorithm {
 
             """
         );
+
+        result.appendToSql(this.sort.sort());
 
         return result ;
     }
