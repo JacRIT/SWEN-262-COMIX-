@@ -37,15 +37,12 @@ interface ComixAPI {
      *                if userId == 1 then it well search all comics
      *                if userId > 1 then it will search the personal collection of
      *                the user with that id.
-     * @param publisher
-     * @param series
-     * @param volumes
-     * @param issue
-     * @return All the comics in a given personal collection from the given
+     * 
+     * @return All the comics belonging to given personal collection from the given
      *         parameters sorted by publisher, series, volumes, and issue#
      *         Null if no personal collection available.
      */
-    Comic[] browsePersonalCollection(int userId, String publisher, String series, String volume, String issue) throws Exception;
+    Comic[] browsePersonalCollection(int userId) throws Exception;
 
     /**
      * TODO : Figure out specific requirements on what statistics need to be

@@ -43,8 +43,7 @@ public class GuestComixAPI implements ComixAPI {
     }
 
     @Override
-    public Comic[] browsePersonalCollection(int userId, String publish, String series, String volumes,
-            String issue) {
+    public Comic[] browsePersonalCollection(int userId) {
         return null;
     }
 }

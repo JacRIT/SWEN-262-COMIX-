@@ -6,6 +6,8 @@ import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 import Model.Search.ConcreteSearches.ExactKeywordSearch;
+import Model.Search.ConcreteSearches.PartialKeywordSearch;
+import Model.Search.ConcreteSorts.BrowseSort;
 
 public class UserComixAPI implements ComixAPI {
     private SearchAlgorithm searchStrategy;
@@ -44,9 +46,15 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Comic[] browsePersonalCollection(int userId, String publisher, String series, String volumes,
-            String issue) throws Exception {
-        //TODO : Use a special browse search so multiple fields are able to be searched at the same time.
-        return comicController.search(userId, publisher);
+    public Comic[] browsePersonalCollection(int userId) throws Exception {
+        SearchAlgorithm browseSearchAlgorithm = new PartialKeywordSearch();
+        browseSearchAlgorithm.setSort(new BrowseSort());
+        SearchAlgorithm previousSearchAlgorithm = this.searchStrategy;
+
+        comicController.setSearch(browseSearchAlgorithm);
+        Comic[] personalCollection = comicController.search(userId, "");
+        comicController.setSearch(previousSearchAlgorithm);
+        
+        return personalCollection;
     }
 }

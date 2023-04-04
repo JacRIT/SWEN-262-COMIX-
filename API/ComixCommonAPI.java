@@ -7,7 +7,6 @@ import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 
 public class ComixCommonAPI implements ComixAPI {
-    // ComicController ComixController;
     private UserController userController;
     private GuestComixAPI guestComixAPI;
     private UserComixAPI userComixAPI;
@@ -79,8 +78,7 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public Comic[] browsePersonalCollection(int userId, String publisher, String series, String volume,
-            String issue) throws Exception {
-        return comixAPI.browsePersonalCollection(userId, publisher, series, volume, issue);
+    public Comic[] browsePersonalCollection(int userId) throws Exception {
+        return comixAPI.browsePersonalCollection(userId);
     }
 }
