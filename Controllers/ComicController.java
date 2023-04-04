@@ -1,5 +1,6 @@
 package Controllers;
 import Model.Search.SearchAlgorithm;
+import Model.Search.SortAlgorithm;
 import Model.Search.ConcreteSearches.PartialKeywordSearch;
 import Model.JavaObjects.*;
 
@@ -30,6 +31,14 @@ public class ComicController {
      */
     public void setSearch(SearchAlgorithm searchStrategy){
         this.searchStrategy = searchStrategy;
+    }
+
+    /**
+     * Sets the search strategy with the given param
+     * @param sortStrategy The strategy chosen for a search
+     */
+    public void setSort(SortAlgorithm sortStrategy){
+        this.searchStrategy.setSort(sortStrategy);
     }
 
     /**
