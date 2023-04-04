@@ -44,9 +44,9 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Comic[] browsePersonalCollection(int userId, String publish, String series, String volumes,
-            String issue) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'browsePersonalCollectionHierarchy'");
+    public Comic[] browsePersonalCollection(int userId, String publisher, String series, String volumes,
+            String issue) throws Exception {
+        //TODO : Use a special browse search so multiple fields are able to be searched at the same time.
+        return comicController.search(userId, publisher);
     }
 }

@@ -80,7 +80,7 @@ public class ComixCommonAPI implements ComixAPI {
 
     @Override
     public Comic[] browsePersonalCollection(int userId, String publisher, String series, String volume,
-            String issue) {
+            String issue) throws Exception {
         return comixAPI.browsePersonalCollection(userId, publisher, series, volume, issue);
     }
 }

@@ -33,8 +33,7 @@ public class GuestComixAPI implements ComixAPI {
 
     @Override
     public float[] generateStatistics(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generateStatistics'");
+        return null;
     }
 
     @Override
@@ -46,7 +45,6 @@ public class GuestComixAPI implements ComixAPI {
     @Override
     public Comic[] browsePersonalCollection(int userId, String publish, String series, String volumes,
             String issue) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'browsePersonalCollectionHierarchy'");
+        return null;
     }
 }
