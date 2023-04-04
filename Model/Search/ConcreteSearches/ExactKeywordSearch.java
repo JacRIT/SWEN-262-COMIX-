@@ -56,7 +56,8 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_info.release_date,
                                     comic_info.release_day,
                                     comic_info.release_month,
-                                    comic_info.release_year
+                                    comic_info.release_year,
+                                    publisher_info.p_name
                                 FROM 
                                     subcollections
                                 INNER JOIN 
@@ -65,6 +66,10 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_ownership ON collection_refrence.copy_fk = comic_ownership.id
                                 INNER JOIN 
                                     comic_info ON comic_info.id = comic_ownership.comic_fk
+                                INNER JOIN
+                                    publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
+                                INNER JOIN
+                                    publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
 
                         ) INTERSECT (
                             ( --get all copy_ids where
@@ -76,7 +81,8 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_info.release_date,
                                     comic_info.release_day,
                                     comic_info.release_month,
-                                    comic_info.release_year
+                                    comic_info.release_year,
+                                    publisher_info.p_name
                                 FROM
                                     creator_refrence
                                 INNER JOIN 
@@ -85,6 +91,10 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_ownership ON comic_info.id = comic_ownership.comic_fk
                                 INNER JOIN
                                     creator_info ON creator_info.id = creator_refrence.creator_fk
+                                INNER JOIN
+                                    publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
+                                INNER JOIN
+                                    publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
                                 WHERE
                                     creator_info.c_name LIKE (?)
                             ) UNION (
@@ -96,7 +106,8 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_info.release_date,
                                     comic_info.release_day,
                                     comic_info.release_month,
-                                    comic_info.release_year
+                                    comic_info.release_year,
+                                    publisher_info.p_name
                                 FROM
                                     character_refrence
                                 INNER JOIN 
@@ -105,6 +116,10 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_ownership ON comic_info.id = comic_ownership.comic_fk
                                 INNER JOIN
                                     character_info ON character_refrence.character_fk = character_info.id
+                                INNER JOIN
+                                    publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
+                                INNER JOIN
+                                    publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
                                 WHERE
                                     character_info.character_name LIKE (?)
                             ) UNION (
@@ -116,7 +131,8 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_info.release_date,
                                     comic_info.release_day,
                                     comic_info.release_month,
-                                    comic_info.release_year
+                                    comic_info.release_year,
+                                    publisher_info.p_name
                                 FROM
                                     publisher_refrence
                                 INNER JOIN 
@@ -136,11 +152,16 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_info.release_date,
                                     comic_info.release_day,
                                     comic_info.release_month,
-                                    comic_info.release_year
+                                    comic_info.release_year,
+                                    publisher_info.p_name
                                 FROM
                                     comic_info
                                 INNER JOIN 
                                     comic_ownership ON comic_ownership.comic_fk = comic_info.id
+                                INNER JOIN
+                                    publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
+                                INNER JOIN
+                                    publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
                                 WHERE comic_info.series LIKE (?) 
                                     OR comic_info.title LIKE (?) 
                                     OR comic_info.descrip LIKE (?)
