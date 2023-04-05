@@ -70,15 +70,27 @@ public class ComicController {
     }
 
     /**
-     * Updates the comic with the new comic
-     * @param userId the userId to identify the collection
-     * @param comic the comic to be changed
+     * Updates the comic (comic_info table) to reflect the given updated version of the comic.
+     * The updated version of the comic should not have any id fields changed from the original.
+     * Any information in fields specific to a copy will be ignored.
+     * Only manually created comics can be edited.
      * @param updatedComic the new comic replacing the old data
      */
-    public void update(int userId, Comic comic, Comic updatedComic){
+    public void updateComic(Comic updatedComic) {
+        // check to make sure comic is not in the database-> if it is, throw error
+        // update sql call
+    }
 
-        //We'll be doing two update methods
-        
+    /**
+     * Updates the copy (comic_ownership table) to reflect the given updated version of the copy.
+     * The updated version of the comic should not have any id fields changed from the original.
+     * Any information in fields not specific to a copy will be ignored.
+     * @param userId the id of the user who owns the copy to be updated
+     * @param updatedComic the new comic replacing the old data
+     */
+    public void updateCopy(int userId, Comic updatedCopy) {
+        // check to make sure the copy is owned by the given user by getting the collection id
+        // update sql call
     }
 
     /**
