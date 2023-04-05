@@ -16,13 +16,14 @@ public class Comic {
     private  ArrayList<Character>      principlCharacters;
     private  String                    description;
     private  float                     initialValue;
+    private  ArrayList<Signature>      signatures;
     private  float                     value;
     private  int                       grade;
     private  boolean                   isSlabbed;
 
     public Comic(int id, int copyId, ArrayList<Publisher> publisher, String series, String title, int volumeNumber,
             String issueNumber, String publicationDate, ArrayList<Creator> creators,
-            ArrayList<Character> principlCharacters, String description, float initialValue, float value, int grade,
+            ArrayList<Character> principlCharacters, String description, float initialValue, ArrayList<Signature> signatures, float value, int grade,
             boolean isSlabbed) {
         this.id = id;
         this.copyId = copyId;
@@ -36,6 +37,7 @@ public class Comic {
         this.principlCharacters = principlCharacters;
         this.description = description;
         this.initialValue = initialValue;
+        this.signatures = signatures;
         this.value = value;
         this.grade = grade;
         this.isSlabbed = isSlabbed;
@@ -156,6 +158,14 @@ public class Comic {
 
     public void setInitialValue(float initialValue) {
         this.initialValue = initialValue;
+    }
+
+    public ArrayList<Signature> getSignatures() {
+        return signatures;
+    }
+
+    public void setSignaturess(ArrayList<Signature> signatures) {
+        this.signatures = signatures;
     }
 
     public float getValue() {

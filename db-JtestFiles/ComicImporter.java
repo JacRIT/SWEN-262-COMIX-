@@ -226,7 +226,7 @@ public class ComicImporter {
         master_prepared.add(copy_target.getTitle());
         master_prepared.add(copy_target.getVolumeNumber());
         master_prepared.add(copy_target.getIssueNumber());
-        master_prepared.add(copy_target.getInitial_value());
+        master_prepared.add(copy_target.getInitialValue());
         master_prepared.add(copy_target.getDescription());
         master_prepared.add(copy_target.getPublicationDate());
 

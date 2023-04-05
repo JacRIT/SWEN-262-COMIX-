@@ -10,6 +10,7 @@ import Model.JavaObjects.Character;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Creator;
 import Model.JavaObjects.Publisher;
+import Model.JavaObjects.Signature;
 
 
 /*
@@ -58,6 +59,7 @@ public class CSVComicReader {
         ArrayList<Publisher> publishers = new ArrayList<Publisher>() ;
         ArrayList<Creator>   creators   = new ArrayList<Creator>();
         ArrayList<Character> characters = new ArrayList<Character>() ; //currently unused D:
+        ArrayList<Signature> signatures = new ArrayList<Signature>() ;
 
         //---------------------------------------------------------
         // COMPUTE SPECIAL VALUES
@@ -111,7 +113,7 @@ public class CSVComicReader {
         // CREATE COMIC OBJECT FROM VALUES
         //---------------------------------------------------------
 
-        return new Comic(1, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, value, grade, isSlabbed) ;
+        return new Comic(1, 1, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, signatures, value, grade, isSlabbed) ;
 
     }
 
