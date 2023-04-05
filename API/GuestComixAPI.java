@@ -1,6 +1,5 @@
 package Api;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import Controllers.ComicController;
@@ -29,13 +28,13 @@ public class GuestComixAPI implements ComixAPI {
     }
 
     @Override
-    public Comic[] searchComics(String keyword) throws Exception {
+    public Comic[] searchComics(int userId, String keyword) throws Exception {
         return comicController.search(1, keyword);
     }
 
     @Override
     public Map<String, String> generateStatistics(User user) {
-        return comicController.getStatistics(user.getId());
+        return null;
     }
 
     @Override
@@ -60,4 +59,28 @@ public class GuestComixAPI implements ComixAPI {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'verifyComic'");
 	}
+
+    @Override
+    public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'gradeComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean slabGradedComicInPersonalCollection(User user) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'slabGradedComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean addComicToPersonalCollection(User user, Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addComicToPersonalCollection'");
+    }
+
+    @Override
+    public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeComicFromPersonalCollection'");
+    }
 }

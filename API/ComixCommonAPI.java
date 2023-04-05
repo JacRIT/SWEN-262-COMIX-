@@ -65,8 +65,8 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public Comic[] searchComics(String keyword) throws Exception {
-        return comixAPI.searchComics(keyword);
+    public Comic[] searchComics(int userId, String keyword) throws Exception {
+        return comixAPI.searchComics(userId, keyword);
     }
 
     @Override
@@ -92,5 +92,29 @@ public class ComixCommonAPI implements ComixAPI {
     @Override
     public Boolean verifyComic(Comic signedComic) {
         return this.comixAPI.verifyComic(signedComic);
+    }
+
+    @Override
+    public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'gradeComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean slabGradedComicInPersonalCollection(User user) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'slabGradedComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean addComicToPersonalCollection(User user, Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addComicToPersonalCollection'");
+    }
+
+    @Override
+    public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeComicFromPersonalCollection'");
     }
 }
