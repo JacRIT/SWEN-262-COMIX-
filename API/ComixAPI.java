@@ -1,5 +1,7 @@
 package Api;
 
+import java.util.HashMap;
+
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
@@ -45,15 +47,16 @@ interface ComixAPI {
     Comic[] browsePersonalCollection(int userId) throws Exception;
 
     /**
-     * TODO : Figure out specific requirements on what statistics need to be
-     * generated.
      * 
+     * Note :
+     *      Each time a comic is signed, its value is increased by 5%. 
+     *      If a comics signature is verified by an authority then the comics value is increased by an additional 20%
      * @param user
      * @return
      * 
      *          NULL if no personal collection available
      */
-    float[] generateStatistics(User user);
+    HashMap<String, Float> generateStatistics(User user);
 
     /**
      * Creates a comic
@@ -65,5 +68,30 @@ interface ComixAPI {
      * @return Name of the Comic Created.
      */
     String createComic(int userId, Comic comic);
+
+
+    //R2 Requirements =================================================================
+
+    /**
+     * Signs a comic. 
+     * The user marks a comic as signed meaning that it has been
+        autographed by someone, e.g. a creator, a famous person, etc.
+        ○ A single comic may be signed more than once.
+        ○ Each time a comic is signed, its value is increased by 5%. 
+     * @param comic
+     * @return true : Comic is signed sucessfully 
+     *         false : Comic is not successfully signed or does not exist in database.
+     */
+    Boolean signComic(Comic comic);
+
+    /**
+     * Verifies a signed comic.
+     * A signed comic may also be marked as "authenticated" meaning that the
+        signature has been verified by an authority. This increases the value of the comic
+        by an additional 20%
+     * @param comic
+     * @return
+     */
+    Boolean verifyComic(Comic signedComic);
 
 }

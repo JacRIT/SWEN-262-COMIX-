@@ -1,5 +1,7 @@
 package Api;
 
+import java.util.HashMap;
+
 import Controllers.UserController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -68,7 +70,7 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public float[] generateStatistics(User user) {
+    public HashMap<String, Float> generateStatistics(User user) {
         return comixAPI.generateStatistics(user);
     }
 
@@ -80,5 +82,15 @@ public class ComixCommonAPI implements ComixAPI {
     @Override
     public Comic[] browsePersonalCollection(int userId) throws Exception {
         return comixAPI.browsePersonalCollection(userId);
+    }
+
+    @Override
+    public Boolean signComic(Comic comic) {
+        return this.comixAPI.signComic(comic);
+    }
+
+    @Override
+    public Boolean verifyComic(Comic signedComic) {
+        return this.comixAPI.verifyComic(signedComic);
     }
 }

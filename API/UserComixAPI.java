@@ -1,26 +1,26 @@
 package Api;
 
+import java.util.HashMap;
+
 import Controllers.ComicController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
-import Model.Search.ConcreteSearches.ExactKeywordSearch;
 import Model.Search.ConcreteSearches.PartialKeywordSearch;
 import Model.Search.ConcreteSorts.BrowseSort;
 
 public class UserComixAPI implements ComixAPI {
-    private SearchAlgorithm searchStrategy;
     private ComicController comicController;
 
     public UserComixAPI() throws Exception {
         this.comicController = new ComicController();
-        this.searchStrategy = new ExactKeywordSearch();
+        comicController.setSearch(new PartialKeywordSearch());
     }
 
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
-        this.searchStrategy.setSort(sortStrategy);
+        this.comicController.setSort(sortStrategy);
     }
 
     @Override
@@ -34,9 +34,10 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public float[] generateStatistics(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generateStatistics'");
+    public HashMap<String, Float> generateStatistics(User user) {
+        // TODO : Update when getstatistics finished.
+        //comicController.getStatistics(user.getId());
+        return  null;
     }
 
     @Override
@@ -47,14 +48,27 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Comic[] browsePersonalCollection(int userId) throws Exception {
-        SearchAlgorithm browseSearchAlgorithm = new PartialKeywordSearch();
+        SearchAlgorithm browseSearchAlgorithm = new PartialKeywordSearch(); 
         browseSearchAlgorithm.setSort(new BrowseSort());
-        SearchAlgorithm previousSearchAlgorithm = this.searchStrategy;
+
+        SearchAlgorithm previousSearchAlgorithm = comicController.getSearch();
 
         comicController.setSearch(browseSearchAlgorithm);
         Comic[] personalCollection = comicController.search(userId, "");
         comicController.setSearch(previousSearchAlgorithm);
         
         return personalCollection;
+    }
+
+    @Override
+    public Boolean signComic(Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'signComic'");
+    }
+
+    @Override
+    public Boolean verifyComic(Comic signedComic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'verifyComic'");
     }
 }
