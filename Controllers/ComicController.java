@@ -8,6 +8,8 @@ import Controllers.Utils.JDBCRead;
 import Controllers.Utils.PreparedStatementContainer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import Controllers.Utils.JDBCComicExtractor;
 
@@ -85,7 +87,7 @@ public class ComicController {
     }
 
     /**
-     * Updates the copy (comic_ownership table) to reflect the given updated version of the copy.
+     * Updates the copy (comic_ownership table and signatures) to reflect the given updated version of the copy.
      * The updated version of the comic should not have any id fields changed from the original.
      * Any information in fields not specific to a copy will be ignored.
      * @param userId the id of the user who owns the copy to be updated
@@ -152,11 +154,15 @@ public class ComicController {
     }
 
     /**
+     * UNFINISHED - signatures not accounted for
      * Gets the statistics, the total number of comics in the collection and the total value of the collection.
      * @param userId - the id of the user whose collection the statistics are being gathered for
      * @return - an array of Doubles containing {count, total value}, where the count can be assumed to be an integer
      */
-    public Double[] getStatistics(int userId){
+    public Map<String,String> getStatistics(int userId){
+        /*
+         * also need to know how many signatures and how many of them are authenticated
+         */
         String sql = """
             SELECT comic_info.initial_value, comic_ownership.grade, comic_ownership.slabbed
             FROM comic_ownership
@@ -167,7 +173,7 @@ public class ComicController {
         ArrayList<Object> obj = new ArrayList<>();
         obj.add(getCollectionIdFromUser(userId));
         ArrayList<ArrayList<Object>> results = jdbcRead.readListofLists(sql, obj, 3);
-        double count = results.size();
+        int count = results.size();
         double totalValue = 0;
         for (ArrayList<Object> entry : results) {
             // initial value
@@ -198,7 +204,24 @@ public class ComicController {
                 value *= 2;
             totalValue += value;
         }
-        Double[] stats = {count, totalValue};
+        /*
+        sql = """
+                SELECT COUNT(*), authenticated FROM signature_info 
+                INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id
+                INNER JOIN collection_refrence ON collection_refrence.copy_fk = signature_refrence.copy_fk
+                WHERE collection_refrence.collection_fk = 3 
+                GROUP BY authenticated;
+            """;
+        obj = new ArrayList<>();
+        obj.add(getCollectionIdFromUser(userId));
+        results = jdbcRead.readListofLists(sql, obj, 2);
+        */
+        // TBC when comics can actually be signed so that this can be tested
+
+
+        Map<String,String> stats = new HashMap<>();
+        stats.put("count", Integer.toString(count));
+        stats.put("value", Double.toString(totalValue));
         return stats;
     }
 
@@ -226,8 +249,8 @@ public class ComicController {
         // for (Comic comic : comics) {
         //     System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
         // }
-        Double[] stats = cc.getStatistics(2);
-        System.out.println("count = "+stats[0]+", total value = "+stats[1]);
+        Map<String,String> stats = cc.getStatistics(2);
+        System.out.println("count = "+stats.get("count")+", total value = "+stats.get("value"));
 
     }
 }
