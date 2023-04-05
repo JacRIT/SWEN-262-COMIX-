@@ -280,7 +280,8 @@ public class CLI {
    * Print the instructions for how to use the application
    */
   private void instructions() {
-    this.log("Welcome to the Comix Application");
+    this.log("Welcome to the Comix Application", false);
+    this.log("Enter a command below then press enter to continue to the next steps.");
     this.log("I - Instructions to use the comix application");
     this.log("R - Register a new account");
     if (this.currentUser == null)
