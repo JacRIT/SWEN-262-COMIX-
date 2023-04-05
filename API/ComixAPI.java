@@ -76,6 +76,7 @@ interface ComixAPI {
     String createComic(int userId, Comic comic);
 
 
+
     /**
      * Signs a comic. 
      * The user marks a comic as signed meaning that it has been
@@ -121,6 +122,7 @@ interface ComixAPI {
 
     /**
      * Marks a graded comic as "slabbed." This doubles the value of the comic
+     * @param gradedComic graded comic being slabbed.
      * @param user The user slabbing the comic.
      * @return  true    : Comic slabbed.
      *          false   : Comic not sucessfully slabbed.
@@ -129,7 +131,7 @@ interface ComixAPI {
      *                      - Comic not in personal collection.
      *                      - Comic does not exist.
      */
-    Boolean slabGradedComicInPersonalCollection(User user);
+    Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic);
 
     /**
      * Adds a comic to a users personal collection.
@@ -152,6 +154,4 @@ interface ComixAPI {
      *                      - no personal collection found.
      */
     Boolean removeComicFromPersonalCollection(User user, Comic comic);
-
-
 }

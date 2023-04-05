@@ -101,7 +101,7 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean slabGradedComicInPersonalCollection(User user) {
+    public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'slabGradedComicInPersonalCollection'");
     }
