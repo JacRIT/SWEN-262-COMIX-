@@ -1,7 +1,6 @@
 package Controllers;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
-import Model.Search.ConcreteSearches.PartialKeywordSearch;
 import Model.JavaObjects.*;
 
 import Controllers.Utils.JDBCInsert;
@@ -137,23 +136,68 @@ public class ComicController {
         jdbcInsert.executeSQL(sql);
     }
 
-
     /**
-     * Gets the statistics
-     * @param userId
-     * @return
+     * Gets the statistics, the total number of comics in the collection and the total value of the collection.
+     * @param userId - the id of the user whose collection the statistics are being gathered for
+     * @return - an array of Doubles containing {count, total value}, where the count can be assumed to be an integer
      */
-    public String getStatistics(int userId){
-    //cpunts number of values and totals values of comics
-        return null;
+    public Double[] getStatistics(int userId){
+        String sql = """
+            SELECT comic_info.initial_value, comic_ownership.grade, comic_ownership.slabbed
+            FROM comic_ownership
+            INNER JOIN comic_info ON comic_info.id = comic_ownership.comic_fk
+            INNER JOIN collection_refrence ON collection_refrence.copy_fk = comic_ownership.id
+            WHERE collection_refrence.collection_fk = ?
+            """;
+        ArrayList<Object> obj = new ArrayList<>();
+        obj.add(getCollectionIdFromUser(userId));
+        ArrayList<ArrayList<Object>> results = jdbcRead.readListofLists(sql, obj, 3);
+        double count = results.size();
+        double totalValue = 0;
+        for (ArrayList<Object> entry : results) {
+            // initial value
+            double initialValue;
+            if (entry.get(0) == null)
+                initialValue = 0;
+            else
+                initialValue = (double) entry.get(0);
+            // grade
+            int grade;
+            if (entry.get(1) == null)
+                grade = 0;
+            else
+                grade = (int) entry.get(1);
+            // slabbed
+            boolean slabbed;
+            if (entry.get(2) == null)
+                slabbed = false;
+            else
+                slabbed = (boolean) entry.get(2);
+            // caluculating total
+            double value = initialValue;
+            if (grade == 1)
+                value = initialValue * 0.1;
+            else if (grade > 1)
+                value = initialValue * Math.log10(grade);
+            if (slabbed)
+                value *= 2;
+            totalValue += value;
+        }
+        Double[] stats = {count, totalValue};
+        return stats;
     }
 
     /**
-     * 
-     * @return
+     * Gets the collection id in the database for the given user.
+     * @param userId - the id of the user to get the personal collection id of
+     * @return - the id of the top-level personal collection owned by the given user
      */
-    private Comic[] loadResults(){
-        return null;
+    private int getCollectionIdFromUser(int userId) {
+        String sql = "SELECT collection_fk FROM user_info WHERE id = ?";
+        ArrayList<Object> obj = new ArrayList<>();
+        obj.add(userId);
+        ArrayList<Object> results = jdbcRead.executePreparedSQL(sql, obj);
+        return (int) results.get(0);
     }
 
 
@@ -161,12 +205,14 @@ public class ComicController {
         ComicController cc = new ComicController();
         // Comic comic = cc.get(1);
         // System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
-        SearchAlgorithm sa = new PartialKeywordSearch();
-        cc.setSearch(sa);
-        Comic[] comics = cc.search(1, "Control");
-        for (Comic comic : comics) {
-            System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
-        }
+        // SearchAlgorithm sa = new PartialKeywordSearch();
+        // cc.setSearch(sa);
+        // Comic[] comics = cc.search(1, "Control");
+        // for (Comic comic : comics) {
+        //     System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
+        // }
+        Double[] stats = cc.getStatistics(2);
+        System.out.println("count = "+stats[0]+", total value = "+stats[1]);
 
     }
 }
