@@ -1,6 +1,6 @@
 package Api;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -47,16 +47,17 @@ interface ComixAPI {
     Comic[] browsePersonalCollection(int userId) throws Exception;
 
     /**
-     * 
+     * Generates the statistics for a users collection.
      * Note :
      *      Each time a comic is signed, its value is increased by 5%. 
      *      If a comics signature is verified by an authority then the comics value is increased by an additional 20%
      * @param user
-     * @return
-     * 
-     *          NULL if no personal collection available
+     * @return Map containing {"number of issues" : "#" 
+     *                          "value" : "#"}
+     *         
+     *          null if no personal collection available
      */
-    HashMap<String, Float> generateStatistics(User user);
+    Map<String, String> generateStatistics(User user);
 
     /**
      * Creates a comic

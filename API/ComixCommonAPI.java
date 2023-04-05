@@ -1,6 +1,6 @@
 package Api;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import Controllers.UserController;
 import Model.JavaObjects.Comic;
@@ -70,7 +70,7 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public HashMap<String, Float> generateStatistics(User user) {
+    public Map<String, String> generateStatistics(User user) {
         return comixAPI.generateStatistics(user);
     }
 
