@@ -33,6 +33,9 @@ public class ComicController {
     public void setSearch(SearchAlgorithm searchStrategy){
         this.searchStrategy = searchStrategy;
     }
+    public SearchAlgorithm getSearch() {
+        return this.searchStrategy;
+    }
 
     /**
      * Sets the search strategy with the given param

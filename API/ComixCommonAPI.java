@@ -1,5 +1,7 @@
 package Api;
 
+import java.util.Map;
+
 import Controllers.UserController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -63,12 +65,12 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public Comic[] searchComics(String keyword) throws Exception {
-        return comixAPI.searchComics(keyword);
+    public Comic[] searchComics(int userId, String keyword) throws Exception {
+        return comixAPI.searchComics(userId, keyword);
     }
 
     @Override
-    public float[] generateStatistics(User user) {
+    public Map<String, String> generateStatistics(User user) {
         return comixAPI.generateStatistics(user);
     }
 
@@ -80,5 +82,39 @@ public class ComixCommonAPI implements ComixAPI {
     @Override
     public Comic[] browsePersonalCollection(int userId) throws Exception {
         return comixAPI.browsePersonalCollection(userId);
+    }
+
+    @Override
+    public Boolean signComic(Comic comic) {
+        return this.comixAPI.signComic(comic);
+    }
+
+    @Override
+    public Boolean verifyComic(Comic signedComic) {
+        return this.comixAPI.verifyComic(signedComic);
+    }
+
+    @Override
+    public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'gradeComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'slabGradedComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean addComicToPersonalCollection(User user, Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addComicToPersonalCollection'");
+    }
+
+    @Override
+    public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeComicFromPersonalCollection'");
     }
 }
