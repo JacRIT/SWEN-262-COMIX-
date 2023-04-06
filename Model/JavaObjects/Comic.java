@@ -45,6 +45,38 @@ public class Comic {
 
     @Override
     public String toString() {
+
+        String simpleSeries ;
+        String simpleTitle ;
+        int CHAR_COUNT = 30;
+
+        if (this.series.length() > CHAR_COUNT  ) {
+            simpleSeries = this.series.substring(0, CHAR_COUNT-4) + "..." ;
+        } else if (this.series.length() == CHAR_COUNT ) {
+            simpleSeries = this.series ;
+        } else {
+            simpleSeries = this.series ;
+            for (int i = this.series.length(); i < CHAR_COUNT-1; i++) {
+                simpleSeries += " " ;
+            }
+        }
+
+        if (this.title.length() > CHAR_COUNT ) {
+            simpleTitle = this.title.substring(0, CHAR_COUNT-4) + "..." ;
+        } else if (this.title.length() == CHAR_COUNT ) {
+            simpleTitle = this.title ;
+        } else {
+            simpleTitle = this.title ;
+            for (int i = this.title.length(); i < CHAR_COUNT-1; i++) {
+                simpleTitle += " " ;
+            }
+        }
+
+        return simpleSeries + "\t" + simpleTitle + "\t issue #" + this.issueNumber + "\t copy id #" + this.copyId + "\t comic id #" + this.id ;
+
+    }
+
+    public String toStringDetailed() {
         return "Comic [\n\tid=                 " + id 
                     + "\n\tcopyId=             " + copyId
                     + "\n\tpublisher=          " + publisher 
