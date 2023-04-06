@@ -230,8 +230,7 @@ public class ComicController {
     }
 
     /**
-     * UNFINISHED - signatures not accounted for
-     * Gets the statistics, the total number of comics in the collection and the total value of the collection.
+     * Gets the statistics: the total number of comics in the collection and the total value of the collection.
      * @param userId - the id of the user whose collection the statistics are being gathered for
      * @return a map with the keys of "count" and "value", with String values
      */
@@ -280,21 +279,28 @@ public class ComicController {
                 value *= 2;
             totalValue += value;
         }
-        /*
+        // signatures
         sql = """
                 SELECT COUNT(*), authenticated FROM signature_info 
                 INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id
                 INNER JOIN collection_refrence ON collection_refrence.copy_fk = signature_refrence.copy_fk
-                WHERE collection_refrence.collection_fk = 3 
+                WHERE collection_refrence.collection_fk = ? 
                 GROUP BY authenticated;
             """;
         obj = new ArrayList<>();
         obj.add(getCollectionIdFromUser(userId));
         results = jdbcRead.readListofLists(sql, obj, 2);
-        */
-        // TBC when comics can actually be signed so that this can be tested
-
-
+        long totalNumSigs = (long)results.get(0).get(0) + (long)results.get(1).get(0);     // first get row, then get count (index 0)
+        // value increases by 5% for every signature
+        for(int i = 0; i < totalNumSigs+.25; i++) {
+            totalValue *= 1.05;
+        }
+        System.out.println(results.get(1).get(1));
+        // value increased by an additional 20% for every authentication
+        for(int i = 0; i < (long)results.get(1).get(0)+.25; i++) {
+            totalValue *= 1.2;
+        }
+        // output
         Map<String,String> stats = new HashMap<>();
         stats.put("count", Integer.toString(count));
         stats.put("value", Double.toString(totalValue));
@@ -325,15 +331,17 @@ public class ComicController {
         // for (Comic comic : comics) {
         //     System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
         // }
-        // Map<String,String> stats = cc.getStatistics(2);
-        // System.out.println("count = "+stats.get("count")+", total value = "+stats.get("value"));
-        Comic comic = cc.get(14241);
-        System.out.println(comic);
+
+        // Comic comic = cc.get(14241);
+        // System.out.println(comic);
         // Signature s = new Signature(0, "Jim", true);
         // comic.addSignature(s);
-        comic.getSignatures().get(0).setAuthenticated(true);
-        cc.updateCopy(2, comic);
-        System.out.println(cc.get(14241));
+        // comic.getSignatures().get(1).setAuthenticated(false);
+        // cc.updateCopy(2, comic);
+        // System.out.println(cc.get(14241));
+
+        Map<String,String> stats = cc.getStatistics(2);
+        System.out.println("count = "+stats.get("count")+", total value = "+stats.get("value"));
 
     }
 }
