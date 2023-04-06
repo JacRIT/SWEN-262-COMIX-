@@ -187,7 +187,8 @@ public class JDBCComicExtractor extends JDBC {
             signatures.add(
                 new Signature(
                     rs5.getInt("id"),
-                    rs5.getString("s_name")
+                    rs5.getString("s_name"),
+                    rs5.getBoolean("authenticated")
                 )
             );
         }

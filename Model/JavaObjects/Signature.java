@@ -6,9 +6,10 @@ public class Signature {
     private String name ;
     private boolean authenticated ;
     
-    public Signature(int id, String name) {
+    public Signature(int id, String name, boolean authenticated) {
         this.id = id;
         this.name = name;
+        this.authenticated = authenticated;
     }
     public int getId() {
         return id;

@@ -57,6 +57,7 @@ public class Comic {
                     + "\n\tprinciplCharacters= " + principlCharacters
                     + "\n\tdescription=        " + description 
                     + "\n\tinitialValue=       " + initialValue 
+                    + "\n\tsignatures=         " + signatures
                     + "\n\tvalue=              " + value 
                     + "\n\tgrade=              " + grade 
                     + "\n\tisSlabbed=          " + isSlabbed 
@@ -164,8 +165,8 @@ public class Comic {
         return signatures;
     }
 
-    public void setSignaturess(ArrayList<Signature> signatures) {
-        this.signatures = signatures;
+    public void addSignature(Signature signature) {
+        this.signatures.add(signature);
     }
 
     public float getValue() {
