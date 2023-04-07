@@ -11,8 +11,8 @@ import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 import Model.Search.ConcreteSearches.ExactKeywordSearch;
 import Model.Search.ConcreteSearches.ExactNumberSearch;
-import Model.Search.ConcreteSearches.GapSearch;
 import Model.Search.ConcreteSearches.PartialKeywordSearch;
+import Model.Search.ConcreteSearches.ValueSearch;
 import Model.Search.ConcreteSorts.DateSort;
 // import Model.Search.SortAlgorithm;
 // import Model.Search.ConcreteSearches.PartialKeywordSearch;
@@ -280,7 +280,8 @@ public class CLI {
    * Print the instructions for how to use the application
    */
   private void instructions() {
-    this.log("Welcome to the Comix Application");
+    this.log("Welcome to the Comix Application", false);
+    this.log("Enter a command below then press enter to continue to the next steps.");
     this.log("I - Instructions to use the comix application");
     this.log("R - Register a new account");
     if (this.currentUser == null)
@@ -291,7 +292,7 @@ public class CLI {
     this.log("Search - Search through all Comics", false);
     this.log("\t[--sortBy=<value>] - sort results by\n\t\t\"title\", \"publication\", \"issue\", \"volume\"", false);
     this.log(
-        "\t[--searchBy=<value>] - search comics by\n\t\t\"partial-search\", \"exact-search\", \"exact-number\", \"gap-search\"");
+        "\t[--searchBy=<value>] - search comics by\n\t\t\"partial-search\", \"exact-search\", \"exact-number\", \"value\"");
     this.log("Exit - Exit Comix");
 
     return;
@@ -363,7 +364,7 @@ public class CLI {
    * using the search type and sort type that the user specifies
    */
   private Comic[] searchComics(String keyword) throws Exception {
-    Comic[] comics = this.api.searchComics(keyword);
+    Comic[] comics = this.api.searchComics(1, keyword);
 
     this.log("Results Length: " + comics.length);
     return comics;
@@ -407,8 +408,8 @@ public class CLI {
     if (searchType.equals("exact-number")) {
       return new ExactNumberSearch();
     }
-    if (searchType.equals("gap-search")) {
-      return new GapSearch();
+    if (searchType.equals("value")) {
+      return new ValueSearch();
     }
     return null;
   }

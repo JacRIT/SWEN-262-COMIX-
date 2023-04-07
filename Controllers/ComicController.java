@@ -87,15 +87,91 @@ public class ComicController {
     }
 
     /**
-     * Updates the copy (comic_ownership table and signatures) to reflect the given updated version of the copy.
+     * Updates the copy (grade, slabbed, signatures) to reflect the given updated version of the copy.
      * The updated version of the comic should not have any id fields changed from the original.
      * Any information in fields not specific to a copy will be ignored.
      * @param userId the id of the user who owns the copy to be updated
-     * @param updatedComic the new comic replacing the old data
+     * @param updatedCopy a Comic instance containing the copy data to overwrite the current data
+     * @return true if the user owns a copy with the given copy id and false if they did not and no changes were made
      */
-    public void updateCopy(int userId, Comic updatedCopy) {
+    public boolean updateCopy(int userId, Comic updatedCopy) {
         // check to make sure the copy is owned by the given user by getting the collection id
-        // update sql call
+        // copy id should 
+        String sql = """
+                SELECT COUNT(*) FROM comic_ownership 
+                INNER JOIN collection_refrence ON collection_refrence.copy_fk = comic_ownership.id
+                WHERE collection_refrence.collection_fk = ? AND comic_ownership.id = ?;
+                """;
+        ArrayList<Object> obj = new ArrayList<>();
+        obj.add(getCollectionIdFromUser(userId));
+        obj.add(updatedCopy.getCopyId());
+        ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, obj);
+        if ((long)result.get(0) == 0l)
+            return false; 
+        // update sql calls
+        // grade and slabbed are in comic_ownership
+        sql = """
+                UPDATE comic_ownership
+                SET grade = ?, slabbed = ?
+                WHERE id = ?
+                """;
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(updatedCopy.getGrade());
+        psc.appendToObjects(updatedCopy.isSlabbed());
+        psc.appendToObjects(updatedCopy.getCopyId());
+        jdbcInsert.executePreparedSQL(psc);
+        // signatures split between signature_refrence and signature_info
+        // check if signature is already in signature_reference
+        for (Signature s : updatedCopy.getSignatures()) {
+            sql = """
+                SELECT authenticated FROM signature_info 
+                INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id
+                WHERE signature_info.id = ? AND signature_refrence.copy_fk = ?;
+            """;
+            obj = new ArrayList<>();
+            obj.add(s.getId());
+            obj.add(updatedCopy.getCopyId());
+            result = jdbcRead.executePreparedSQL(sql, obj);
+            System.out.println("\tselect done");
+            // if signature not already there, add it
+            if (result.size() == 0) {
+                // add entry to signature_info
+                sql = """
+                        INSERT INTO signature_info (s_name, authenticated)
+                        VALUES (?, ?)
+                        """;
+                obj = new ArrayList<>();
+                obj.add(s.getName());
+                obj.add(s.isAuthenticated());
+                int id = jdbcInsert.executePreparedSQLGetId(sql, obj);
+                System.out.println("\tinfo insert done");
+                // add entry to signature_refrence
+                sql = """
+                        INSERT INTO signature_refrence (signature_fk, copy_fk) 
+                        VALUES (?, ?)
+                        """;
+                psc = new PreparedStatementContainer();
+                psc.appendToSql(sql);
+                psc.appendToObjects(id);
+                psc.appendToObjects(updatedCopy.getCopyId());
+                jdbcInsert.executePreparedSQL(psc);
+                System.out.println("\trefrence insert done");
+            }
+            // if signature authentication has changed, update signature_info
+            else if ((boolean)result.get(0) != s.isAuthenticated()) {
+                sql = """
+                        UPDATE signature_info SET authenticated = ? WHERE id = ?
+                        """;
+                
+                psc = new PreparedStatementContainer();
+                psc.appendToSql(sql);
+                psc.appendToObjects(s.isAuthenticated());
+                psc.appendToObjects(s.getId());
+                jdbcInsert.executePreparedSQL(psc);
+            }
+        }
+        return true;
     }
 
     /**
@@ -154,10 +230,9 @@ public class ComicController {
     }
 
     /**
-     * UNFINISHED - signatures not accounted for
-     * Gets the statistics, the total number of comics in the collection and the total value of the collection.
+     * Gets the statistics: the total number of comics in the collection and the total value of the collection.
      * @param userId - the id of the user whose collection the statistics are being gathered for
-     * @return - an array of Doubles containing {count, total value}, where the count can be assumed to be an integer
+     * @return a map with the keys of "count" and "value", with String values
      */
     public Map<String,String> getStatistics(int userId){
         /*
@@ -204,21 +279,28 @@ public class ComicController {
                 value *= 2;
             totalValue += value;
         }
-        /*
+        // signatures
         sql = """
                 SELECT COUNT(*), authenticated FROM signature_info 
                 INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id
                 INNER JOIN collection_refrence ON collection_refrence.copy_fk = signature_refrence.copy_fk
-                WHERE collection_refrence.collection_fk = 3 
+                WHERE collection_refrence.collection_fk = ? 
                 GROUP BY authenticated;
             """;
         obj = new ArrayList<>();
         obj.add(getCollectionIdFromUser(userId));
         results = jdbcRead.readListofLists(sql, obj, 2);
-        */
-        // TBC when comics can actually be signed so that this can be tested
-
-
+        long totalNumSigs = (long)results.get(0).get(0) + (long)results.get(1).get(0);     // first get row, then get count (index 0)
+        // value increases by 5% for every signature
+        for(int i = 0; i < totalNumSigs+.25; i++) {
+            totalValue *= 1.05;
+        }
+        System.out.println(results.get(1).get(1));
+        // value increased by an additional 20% for every authentication
+        for(int i = 0; i < (long)results.get(1).get(0)+.25; i++) {
+            totalValue *= 1.2;
+        }
+        // output
         Map<String,String> stats = new HashMap<>();
         stats.put("count", Integer.toString(count));
         stats.put("value", Double.toString(totalValue));
@@ -245,10 +327,19 @@ public class ComicController {
         // System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
         // SearchAlgorithm sa = new PartialKeywordSearch();
         // cc.setSearch(sa);
-        // Comic[] comics = cc.search(1, "Control");
+        // Comic[] comics = cc.search(2, "");
         // for (Comic comic : comics) {
         //     System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
         // }
+
+        // Comic comic = cc.get(14241);
+        // System.out.println(comic);
+        // Signature s = new Signature(0, "Jim", true);
+        // comic.addSignature(s);
+        // comic.getSignatures().get(1).setAuthenticated(false);
+        // cc.updateCopy(2, comic);
+        // System.out.println(cc.get(14241));
+
         Map<String,String> stats = cc.getStatistics(2);
         System.out.println("count = "+stats.get("count")+", total value = "+stats.get("value"));
 

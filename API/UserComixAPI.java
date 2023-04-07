@@ -46,7 +46,7 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Comic[] browsePersonalCollection(int userId) throws Exception {
-        SearchAlgorithm browseSearchAlgorithm = new PartialKeywordSearch(); 
+        SearchAlgorithm browseSearchAlgorithm = new PartialKeywordSearch();
         browseSearchAlgorithm.setSort(new BrowseSort());
 
         SearchAlgorithm previousSearchAlgorithm = comicController.getSearch();
@@ -54,7 +54,7 @@ public class UserComixAPI implements ComixAPI {
         comicController.setSearch(browseSearchAlgorithm);
         Comic[] personalCollection = comicController.search(userId, "");
         comicController.setSearch(previousSearchAlgorithm);
-        
+
         return personalCollection;
     }
 
@@ -116,5 +116,9 @@ public class UserComixAPI implements ComixAPI {
     public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'unslabGradedComicInPersonalCollection'");
+    }
+    
+    public Comic getComic(int comicId) throws Exception {
+        return this.comicController.get(comicId);
     }
 }

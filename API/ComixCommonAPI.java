@@ -133,4 +133,9 @@ public class ComixCommonAPI implements ComixAPI {
     public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) {
         return this.comixAPI.unslabGradedComicInPersonalCollection(user, gradedComic);
     }
+
+    @Override
+    public Comic getComic(int comicId) throws Exception {
+        return this.comixAPI.getComic(comicId);
+    }
 }
