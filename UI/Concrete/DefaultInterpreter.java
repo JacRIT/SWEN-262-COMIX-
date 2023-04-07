@@ -60,20 +60,15 @@ public abstract class DefaultInterpreter implements Interpreter {
     }
 
     if (command.startsWith("V") || command.startsWith("v")) {
-      Boolean detailed = false;
-      String[] split = command.split(" ");
+      Boolean detailed = this.isComicDetailed(flags);
 
-      if (split.length != 2)
+      if (detailed == null)
+        return "Unkown flag (" + input + ") found, please try again";
+
+      Integer comicId = this.getViewComicId(command);
+
+      if (comicId == null)
         return "Command (" + command + ") is in an incorrect format";
-
-      int comicId = Integer.parseInt(split[1].trim());
-
-      for (String flag : flags) {
-        if (flag.equals("detailed"))
-          detailed = true;
-        else
-          return "Unkown flag (" + flag + ") found, please try again";
-      }
 
       return this.viewComic(comicId, detailed);
     }
@@ -127,7 +122,7 @@ public abstract class DefaultInterpreter implements Interpreter {
    * @return A message to display back to the end-user, can be a success or error
    *         message
    */
-  private String viewComic(int comicId, Boolean detailed) {
+  protected String viewComic(int comicId, Boolean detailed) {
     try {
       Comic comic = this.api.getComic(comicId);
 
@@ -208,6 +203,35 @@ public abstract class DefaultInterpreter implements Interpreter {
    */
   protected Boolean isFlagged(String input) {
     return this.seperateFlags(input).length > 1;
+  }
+
+  /**
+   * Decide if a comic is detailed
+   * 
+   * @param flags Flags entered in with the command
+   */
+  protected Boolean isComicDetailed(String[] flags) {
+    Boolean detailed = false;
+    for (String flag : flags) {
+      if (flag.equals("detailed"))
+        detailed = true;
+      else
+        return null;
+    }
+    return detailed;
+  }
+
+  /**
+   * Get view comic id from string
+   */
+  protected Integer getViewComicId(String command) {
+    String[] split = command.split(" ");
+
+    if (split.length != 2)
+      return null;
+
+    int comicId = Integer.parseInt(split[1].trim());
+    return comicId;
   }
 
   /**

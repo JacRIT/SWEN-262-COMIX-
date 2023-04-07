@@ -9,6 +9,8 @@ import UI.Interfaces.Mediator;
 
 public class AuthInterpreter extends DefaultInterpreter {
 
+  private Integer lastViewed;
+
   public AuthInterpreter(Mediator mediator) {
     super(mediator);
   }
@@ -28,17 +30,39 @@ public class AuthInterpreter extends DefaultInterpreter {
       }).toArray(String[]::new);
     }
 
+    if (command.startsWith("V") || command.startsWith("v")) {
+      Boolean detailed = this.isComicDetailed(flags);
+
+      if (detailed == null)
+        return "Unkown flag (" + input + ") found, please try again";
+
+      Integer comicId = this.getViewComicId(command);
+
+      if (comicId == null)
+        return "Command (" + command + ") is in an incorrect format";
+
+      return this.viewComic(comicId, detailed);
+    }
+
     if (command.startsWith("SP") || command.startsWith("sp")) {
       String flagMessage = this.setSearchFlags(flags);
-
       String keyword = command.substring(2, command.length()).trim();
+
+      this.lastViewed = null;
       return this.search(keyword) + flagMessage;
     }
 
     if (command.startsWith("A") || command.startsWith("a")) {
-      return this.createCommand(command);
+      String fullCommand = command.trim();
+      if (this.lastViewed != null && fullCommand.length() == 1) {
+        fullCommand += " " + this.lastViewed.toString();
+      }
+
+      this.lastViewed = null;
+      return this.createCommand(fullCommand);
     }
 
+    this.lastViewed = null;
     return super.interprete(input);
   }
 
@@ -54,10 +78,16 @@ public class AuthInterpreter extends DefaultInterpreter {
   private String createCommand(String input) {
     try {
       PCCommand newCommand = this.commandFactory.createCommand(input, this.mediator.getUser(), this.api);
+
+      if (newCommand == null) {
+        throw new Exception("Command created was null");
+      }
+
       String successMessage = newCommand.execute();
       this.mediator.addCommand(newCommand);
       return successMessage;
     } catch (Exception err) {
+      // System.out.println(err);
       System.out.println("Create Command Err:\n" + err.getLocalizedMessage() + "\n" + err.getMessage());
       return "Command: " + input.split(" ")[0] + " could not be executed";
     }
@@ -98,4 +128,13 @@ public class AuthInterpreter extends DefaultInterpreter {
     }
   }
 
+  @Override
+  protected String viewComic(int comicId, Boolean detailed) {
+    String defaultBehavior = super.viewComic(comicId, detailed);
+    if (defaultBehavior.startsWith("Internal error"))
+      return defaultBehavior;
+    this.lastViewed = comicId;
+    String addComicInstructions = "\nPress \"A\" to add to your personal collection.";
+    return defaultBehavior + addComicInstructions;
+  }
 }
