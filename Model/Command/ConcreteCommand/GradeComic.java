@@ -7,35 +7,29 @@ import Model.JavaObjects.User;
 
 public class GradeComic implements PCCommand {
 
-  private int lastGrade;
   private int newGrade;
-  private int comicId;
+  private Comic oldComic;
   private User user;
 
   private ComixCommonAPI api;
 
-  public GradeComic(int lastGrade, int newGrade, int comicId, User user, ComixCommonAPI api) {
-    this.lastGrade = lastGrade;
+  public GradeComic(int lastGrade, int newGrade, Comic oldComic, User user, ComixCommonAPI api) {
     this.newGrade = newGrade;
-    this.comicId = comicId;
+    this.oldComic = oldComic;
     this.user = user;
     this.api = api;
   }
 
   @Override
-  public void execute() {
-    Comic comic = this.api.getComic(this.comicId);
-
-    this.api.gradeComicInPersonalCollection(this.user, comic, this.newGrade);
-
+  public String execute() {
+    this.api.gradeComicInPersonalCollection(this.user, this.oldComic, this.newGrade);
+    return "";
   }
 
   @Override
-  public void unExecute() {
-    Comic comic = this.api.getComic(this.comicId);
-
-    this.api.gradeComicInPersonalCollection(this.user, comic, this.lastGrade);
-
+  public String unExecute() {
+    this.api.gradeComicInPersonalCollection(this.user, this.oldComic, this.oldComic.getGrade());
+    return "";
   }
 
 }

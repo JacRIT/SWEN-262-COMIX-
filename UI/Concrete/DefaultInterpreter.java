@@ -38,7 +38,7 @@ public abstract class DefaultInterpreter implements Interpreter {
 
     if (this.isFlagged(input)) {
       flags = this.seperateFlags(input);
-      String removing = flags[0] + "   ";
+      String removing = flags[0];
       command = removing;
       flags = Arrays.stream(flags).filter((flag) -> {
         return !removing.equals(flag);
@@ -56,7 +56,6 @@ public abstract class DefaultInterpreter implements Interpreter {
 
       String keyword = command.substring(2, command.length()).trim();
       return this.search(keyword) + flagMessage;
-      // Search with provided flags
     }
 
     if (command.startsWith("Exit") || command.startsWith("exit"))
@@ -66,7 +65,7 @@ public abstract class DefaultInterpreter implements Interpreter {
 
   }
 
-  private String search(String keyword) {
+  protected String search(String keyword) {
     try {
       Comic[] comics = this.api.searchComics(1, keyword);
 
@@ -91,7 +90,7 @@ public abstract class DefaultInterpreter implements Interpreter {
     }
   }
 
-  private String setFlags(String[] flags) {
+  protected String setFlags(String[] flags) {
     String successMessage = "";
 
     SortAlgorithm sort = this.sortFactory.createAlgorithim(null);
@@ -101,9 +100,12 @@ public abstract class DefaultInterpreter implements Interpreter {
       successMessage = "Results sorted by: DefaultSort\nResults searched by: PartialSort";
     } else
       for (String unseperated : flags) {
+        System.out.println("");
+        System.out.println("Looping: " + unseperated);
+        System.out.println("");
         String[] seperated = unseperated.split("=");
         if (seperated.length != 2) {
-          successMessage += "Flag " + seperated[0] + "is in an incorrect format.\n";
+          successMessage += "Flag " + seperated[0] + " is in an incorrect format.\n";
           continue;
         }
 

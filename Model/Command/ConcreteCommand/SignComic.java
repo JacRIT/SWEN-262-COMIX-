@@ -2,18 +2,19 @@ package Model.Command.ConcreteCommand;
 
 import Api.ComixCommonAPI;
 import Model.Command.PCCommand;
+import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
 
 public class SignComic implements PCCommand {
 
   private User user;
-  private int comicId;
+  private Comic comic;
 
   private ComixCommonAPI api;
 
-  public SignComic(User user, int comicId, ComixCommonAPI api) {
+  public SignComic(User user, Comic comic, ComixCommonAPI api) {
     this.user = user;
-    this.comicId = comicId;
+    this.comic = comic;
     this.api = api;
   }
 
@@ -21,16 +22,18 @@ public class SignComic implements PCCommand {
    * Waiting on api responses
    */
   @Override
-  public void execute() {
+  public String execute() {
 
+    return "";
   }
 
   /**
    * Waiting on api responses
    */
   @Override
-  public void unExecute() {
+  public String unExecute() {
 
+    return "";
   }
 
 }

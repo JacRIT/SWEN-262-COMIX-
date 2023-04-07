@@ -2,8 +2,8 @@ package Model.Command;
 
 public interface PCCommand {
 
-  public void execute();
+  public String execute();
 
-  public void unExecute();
+  public String unExecute();
 
 }

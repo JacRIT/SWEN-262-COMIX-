@@ -41,7 +41,7 @@ public class GuestInterpreter extends DefaultInterpreter {
       String successMessage = "Welcome " + user.getName() + "\nPress \"I\" to see new available options";
 
       this.mediator.setUser(user);
-      this.mediator.setCli(new AuthCLI(user));
+      this.mediator.setCli(new AuthCLI());
       this.mediator.setInterpreter(new AuthInterpreter(this.mediator));
 
       return successMessage;
@@ -63,7 +63,7 @@ public class GuestInterpreter extends DefaultInterpreter {
       String successMessage = "Welcome " + user.getName() + "\nPress \"I\" to see new available options";
 
       this.mediator.setUser(user);
-      this.mediator.setCli(new AuthCLI(user));
+      this.mediator.setCli(new AuthCLI());
       this.mediator.setInterpreter(new AuthInterpreter(this.mediator));
 
       return successMessage;

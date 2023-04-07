@@ -19,17 +19,21 @@ public class SlabComic implements PCCommand {
   }
 
   @Override
-  public void execute() {
+  public String execute() {
     Comic comic = this.api.getComic(this.comicId);
 
     this.api.slabGradedComicInPersonalCollection(this.user, comic);
+
+    return "";
   }
 
   @Override
-  public void unExecute() {
+  public String unExecute() {
     Comic comic = this.api.getComic(this.comicId);
 
     this.api.unslabGradedComicInPersonalCollection(this.user, comic);
+
+    return "";
   }
 
 }

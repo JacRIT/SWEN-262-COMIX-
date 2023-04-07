@@ -8,28 +8,37 @@ import Model.JavaObjects.User;
 public class AddToPC implements PCCommand {
 
   private User user;
-  private int comicId;
+  private Comic comic;
 
   private ComixCommonAPI api;
 
-  public AddToPC(User user, int comicId, ComixCommonAPI api) {
+  public AddToPC(User user, Comic comic, ComixCommonAPI api) {
     this.user = user;
-    this.comicId = comicId;
+    this.comic = comic;
     this.api = api;
   }
 
   @Override
-  public void execute() {
-    Comic comic = this.api.getComic(this.comicId);
+  public String execute() {
 
-    this.api.addComicToPersonalCollection(this.user, comic);
+    Boolean success = this.api.addComicToPersonalCollection(this.user, this.comic);
+
+    if (success)
+      return "Comic \"" + this.comic.getTitle() + "\" successfully added to " + this.user.getName() + "'s collection";
+
+    return "Comic \"" + this.comic.getTitle() + "\" could not be added to " + this.user.getName() + "'s collection";
+
   }
 
   @Override
-  public void unExecute() {
-    Comic comic = this.api.getComic(this.comicId);
+  public String unExecute() {
+    Boolean success = this.api.removeComicFromPersonalCollection(this.user, this.comic);
+    if (success)
+      return "Comic \"" + this.comic.getTitle() + "\" successfully removed from " + this.user.getName()
+          + "'s collection";
 
-    this.api.removeComicFromPersonalCollection(this.user, comic);
+    return "Comic \"" + this.comic.getTitle() + "\" could not be removed from " + this.user.getName() + "'s collection";
+
   }
 
 }
