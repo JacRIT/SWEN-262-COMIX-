@@ -36,6 +36,10 @@ public class ModifiedQueue<T> {
     return this.list.get(this.index);
   }
 
+  public T getCurrent() {
+    return this.list.get(this.index);
+  }
+
   public T moveBackward() {
     if (this.index <= 0)
       return null;
