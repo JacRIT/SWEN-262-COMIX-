@@ -91,17 +91,35 @@ interface ComixAPI {
     Boolean signComic(Comic comic);
 
     /**
+     * unSigns a comic.  
+     * @param comic
+     * @return true : Comic is unSigned sucessfully 
+     *         false : Comic is not successfully unsigned 
+     *                  - comic does not exist in database.
+     */
+    Boolean unSignComic(Comic comic);
+
+    /**
      * Verifies a signed comic.
      * A signed comic may also be marked as "authenticated" meaning that the
         signature has been verified by an authority. This increases the value of the comic
         by an additional 20%
      * @param signedComic a previously signed comic to be verified.
-     * @return  true    : comic sucessfully signed
-     *          false   : comic NOT sucessfully signed
+     * @return  true    : comic sucessfully verified/authenticated
+     *          false   : comic NOT sucessfully verified/authenticated
      *                      - comic does not exist
      *                      - comic not previously signed
      */
     Boolean verifyComic(Comic signedComic);
+    /**
+     * unVerifies a signed comic.
+     * @param signedComic a previously signed and verified comic to be unverified.
+     * @return  true    : comic sucessfully unverified
+     *          false   : comic NOT sucessfully unverified
+     *                      - comic does not exist
+     *                      - comic not previously verified and signed
+     */
+    Boolean unVerifyComic(Comic signedComic);
 
     /**
      * Marks a comic as "graded" on a scale of 1 to 10. The value of a graded comic
@@ -119,6 +137,16 @@ interface ComixAPI {
      *                      - grade is not inbetween 1-10
      */
     Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade);
+    /**
+     * @param user The user ungrading the comic.
+     * @param comic The comic being ungraded
+     * @return  true    : comic sucessfully ungraded
+     *          false   : comic not sucessfully ungraded
+     *                      - comic does not exist
+     *                      - comic not in personal collection
+     *                      - comic is not previously graded
+     */
+    Boolean ungradeComicInPersonalCollection(User user, Comic comic);
 
     /**
      * Marks a graded comic as "slabbed." This doubles the value of the comic
@@ -132,6 +160,18 @@ interface ComixAPI {
      *                      - Comic does not exist.
      */
     Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic);
+    /**
+     * Unslabs a previously slabbed and graded comic in specified users collection.
+     * @param gradedComic graded comic being unSlabbed.
+     * @param user The user unslabbing the comic.
+     * @return  true    : Comic unslabbed.
+     *          false   : Comic not sucessfully unslabbed.
+     *                      - Comic not previously slabbed.
+     *                      - Comic is not graded.
+     *                      - Comic not in personal collection.
+     *                      - Comic does not exist.
+     */
+    Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic);
 
     /**
      * Adds a comic to a users personal collection.

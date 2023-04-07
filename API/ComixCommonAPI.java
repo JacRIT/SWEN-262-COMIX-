@@ -96,25 +96,41 @@ public class ComixCommonAPI implements ComixAPI {
 
     @Override
     public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'gradeComicInPersonalCollection'");
+        return this.comixAPI.gradeComicInPersonalCollection(user, comic, grade);
     }
 
     @Override
     public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'slabGradedComicInPersonalCollection'");
+        return this.comixAPI.slabGradedComicInPersonalCollection(user, gradedComic);
     }
 
     @Override
     public Boolean addComicToPersonalCollection(User user, Comic comic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addComicToPersonalCollection'");
+        return this.comixAPI.addComicToPersonalCollection(user, comic);
     }
 
     @Override
     public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeComicFromPersonalCollection'");
+        return this.comixAPI.removeComicFromPersonalCollection(user, comic);
+    }
+
+    @Override
+    public Boolean unSignComic(Comic comic) {
+        return this.comixAPI.unSignComic(comic);
+    }
+
+    @Override
+    public Boolean unVerifyComic(Comic signedComic) {
+        return this.comixAPI.unVerifyComic(signedComic);
+    }
+
+    @Override
+    public Boolean ungradeComicInPersonalCollection(User user, Comic comic) {
+        return this.comixAPI.ungradeComicInPersonalCollection(user, comic);
+    }
+
+    @Override
+    public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+        return this.comixAPI.unslabGradedComicInPersonalCollection(user, gradedComic);
     }
 }
