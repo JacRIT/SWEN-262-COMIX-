@@ -84,14 +84,22 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Boolean addComicToPersonalCollection(User user, Comic comic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addComicToPersonalCollection'");
+        if (noPersonalCollection(user)) {
+            return false;
+        } else {//There should before this for if a comic exists  
+            this.comicController.addToCollection(user.getId(), comic);
+            return true;  
+        }
     }
 
     @Override
     public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeComicFromPersonalCollection'");
+        if (noPersonalCollection(user)) {
+            return false;
+        } else {//There should before this for if a comic exists
+            this.comicController.removeFromCollection(user.getId(), comic);
+            return true;
+        }
     }
 
     @Override
@@ -117,8 +125,12 @@ public class UserComixAPI implements ComixAPI {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'unslabGradedComicInPersonalCollection'");
     }
-    
+
     public Comic getComic(int comicId) throws Exception {
         return this.comicController.get(comicId);
+    }
+
+    private Boolean noPersonalCollection(User user) {
+        return user.getId() <= 1;
     }
 }
