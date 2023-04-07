@@ -48,17 +48,17 @@ public class GuestComixAPI implements ComixAPI {
         return null;
     }
 
-	@Override
-	public Boolean signComic(Comic comic) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'signComic'");
-	}
+    @Override
+    public Boolean signComic(Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'signComic'");
+    }
 
-	@Override
-	public Boolean verifyComic(Comic signedComic) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'verifyComic'");
-	}
+    @Override
+    public Boolean verifyComic(Comic signedComic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'verifyComic'");
+    }
 
     @Override
     public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
@@ -82,5 +82,10 @@ public class GuestComixAPI implements ComixAPI {
     public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeComicFromPersonalCollection'");
+    }
+
+    @Override
+    public Comic getComic(int comicId) throws Exception {
+        return this.comicController.get(comicId);
     }
 }

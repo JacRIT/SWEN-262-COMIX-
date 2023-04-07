@@ -26,6 +26,14 @@ public class GuestInterpreter extends DefaultInterpreter {
 
   }
 
+  /**
+   * Communicate with the api to register a new account, then change the CLI and
+   * interpreter currently being used
+   * 
+   * @param username The name provided is the name used to register a new account
+   * @return A message to display back to the end-user, can be a success or error
+   *         message
+   */
   private String register(String username) {
     String errMessage = "User could not be registered with username: " + username;
     try {
@@ -51,6 +59,14 @@ public class GuestInterpreter extends DefaultInterpreter {
     }
   }
 
+  /**
+   * Communicate with the api to login an end-user into their account, then change
+   * the CLI and interpreter currently being used
+   * 
+   * @param username The name provided is the name used to register a new account
+   * @return A message to display back to the end-user, can be a success or error
+   *         message
+   */
   private String login(String username) {
     String errMessage = "User could not be found with username: " + username;
     try {

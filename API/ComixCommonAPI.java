@@ -117,4 +117,9 @@ public class ComixCommonAPI implements ComixAPI {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeComicFromPersonalCollection'");
     }
+
+    @Override
+    public Comic getComic(int comicId) throws Exception {
+        return this.comixAPI.getComic(comicId);
+    }
 }

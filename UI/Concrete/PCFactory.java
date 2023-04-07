@@ -10,7 +10,7 @@ import UI.Interfaces.CommandFactory;
 public class PCFactory implements CommandFactory {
 
   @Override
-  public PCCommand createCommand(String type, User user, ComixCommonAPI api) {
+  public PCCommand createCommand(String type, User user, ComixCommonAPI api) throws Exception {
 
     if (type.startsWith("A")) {
       String[] split = type.split(" ");

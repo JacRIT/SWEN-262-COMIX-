@@ -3,10 +3,10 @@ package UI.Concrete;
 import java.util.Arrays;
 
 import Api.ComixCommonAPI;
-import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
+import UI.Interfaces.CommandFactory;
 import UI.Interfaces.Factory;
 import UI.Interfaces.Interpreter;
 import UI.Interfaces.Mediator;
@@ -17,7 +17,7 @@ public abstract class DefaultInterpreter implements Interpreter {
   protected Mediator mediator;
   protected Factory<SearchAlgorithm> searchFactory;
   protected Factory<SortAlgorithm> sortFactory;
-  protected Factory<PCCommand> commandFactory;
+  protected CommandFactory commandFactory;
 
   public DefaultInterpreter(Mediator mediator) {
     try {
@@ -27,6 +27,7 @@ public abstract class DefaultInterpreter implements Interpreter {
     }
     this.searchFactory = new SearchFactory();
     this.sortFactory = new SortFactory();
+    this.commandFactory = new PCFactory();
     this.mediator = mediator;
   }
 
@@ -52,10 +53,29 @@ public abstract class DefaultInterpreter implements Interpreter {
 
     if (command.startsWith("S") || command.startsWith("s")) {
 
-      String flagMessage = this.setFlags(flags);
+      String flagMessage = this.setSearchFlags(flags);
 
       String keyword = command.substring(2, command.length()).trim();
       return this.search(keyword) + flagMessage;
+    }
+
+    if (command.startsWith("V") || command.startsWith("v")) {
+      Boolean detailed = false;
+      String[] split = command.split(" ");
+
+      if (split.length != 2)
+        return "Command (" + command + ") is in an incorrect format";
+
+      int comicId = Integer.parseInt(split[1].trim());
+
+      for (String flag : flags) {
+        if (flag.equals("detailed"))
+          detailed = true;
+        else
+          return "Unkown flag (" + flag + ") found, please try again";
+      }
+
+      return this.viewComic(comicId, detailed);
     }
 
     if (command.startsWith("Exit") || command.startsWith("exit"))
@@ -65,6 +85,13 @@ public abstract class DefaultInterpreter implements Interpreter {
 
   }
 
+  /**
+   * Search the entire database to find a matching comic to the keyword provided
+   * 
+   * @param keyword The phrase to search the database with
+   * @return A message to display back to the end-user, can be a success or error
+   *         message
+   */
   protected String search(String keyword) {
     try {
       Comic[] comics = this.api.searchComics(1, keyword);
@@ -90,7 +117,40 @@ public abstract class DefaultInterpreter implements Interpreter {
     }
   }
 
-  protected String setFlags(String[] flags) {
+  /**
+   * Search the entire database to find a specific comic that matches the
+   * specified id
+   * 
+   * @param comicId  The specific id of the comic a user wishes to view
+   * @param detailed Boolean to decide if the comic should display a summary or
+   *                 it's entire contents
+   * @return A message to display back to the end-user, can be a success or error
+   *         message
+   */
+  private String viewComic(int comicId, Boolean detailed) {
+    try {
+      Comic comic = this.api.getComic(comicId);
+
+      if (detailed)
+        return comic.toStringDetailed();
+
+      return comic.toString();
+    } catch (Exception err) {
+      String errMessage = "Internal error:\n" + err.getLocalizedMessage() + "\n" + err.getMessage();
+      return errMessage;
+    }
+  }
+
+  /**
+   * Set the Search and Sort algorithims specified to search for comics
+   * 
+   * @param flags Collection of strings specified by the user with flags to define
+   *              how to search for comics
+   * @return A message to display back to the end-user for how they have decided
+   *         to search for comics, can be a success or error
+   *         message
+   */
+  protected String setSearchFlags(String[] flags) {
     String successMessage = "";
 
     SortAlgorithm sort = this.sortFactory.createAlgorithim(null);
@@ -140,10 +200,24 @@ public abstract class DefaultInterpreter implements Interpreter {
 
   }
 
+  /**
+   * Decides if the given input contains any flags within it
+   * 
+   * @param input The entire input entered by the user
+   * @return True if the input contains any flags, False otherwise
+   */
   protected Boolean isFlagged(String input) {
     return this.seperateFlags(input).length > 1;
   }
 
+  /**
+   * Given an input, seperate the regular command from the flags included at the
+   * end
+   * 
+   * @param input The entire input entered by the user
+   * @returns A collection of strings the first index being the base command and
+   *          the following containing any flags optionally entered
+   */
   protected String[] seperateFlags(String input) {
     String[] flags = input.split("--");
     flags = Arrays.stream(flags).map((flag) -> {

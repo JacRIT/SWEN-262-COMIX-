@@ -29,25 +29,50 @@ public class AuthInterpreter extends DefaultInterpreter {
     }
 
     if (command.startsWith("SP") || command.startsWith("sp")) {
-      String flagMessage = this.setFlags(flags);
+      String flagMessage = this.setSearchFlags(flags);
 
       String keyword = command.substring(2, command.length()).trim();
       return this.search(keyword) + flagMessage;
     }
 
     if (command.startsWith("A") || command.startsWith("a")) {
-      PCCommand newCommand = this.commandFactory.createAlgorithim(command);
-      String successMessage = newCommand.execute();
-      this.mediator.addCommand(newCommand);
-      return successMessage;
+      return this.createCommand(command);
     }
 
     return super.interprete(input);
   }
 
+  /**
+   * Given an input, create the specified command that can be undone or redone at
+   * the will of the user by adding the created command to the mediators queue of
+   * commands
+   * 
+   * @param input A string containing the input entered by the user
+   * @return A message to display back to the end-user, can be a success or error
+   *         message
+   */
+  private String createCommand(String input) {
+    try {
+      PCCommand newCommand = this.commandFactory.createCommand(input, this.mediator.getUser(), this.api);
+      String successMessage = newCommand.execute();
+      this.mediator.addCommand(newCommand);
+      return successMessage;
+    } catch (Exception err) {
+      System.out.println("Create Command Err:\n" + err.getLocalizedMessage() + "\n" + err.getMessage());
+      return "Command: " + input.split(" ")[0] + " could not be executed";
+    }
+  }
+
+  /**
+   * Search the entire database to find a matching comic to the keyword provided
+   * that is also contained within the specified users personal collection
+   * 
+   * @param keyword The phrase to search the database with
+   * @return A message to display back to the end-user, can be a success or error
+   *         message
+   */
   @Override
   protected String search(String keyword) {
-
     try {
       User user = this.mediator.getUser();
       Comic[] comics = this.api.searchComics(user.getId(), keyword);
@@ -71,7 +96,6 @@ public class AuthInterpreter extends DefaultInterpreter {
     } catch (Exception err) {
       return "Search <" + keyword + "> Error:\n" + err.getLocalizedMessage() + "/n" + err.getMessage();
     }
-
   }
 
 }
