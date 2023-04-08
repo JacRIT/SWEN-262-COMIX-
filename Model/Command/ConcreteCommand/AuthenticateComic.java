@@ -20,14 +20,14 @@ public class AuthenticateComic implements PCCommand {
 
   @Override
   public String execute() {
-    this.api.verifyComic(this.user, this.comic);
-    return "";
+    // this.api.verifyComic(this.user, this.comic);
+    return "Comic (" + this.comic.getTitle() + ") has been verified";
   }
 
   @Override
   public String unExecute() {
-    this.api.unVerifyComic(this.user, this.comic);
-    return "";
+    // this.api.unVerifyComic(this.user, this.comic);
+    return "Comic (" + this.comic.getTitle() + ") has been unverified";
   }
 
 }

@@ -52,9 +52,9 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.search(keyword) + flagMessage;
     }
 
-    if (command.startsWith("A") || command.startsWith("a")) {
+    if (command.startsWith("AP") || command.startsWith("ap")) {
       String fullCommand = command.trim();
-      if (this.lastViewed != null && fullCommand.length() == 1) {
+      if (this.lastViewed != null && fullCommand.length() == 2) {
         fullCommand += " " + this.lastViewed.toString();
       }
 
@@ -134,7 +134,14 @@ public class AuthInterpreter extends DefaultInterpreter {
     if (defaultBehavior.startsWith("Internal error"))
       return defaultBehavior;
     this.lastViewed = comicId;
-    String addComicInstructions = "\nPress \"A\" to add to your personal collection.";
-    return defaultBehavior + addComicInstructions;
+    // String addComicInstructions = "\nEnter \"AP\" to add to your personal
+    // collection.";
+    String addComicInstructions = "\nEnter \"AP\" to add to your personal collection.";
+    String signComicInstructions = "\nEnter \"SG\" to add your signature to the comic";
+    String slabComicInstructions = "\nEnter \"SL\" to slab this comic";
+    String gradeComicInstructions = "\nEnter \"G <Graded Value>\" to grade this comic on a scale of 1-10";
+    String authenticateInstructions = "\nEnter \"A\" to authenticate the signatures on the comic";
+    return defaultBehavior + addComicInstructions + signComicInstructions + slabComicInstructions
+        + gradeComicInstructions + authenticateInstructions;
   }
 }

@@ -213,7 +213,7 @@ public abstract class DefaultInterpreter implements Interpreter {
   protected Boolean isComicDetailed(String[] flags) {
     Boolean detailed = false;
     for (String flag : flags) {
-      if (flag.equals("detailed"))
+      if (flag.equals("d"))
         detailed = true;
       else
         return null;

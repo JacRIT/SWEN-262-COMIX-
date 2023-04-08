@@ -8,32 +8,32 @@ import Model.JavaObjects.User;
 public class SlabComic implements PCCommand {
 
   private User user;
-  private int comicId;
+  private Comic comic;
   private ComixCommonAPI api;
 
   public SlabComic(User user,
-      ComixCommonAPI api, int comicId) {
+      ComixCommonAPI api, Comic comic) {
     this.user = user;
-    this.comicId = comicId;
+    this.comic = comic;
     this.api = api;
   }
 
   @Override
   public String execute() {
-    Comic comic = this.api.getComic(this.comicId);
+    // Comic comic = this.api.getComic(this.comicId);
 
-    this.api.slabGradedComicInPersonalCollection(this.user, comic);
+    // this.api.slabGradedComicInPersonalCollection(this.user, comic);
 
-    return "";
+    return "Comic (" + this.comic.getTitle() + ") has been slabbed";
   }
 
   @Override
   public String unExecute() {
-    Comic comic = this.api.getComic(this.comicId);
+    // Comic comic = this.api.getComic(this.comicId);
 
-    this.api.unslabGradedComicInPersonalCollection(this.user, comic);
+    // this.api.unslabGradedComicInPersonalCollection(this.user, comic);
 
-    return "";
+    return "Comic (" + this.comic.getTitle() + ") has been unslabbed";
   }
 
 }

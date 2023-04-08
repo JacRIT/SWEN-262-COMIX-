@@ -3,27 +3,28 @@ package Model.JavaObjects;
 import java.util.ArrayList;
 
 public class Comic {
-   
-    private  int                       id;
-    private  int                       copyId;
-    private  ArrayList<Publisher>      publisher;
-    private  String                    series;
-    private  String                    title;
-    private  int                       volumeNumber;
-    private  String                    issueNumber;
-    private  String                    publicationDate;
-    private  ArrayList<Creator>        creators;
-    private  ArrayList<Character>      principlCharacters;
-    private  String                    description;
-    private  float                     initialValue;
-    private  ArrayList<Signature>      signatures;
-    private  float                     value;
-    private  int                       grade;
-    private  boolean                   isSlabbed;
+
+    private int id;
+    private int copyId;
+    private ArrayList<Publisher> publisher;
+    private String series;
+    private String title;
+    private int volumeNumber;
+    private String issueNumber;
+    private String publicationDate;
+    private ArrayList<Creator> creators;
+    private ArrayList<Character> principlCharacters;
+    private String description;
+    private float initialValue;
+    private ArrayList<Signature> signatures;
+    private float value;
+    private int grade;
+    private boolean isSlabbed;
 
     public Comic(int id, int copyId, ArrayList<Publisher> publisher, String series, String title, int volumeNumber,
             String issueNumber, String publicationDate, ArrayList<Creator> creators,
-            ArrayList<Character> principlCharacters, String description, float initialValue, ArrayList<Signature> signatures, float value, int grade,
+            ArrayList<Character> principlCharacters, String description, float initialValue,
+            ArrayList<Signature> signatures, float value, int grade,
             boolean isSlabbed) {
         this.id = id;
         this.copyId = copyId;
@@ -46,54 +47,55 @@ public class Comic {
     @Override
     public String toString() {
 
-        String simpleSeries ;
-        String simpleTitle ;
+        String simpleSeries;
+        String simpleTitle;
         int CHAR_COUNT = 30;
 
-        if (this.series.length() > CHAR_COUNT  ) {
-            simpleSeries = this.series.substring(0, CHAR_COUNT-4) + "..." ;
-        } else if (this.series.length() == CHAR_COUNT ) {
-            simpleSeries = this.series ;
+        if (this.series.length() > CHAR_COUNT) {
+            simpleSeries = this.series.substring(0, CHAR_COUNT - 4) + "...";
+        } else if (this.series.length() == CHAR_COUNT) {
+            simpleSeries = this.series;
         } else {
-            simpleSeries = this.series ;
-            for (int i = this.series.length(); i < CHAR_COUNT-1; i++) {
-                simpleSeries += " " ;
+            simpleSeries = this.series;
+            for (int i = this.series.length(); i < CHAR_COUNT - 1; i++) {
+                simpleSeries += " ";
             }
         }
 
-        if (this.title.length() > CHAR_COUNT ) {
-            simpleTitle = this.title.substring(0, CHAR_COUNT-4) + "..." ;
-        } else if (this.title.length() == CHAR_COUNT ) {
-            simpleTitle = this.title ;
+        if (this.title.length() > CHAR_COUNT) {
+            simpleTitle = this.title.substring(0, CHAR_COUNT - 4) + "...";
+        } else if (this.title.length() == CHAR_COUNT) {
+            simpleTitle = this.title;
         } else {
-            simpleTitle = this.title ;
-            for (int i = this.title.length(); i < CHAR_COUNT-1; i++) {
-                simpleTitle += " " ;
+            simpleTitle = this.title;
+            for (int i = this.title.length(); i < CHAR_COUNT - 1; i++) {
+                simpleTitle += " ";
             }
         }
 
-        return simpleSeries + "\t" + simpleTitle + "\t issue #" + this.issueNumber + "\t copy id #" + this.copyId + "\t comic id #" + this.id ;
+        return simpleSeries + "\t" + simpleTitle + "\t issue #" + this.issueNumber + "\t copy id #" + this.copyId
+                + "\t comic id " + this.id;
 
     }
 
     public String toStringDetailed() {
-        return "Comic [\n\tid=                 " + id 
-                    + "\n\tcopyId=             " + copyId
-                    + "\n\tpublisher=          " + publisher 
-                    + "\n\tseries=             " + series 
-                    + "\n\ttitle=              " + title
-                    + "\n\tvolumeNumber=       " + volumeNumber 
-                    + "\n\tissueNumber=        " + issueNumber 
-                    + "\n\tpublicationDate=    " + publicationDate 
-                    + "\n\tcreators=           " + creators 
-                    + "\n\tprinciplCharacters= " + principlCharacters
-                    + "\n\tdescription=        " + description 
-                    + "\n\tinitialValue=       " + initialValue 
-                    + "\n\tsignatures=         " + signatures
-                    + "\n\tvalue=              " + value 
-                    + "\n\tgrade=              " + grade 
-                    + "\n\tisSlabbed=          " + isSlabbed 
-                    + "\n]";
+        return "Comic [\n\tid=                 " + id
+                + "\n\tcopyId=             " + copyId
+                + "\n\tpublisher=          " + publisher
+                + "\n\tseries=             " + series
+                + "\n\ttitle=              " + title
+                + "\n\tvolumeNumber=       " + volumeNumber
+                + "\n\tissueNumber=        " + issueNumber
+                + "\n\tpublicationDate=    " + publicationDate
+                + "\n\tcreators=           " + creators
+                + "\n\tprinciplCharacters= " + principlCharacters
+                + "\n\tdescription=        " + description
+                + "\n\tinitialValue=       " + initialValue
+                + "\n\tsignatures=         " + signatures
+                + "\n\tvalue=              " + value
+                + "\n\tgrade=              " + grade
+                + "\n\tisSlabbed=          " + isSlabbed
+                + "\n]";
 
     }
 
