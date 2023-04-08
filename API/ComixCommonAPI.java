@@ -19,7 +19,7 @@ public class ComixCommonAPI implements ComixAPI {
         this.guestComixAPI = new GuestComixAPI();
         this.userComixAPI = new UserComixAPI();
         this.userController = new UserController();
-        this.comixAPI = guestComixAPI;
+        this.comixAPI = this.guestComixAPI;
     }
 
     /**
@@ -29,11 +29,15 @@ public class ComixCommonAPI implements ComixAPI {
      * @param username
      * @return Success : User
      *         Fail : Null
+     * @throws Exception
      */
-    public User authenticate(String username) {
+    public User authenticate(String username) throws Exception {
         User user = userController.getByUsername(username);
         if (user != null) {
-            this.comixAPI = userComixAPI;
+            System.out.println();
+            System.out.println("Comix API changing");
+            System.out.println();
+            this.comixAPI = new UserComixAPI();
         } else {
             return null;
         }
@@ -67,22 +71,22 @@ public class ComixCommonAPI implements ComixAPI {
 
     @Override
     public Comic[] searchComics(int userId, String keyword) throws Exception {
-        return comixAPI.searchComics(userId, keyword);
+        return this.comixAPI.searchComics(userId, keyword);
     }
 
     @Override
     public Map<String, String> generateStatistics(User user) {
-        return comixAPI.generateStatistics(user);
+        return this.comixAPI.generateStatistics(user);
     }
 
     @Override
     public String createComic(int userId, Comic comic) {
-        return comixAPI.createComic(userId, comic);
+        return this.comixAPI.createComic(userId, comic);
     }
 
     @Override
     public Comic[] browsePersonalCollection(int userId) throws Exception {
-        return comixAPI.browsePersonalCollection(userId);
+        return this.comixAPI.browsePersonalCollection(userId);
     }
 
     @Override
@@ -107,6 +111,11 @@ public class ComixCommonAPI implements ComixAPI {
 
     @Override
     public Boolean addComicToPersonalCollection(User user, Comic comic) {
+
+        System.out.println("");
+        System.out.println("Add to Pc api: " + this.comixAPI.getClass());
+        System.out.println("");
+
         return this.comixAPI.addComicToPersonalCollection(user, comic);
     }
 

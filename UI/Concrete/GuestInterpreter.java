@@ -50,7 +50,7 @@ public class GuestInterpreter extends DefaultInterpreter {
 
       this.mediator.setUser(user);
       this.mediator.setCli(new AuthCLI());
-      this.mediator.setInterpreter(new AuthInterpreter(this.mediator));
+      this.mediator.setInterpreter(new AuthInterpreter(this.mediator, this.api));
 
       return successMessage;
     } catch (Exception err) {
@@ -80,7 +80,7 @@ public class GuestInterpreter extends DefaultInterpreter {
 
       this.mediator.setUser(user);
       this.mediator.setCli(new AuthCLI());
-      this.mediator.setInterpreter(new AuthInterpreter(this.mediator));
+      this.mediator.setInterpreter(new AuthInterpreter(this.mediator, this.api));
 
       return successMessage;
     } catch (Exception err) {
