@@ -6,6 +6,7 @@ import Api.ComixCommonAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
+import Model.Search.ConcreteSearches.PartialKeywordSearch;
 import UI.Interfaces.Mediator;
 
 public class AuthInterpreter extends DefaultInterpreter {
@@ -111,6 +112,7 @@ public class AuthInterpreter extends DefaultInterpreter {
       System.out.println("Loading Personal Collection...");
       System.out.println();
 
+      this.api.setSearchStrategy(new PartialKeywordSearch());
       Comic[] comics = this.api.browsePersonalCollection(this.mediator.getUser().getId());
 
       if (comics == null)

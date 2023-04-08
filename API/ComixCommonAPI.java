@@ -37,7 +37,7 @@ public class ComixCommonAPI implements ComixAPI {
             System.out.println();
             System.out.println("Comix API changing");
             System.out.println();
-            this.comixAPI = new UserComixAPI();
+            this.comixAPI = this.userComixAPI;
         } else {
             return null;
         }
@@ -75,12 +75,12 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public Map<String, String> generateStatistics(User user) {
+    public Map<String, String> generateStatistics(User user) throws Exception {
         return this.comixAPI.generateStatistics(user);
     }
 
     @Override
-    public String createComic(int userId, Comic comic) {
+    public String createComic(int userId, Comic comic) throws Exception {
         return this.comixAPI.createComic(userId, comic);
     }
 
@@ -90,27 +90,27 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean signComic(Signature signature, Comic comic) {
+    public Boolean signComic(Signature signature, Comic comic) throws Exception {
         return this.comixAPI.signComic(signature, comic);
     }
 
     @Override
-    public Boolean verifyComic(Signature signature, Comic signedComic) {
+    public Boolean verifyComic(Signature signature, Comic signedComic) throws Exception {
         return this.comixAPI.verifyComic(signature, signedComic);
     }
 
     @Override
-    public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
+    public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) throws Exception {
         return this.comixAPI.gradeComicInPersonalCollection(user, comic, grade);
     }
 
     @Override
-    public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+    public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
         return this.comixAPI.slabGradedComicInPersonalCollection(user, gradedComic);
     }
 
     @Override
-    public Boolean addComicToPersonalCollection(User user, Comic comic) {
+    public Boolean addComicToPersonalCollection(User user, Comic comic) throws Exception {
 
         System.out.println("");
         System.out.println("Add to Pc api: " + this.comixAPI.getClass());
@@ -120,27 +120,27 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
+    public Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception {
         return this.comixAPI.removeComicFromPersonalCollection(user, comic);
     }
 
     @Override
-    public Boolean unSignComic(Signature signature, Comic comic) {
+    public Boolean unSignComic(Signature signature, Comic comic) throws Exception {
         return this.comixAPI.unSignComic(signature, comic);
     }
 
     @Override
-    public Boolean unVerifyComic(Signature signature, Comic signedComic) {
+    public Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception {
         return this.comixAPI.unVerifyComic(signature, signedComic);
     }
 
     @Override
-    public Boolean ungradeComicInPersonalCollection(User user, Comic comic) {
+    public Boolean ungradeComicInPersonalCollection(User user, Comic comic) throws Exception {
         return this.comixAPI.ungradeComicInPersonalCollection(user, comic);
     }
 
     @Override
-    public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+    public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
         return this.comixAPI.unslabGradedComicInPersonalCollection(user, gradedComic);
     }
 
