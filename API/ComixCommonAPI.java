@@ -34,9 +34,6 @@ public class ComixCommonAPI implements ComixAPI {
     public User authenticate(String username) throws Exception {
         User user = userController.getByUsername(username);
         if (user != null) {
-            System.out.println();
-            System.out.println("Comix API changing");
-            System.out.println();
             this.comixAPI = this.userComixAPI;
         } else {
             return null;

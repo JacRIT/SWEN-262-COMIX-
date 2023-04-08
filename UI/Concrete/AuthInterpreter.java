@@ -61,6 +61,14 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.search(keyword) + flagMessage;
     }
 
+    if (command.startsWith("S") || command.startsWith("s")) {
+      String flagMessage = this.setSearchFlags(flags);
+      String keyword = command.substring(2, command.length()).trim();
+
+      this.lastViewed = null;
+      return super.search(keyword) + flagMessage;
+    }
+
     if (command.startsWith("AP") || command.startsWith("ap")) {
       String fullCommand = command.trim();
       if (this.lastViewed != null && fullCommand.length() == 2) {
@@ -70,6 +78,10 @@ public class AuthInterpreter extends DefaultInterpreter {
       this.lastViewed = null;
       return this.createCommand(fullCommand);
     }
+
+    System.out.println("");
+    System.out.println("Using super");
+    System.out.println("");
 
     this.lastViewed = null;
     return super.interprete(input);

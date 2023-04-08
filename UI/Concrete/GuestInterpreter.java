@@ -46,13 +46,16 @@ public class GuestInterpreter extends DefaultInterpreter {
         return errMessage;
       }
 
-      String successMessage = "Welcome " + user.getName() + "\nPress \"I\" to see new available options";
+      return this.login(username);
 
-      this.mediator.setUser(user);
-      this.mediator.setCli(new AuthCLI());
-      this.mediator.setInterpreter(new AuthInterpreter(this.mediator, this.api));
+      // String successMessage = "Welcome " + user.getName() + "\nPress \"I\" to see
+      // new available options";
 
-      return successMessage;
+      // this.mediator.setUser(user);
+      // this.mediator.setCli(new AuthCLI());
+      // this.mediator.setInterpreter(new AuthInterpreter(this.mediator, this.api));
+
+      // return successMessage;
     } catch (Exception err) {
       errMessage = "Internal error:\n" + err.getLocalizedMessage() + "\n" + err.getMessage();
       return errMessage;

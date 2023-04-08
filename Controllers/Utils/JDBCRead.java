@@ -58,7 +58,7 @@ public class JDBCRead extends JDBC {
                 x++;
                 System.out.println("Preparing Statement..." + obj);
             }
-            System.out.println("Executing Command... " + stmt.toString());
+            System.out.println("Executing Command...");
 
             ResultSet rs = stmt.executeQuery();
             System.out.println("Command Executed!");

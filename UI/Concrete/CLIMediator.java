@@ -73,7 +73,7 @@ public class CLIMediator implements Mediator {
   public void undo() {
 
     PCCommand lastCommand = this.sessionCommands.moveBackward();
-    lastCommand.unExecute();
+    // lastCommand.unExecute();
 
   }
 
@@ -81,7 +81,7 @@ public class CLIMediator implements Mediator {
   public void redo() {
 
     PCCommand lastCommand = this.sessionCommands.getCurrent();
-    lastCommand.execute();
+    // lastCommand.execute();
     this.sessionCommands.moveForward();
 
   }
