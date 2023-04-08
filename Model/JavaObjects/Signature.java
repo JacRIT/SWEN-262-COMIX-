@@ -11,6 +11,11 @@ public class Signature {
         this.name = name;
         this.authenticated = authenticated;
     }
+    public Signature(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.authenticated = false;
+    }
     public int getId() {
         return id;
     }
