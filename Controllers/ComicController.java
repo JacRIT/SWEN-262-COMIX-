@@ -200,10 +200,17 @@ public class ComicController {
     public void delete(int userId, Comic comic) {
         int copyId = comic.getCopyId();
         // deletes references and then the copy
-        String deleteSql = "DELETE from signature_refrence, collection_refrence WHERE copy_fk = "
-                + Integer.toString(copyId)
-                + "; DELETE from comic_ownership WHERE id = " + Integer.toString(copyId);
-        jdbcInsert.executeSQL(deleteSql);
+        String deleteRefSql = "DELETE from signature_refrence, collection_refrence WHERE copy_fk = (?);";
+        String deleteCopySql = "DELETE from comic_ownership WHERE id = (?)";
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(deleteRefSql);
+        psc.appendToObjects(copyId);
+        jdbcInsert.executePreparedSQL(psc);
+        // now deletes copy
+        psc = new PreparedStatementContainer();
+        psc.appendToSql(deleteCopySql);
+        psc.appendToObjects(copyId);
+        jdbcInsert.executePreparedSQL(psc);
     }
 
     /**
@@ -214,15 +221,19 @@ public class ComicController {
      */
     public void create(int userId, Comic comic) throws Exception {
         // adding it to comic_ownership
-        String comicId = Integer.toString(comic.getId()) + ", ";
-        String comicValue = Float.toString(comic.getValue()) + ", "; // converting here since database uses INTEGER
-        String grade = Integer.toString(comic.getGrade()) + ", ";
-        String slabbed = Boolean.toString(comic.isSlabbed());
-        String sql = "INSERT INTO comic_ownership(comic_fk, comic_value, grade, slabbed)" +
-                "VALUES(" + comicId + comicValue + grade + slabbed + ")";
-        jdbcInsert.executeSQL(sql);
+        int comicId = comic.getId();
+        float comicValue = comic.getValue();
+        int grade = comic.getGrade();
+        boolean slabbed = comic.isSlabbed();
+        String sql = "INSERT INTO comic_ownership(comic_fk, comic_value, grade, slabbed) VALUES( ?, ?, ?, ?)";
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(comicId);
+        psc.appendToObjects(comicValue);
+        psc.appendToObjects(grade);
+        psc.appendToObjects(slabbed);
+        jdbcInsert.executePreparedSQL(psc);
         addToCollection(userId, comic);
-
     }
 
     /**
@@ -252,9 +263,12 @@ public class ComicController {
      * @param comic  the comic to be removed
      */
     public void removeFromCollection(int userId, Comic comic) {
-        String comicId = Integer.toString(comic.getId());
-        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = " + Integer.toString(userId)
-                + "AND copy_fk = " + comicId;
+        int comicId = comic.getId();
+        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = ? AND copy_fk = ?;";
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(userId);
+        psc.appendToObjects(comicId);
         jdbcInsert.executeSQL(sql);
     }
 
