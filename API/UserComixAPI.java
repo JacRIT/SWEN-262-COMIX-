@@ -4,6 +4,7 @@ import java.util.Map;
 
 import Controllers.ComicController;
 import Model.JavaObjects.Comic;
+import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
@@ -59,15 +60,30 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean signComic(Comic comic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'signComic'");
+    public Boolean signComic(Signature signature, Comic comic) {
+        comic.addSignature(signature);
+        comicController.updateComic(comic);
+        return true; // TODO : no checks implemented.
+    }
+    @Override
+    public Boolean unSignComic(Signature signature, Comic comic) {
+        comic.removeSignature(signature);
+        comicController.updateComic(comic);
+        return true; // TODO : no checks implemented.
+
     }
 
     @Override
-    public Boolean verifyComic(Comic signedComic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyComic'");
+    public Boolean verifyComic(Signature signature, Comic signedComic) {
+        signedComic.verifyComic(signature);
+        comicController.updateComic(signedComic);
+        return true; // TODO : no checks implemented.
+    }
+    @Override
+    public Boolean unVerifyComic(Signature signature, Comic signedComic) {
+        signedComic.unVerifyComic(signature);
+        comicController.updateComic(signedComic);
+        return true; // TODO : no checks implemented.
     }
 
     @Override
@@ -84,34 +100,14 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Boolean addComicToPersonalCollection(User user, Comic comic) {
-        if (noPersonalCollection(user)) {
-            return false;
-        } else {//There should before this for if a comic exists  
-            this.comicController.addToCollection(user.getId(), comic);
-            return true;  
-        }
+        this.comicController.addToCollection(user.getId(), comic);
+        return true; // TODO : no checks implemented.
     }
 
     @Override
     public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
-        if (noPersonalCollection(user)) {
-            return false;
-        } else {//There should before this for if a comic exists
-            this.comicController.removeFromCollection(user.getId(), comic);
-            return true;
-        }
-    }
-
-    @Override
-    public Boolean unSignComic(Comic comic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'unSignComic'");
-    }
-
-    @Override
-    public Boolean unVerifyComic(Comic signedComic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'unVerifyComic'");
+        this.comicController.removeFromCollection(user.getId(), comic);
+        return true; // TODO : no checks implemented.
     }
 
     @Override
@@ -128,9 +124,5 @@ public class UserComixAPI implements ComixAPI {
 
     public Comic getComic(int comicId) throws Exception {
         return this.comicController.get(comicId);
-    }
-
-    private Boolean noPersonalCollection(User user) {
-        return user.getId() <= 1;
     }
 }

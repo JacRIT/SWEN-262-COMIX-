@@ -4,6 +4,7 @@ import java.util.Map;
 
 import Controllers.UserController;
 import Model.JavaObjects.Comic;
+import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
@@ -85,13 +86,13 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean signComic(Comic comic) {
-        return this.comixAPI.signComic(comic);
+    public Boolean signComic(Signature signature, Comic comic) {
+        return this.comixAPI.signComic(signature, comic);
     }
 
     @Override
-    public Boolean verifyComic(Comic signedComic) {
-        return this.comixAPI.verifyComic(signedComic);
+    public Boolean verifyComic(Signature signature, Comic signedComic) {
+        return this.comixAPI.verifyComic(signature, signedComic);
     }
 
     @Override
@@ -115,13 +116,13 @@ public class ComixCommonAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean unSignComic(Comic comic) {
-        return this.comixAPI.unSignComic(comic);
+    public Boolean unSignComic(Signature signature, Comic comic) {
+        return this.comixAPI.unSignComic(signature, comic);
     }
 
     @Override
-    public Boolean unVerifyComic(Comic signedComic) {
-        return this.comixAPI.unVerifyComic(signedComic);
+    public Boolean unVerifyComic(Signature signature, Comic signedComic) {
+        return this.comixAPI.unVerifyComic(signature, signedComic);
     }
 
     @Override

@@ -3,6 +3,7 @@ package Api;
 import java.util.Map;
 
 import Model.JavaObjects.Comic;
+import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
@@ -94,12 +95,13 @@ interface ComixAPI {
      * - A single comic may be signed more than once.
      * - Each time a comic is signed, its value is increased by 5%.
      * 
-     * @param comic
+     * @param comic comic being signed
+     * @param user user signing comic
      * @return true : Comic is signed sucessfully
      *         false : Comic is not successfully signed
      *         - comic does not exist in database.
      */
-    Boolean signComic(Comic comic);
+    Boolean signComic(Signature signature, Comic comic);
 
     /**
      * unSigns a comic.  
@@ -108,7 +110,7 @@ interface ComixAPI {
      *         false : Comic is not successfully unsigned 
      *                  - comic does not exist in database.
      */
-    Boolean unSignComic(Comic comic);
+    Boolean unSignComic(Signature signature, Comic comic);
 
     /**
      * Verifies a signed comic.
@@ -118,12 +120,8 @@ interface ComixAPI {
      * by an additional 20%
      * 
      * @param signedComic a previously signed comic to be verified.
-     * @return  true    : comic sucessfully verified/authenticated
-     *          false   : comic NOT sucessfully verified/authenticated
-     *                      - comic does not exist
-     *                      - comic not previously signed
      */
-    Boolean verifyComic(Comic signedComic);
+    Boolean verifyComic(Signature signature, Comic signedComic);
     /**
      * unVerifies a signed comic.
      * @param signedComic a previously signed and verified comic to be unverified.
@@ -132,7 +130,7 @@ interface ComixAPI {
      *                      - comic does not exist
      *                      - comic not previously verified and signed
      */
-    Boolean unVerifyComic(Comic signedComic);
+    Boolean unVerifyComic(Signature signature, Comic signedComic);
 
     /**
      * Marks a comic as "graded" on a scale of 1 to 10. The value of a graded comic
@@ -212,5 +210,5 @@ interface ComixAPI {
      */
     Boolean removeComicFromPersonalCollection(User user, Comic comic);
 
-    
+
 }
