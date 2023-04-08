@@ -44,6 +44,12 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.viewComic(comicId, detailed);
     }
 
+    if (command.startsWith("BP") || command.startsWith("bp")) {
+      String personalCollection = this.browsePC();
+      this.lastViewed = null;
+      return personalCollection;
+    }
+
     if (command.startsWith("SP") || command.startsWith("sp")) {
       String flagMessage = this.setSearchFlags(flags);
       String keyword = command.substring(2, command.length()).trim();
@@ -90,6 +96,40 @@ public class AuthInterpreter extends DefaultInterpreter {
       // System.out.println(err);
       System.out.println("Create Command Err:\n" + err.getLocalizedMessage() + "\n" + err.getMessage());
       return "Command: " + input.split(" ")[0] + " could not be executed";
+    }
+  }
+
+  /**
+   * Communicate with the api to browse a specific users personal collection
+   */
+  private String browsePC() {
+    try {
+
+      System.out.println();
+      System.out.println("Loading Personal Collection...");
+      System.out.println();
+
+      Comic[] comics = this.api.browsePersonalCollection(this.mediator.getUser().getId());
+
+      if (comics == null)
+        return "Your personal collection is empty";
+
+      String successMessage = this.mediator.getUser().getName() + "'s Personal Collection:";
+
+      for (Comic comic : comics) {
+        successMessage += "\n\t" + comic.toString();
+      }
+
+      return successMessage;
+
+    } catch (Exception err) {
+
+      System.out.println();
+      System.out.println("Browse Error:\n" + err.getMessage() + "\n" + err.getLocalizedMessage());
+      System.out.println();
+
+      return "Internal Error Browsing " + this.mediator.getUser().getName() + "'s Personal Collection";
+
     }
   }
 
