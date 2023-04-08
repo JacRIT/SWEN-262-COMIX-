@@ -41,7 +41,7 @@ public abstract class DefaultCLI implements CLI {
 
     this.log("V <Comic Id> - View a single comics contents", false);
     this.log("\tOptional Flags:", false);
-    this.log("\t--detailed - Display the entire contents of a comic rather than a brief summary");
+    this.log("\t--d - Display the entire contents of a comic rather than a brief summary");
 
     this.log("S <Search Term> - Search through all Comics", false);
     this.log("\tOptional Flags:", false);

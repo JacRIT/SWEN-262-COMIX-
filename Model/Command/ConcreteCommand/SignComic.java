@@ -24,7 +24,7 @@ public class SignComic implements PCCommand {
   @Override
   public String execute() {
 
-    return "";
+    return "Comic (" + this.comic.getTitle() + ") has been signed by " + this.user.getName();
   }
 
   /**
@@ -33,7 +33,7 @@ public class SignComic implements PCCommand {
   @Override
   public String unExecute() {
 
-    return "";
+    return this.user.getName() + " signature has been removed from Comic (" + this.comic.getTitle() + ")";
   }
 
 }

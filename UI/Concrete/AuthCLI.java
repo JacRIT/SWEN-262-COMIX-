@@ -20,7 +20,7 @@ public class AuthCLI extends DefaultCLI {
     super.log(
         "\t--searchBy=<value> - Search comics by:\n\t\t\"partial-search\", \"exact-search\", \"exact-number\", \"value\"\n\t\tDefaults to partial-search");
 
-    super.log("A <comic id> - Add a comic into your personal collection");
+    super.log("AP <comic id> - Add a comic into your personal collection");
 
     this.log("L - Logout of your account");
 
