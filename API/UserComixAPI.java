@@ -62,13 +62,13 @@ public class UserComixAPI implements ComixAPI {
     @Override
     public Boolean signComic(Signature signature, Comic comic) {
         comic.addSignature(signature);
-        comicController.updateComic(comic);
+        comicController.updateCopy(signature.getId(), comic);
         return true; // TODO : no checks implemented.
     }
     @Override
     public Boolean unSignComic(Signature signature, Comic comic) {
         comic.removeSignature(signature);
-        comicController.updateComic(comic);
+        comicController.updateCopy(signature.getId(), comic);
         return true; // TODO : no checks implemented.
 
     }
@@ -76,13 +76,13 @@ public class UserComixAPI implements ComixAPI {
     @Override
     public Boolean verifyComic(Signature signature, Comic signedComic) {
         signedComic.verifyComic(signature);
-        comicController.updateComic(signedComic);
+        comicController.updateCopy(signature.getId(), signedComic);
         return true; // TODO : no checks implemented.
     }
     @Override
     public Boolean unVerifyComic(Signature signature, Comic signedComic) {
         signedComic.unVerifyComic(signature);
-        comicController.updateComic(signedComic);
+        comicController.updateCopy(signature.getId(), signedComic);
         return true; // TODO : no checks implemented.
     }
 
