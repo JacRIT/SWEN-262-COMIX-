@@ -88,14 +88,32 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'gradeComicInPersonalCollection'");
+        if (comic.gradeComic(grade)) {
+            comicController.updateCopy(user.getId(), comic);
+            return true;
+        } else {
+            return false;
+        }
+         // TODO : some checks not implemented.
+    }
+    @Override
+    public Boolean ungradeComicInPersonalCollection(User user, Comic comic) {
+        comic.unGradeComic();
+        comicController.updateCopy(user.getId(), comic);
+        return true; // TODO : no checks implemented.
     }
 
     @Override
     public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'slabGradedComicInPersonalCollection'");
+        gradedComic.slabComic();
+        comicController.updateCopy(user.getId(), gradedComic);
+        return true; // TODO : no checks implemented.
+    }
+    @Override
+    public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+        gradedComic.unSlabComic();
+        comicController.updateCopy(user.getId(), gradedComic);
+        return true; // TODO : no checks implemented.
     }
 
     @Override
@@ -110,17 +128,7 @@ public class UserComixAPI implements ComixAPI {
         return true; // TODO : no checks implemented.
     }
 
-    @Override
-    public Boolean ungradeComicInPersonalCollection(User user, Comic comic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ungradeComicInPersonalCollection'");
-    }
 
-    @Override
-    public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'unslabGradedComicInPersonalCollection'");
-    }
 
     public Comic getComic(int comicId) throws Exception {
         return this.comicController.get(comicId);

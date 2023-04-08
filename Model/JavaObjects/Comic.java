@@ -244,6 +244,21 @@ public class Comic {
         this.isSlabbed = isSlabbed;
     }
 
+    public Boolean gradeComic(int grade) {
+        if (grade < 0 || grade > 10) return false;
+        this.grade = grade;
+        return true;
+    }
+    public void unGradeComic() {
+        this.grade = 0;
+    }
+    public void slabComic() {
+        this.isSlabbed = true;
+    }
+    public void unSlabComic() {
+        this.isSlabbed = false;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
