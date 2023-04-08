@@ -22,6 +22,8 @@ public class AuthCLI extends DefaultCLI {
 
     super.log("AP <comic id> - Add a comic into your personal collection");
 
+    super.log("BP - Browse all the comics in your personal collection");
+
     this.log("L - Logout of your account");
 
     if (includeLast)
