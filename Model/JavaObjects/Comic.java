@@ -200,6 +200,23 @@ public class Comic {
     public void addSignature(Signature signature) {
         this.signatures.add(signature);
     }
+    public void removeSignature(Signature signature) {
+        this.signatures.remove(signature);
+    }
+    public void verifyComic(Signature signature) {
+        for(Signature currentSignature : signatures) {
+            if ( currentSignature.equals(signature)) {
+                currentSignature.setAuthenticated(true);
+            }
+        }
+    }
+    public void unVerifyComic(Signature signature) {
+        for(Signature currentSignature : signatures) {
+            if ( currentSignature.equals(signature) ) {
+                currentSignature.setAuthenticated(false);
+            }
+        }
+    }
 
     public float getValue() {
         return value;
