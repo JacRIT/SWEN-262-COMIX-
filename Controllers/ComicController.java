@@ -212,7 +212,7 @@ public class ComicController {
      * @param userId the userId of the collection the comic will be in
      * @param comic  The comic to be inserted
      */
-    public void create(int userId, Comic comic) {
+    public void create(int userId, Comic comic) throws Exception {
         // adding it to comic_ownership
         String comicId = Integer.toString(comic.getId()) + ", ";
         String comicValue = Float.toString(comic.getValue()) + ", "; // converting here since database uses INTEGER
@@ -226,16 +226,23 @@ public class ComicController {
     }
 
     /**
-     * Adds a comic copy to a collection
-     * 
+     * Adds a comic copy to a collection.
      * @param userId the userId of the collection the comic will be in
      * @param comic  the comic to be added
      */
-    public void addToCollection(int userId, Comic comic) {
-        String comicid = Integer.toString(comic.getCopyId());
-        String sql = "INSERT INTO collection_refrence(collection_fk, copy_fk)" +
-                "VALUES(" + Integer.toString(userId) + ", " + comicid + ")";
-        jdbcInsert.executeSQL(sql);
+    public void addToCollection(int userId, Comic comic) throws Exception {
+        // create a new copy of a comic (comic_ownership)
+        String sql = "INSERT INTO comic_ownership (comic_fk) VALUES (?)";
+        ArrayList<Object> obj = new ArrayList<>();
+        obj.add(comic.getId());
+        int copyId = jdbcInsert.executePreparedSQLGetId(sql, obj);
+        // add new entry to collection_refrence
+        sql = "INSERT INTO collection_refrence (collection_fk, copy_fk) VALUES (?,?)";
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(getCollectionIdFromUser(userId));
+        psc.appendToObjects(copyId);
+        jdbcInsert.executePreparedSQL(psc);
     }
 
     /**
