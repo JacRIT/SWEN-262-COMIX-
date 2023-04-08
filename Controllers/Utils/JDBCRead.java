@@ -9,8 +9,7 @@ import java.util.ArrayList;
 
 public class JDBCRead extends JDBC {
 
-    public ArrayList<ArrayList<Object>> readListofLists(String SQL, ArrayList<Object> prepareds, int numCols)
-            throws Exception {
+    public ArrayList<ArrayList<Object>> readListofLists(String SQL, ArrayList<Object> prepareds, int numCols) {
         System.out.println("Creating Connection...");
         try (
                 Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -40,12 +39,12 @@ public class JDBCRead extends JDBC {
             return results;
 
         } catch (SQLException e) {
-            throw new Exception("Outer Problem", e);
+            throw new Error("Outer Problem", e);
         }
 
     }
 
-    public ArrayList<Object> executePreparedSQL(String SQL, ArrayList<Object> prepareds) throws Exception {
+    public ArrayList<Object> executePreparedSQL(String SQL, ArrayList<Object> prepareds) {
         System.out.println("Creating Connection...");
         try (
                 Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -71,7 +70,7 @@ public class JDBCRead extends JDBC {
             return result;
 
         } catch (SQLException e) {
-            throw new Exception("Outer Problem", e);
+            throw new Error("Outer Problem", e);
         }
 
     }
