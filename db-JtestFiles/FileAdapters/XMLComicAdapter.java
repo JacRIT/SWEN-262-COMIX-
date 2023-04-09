@@ -20,7 +20,7 @@ public class XMLComicAdapter implements ComicConverter {
         this.adaptee = adapteeXml;
     }
     @Override
-    public String convertToFile(Comic comic) {
+    public String convertToFile(String filename, Comic[] comics) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'convertToFile'");
     }

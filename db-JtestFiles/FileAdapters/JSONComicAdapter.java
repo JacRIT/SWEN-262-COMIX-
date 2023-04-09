@@ -4,12 +4,14 @@ import Model.JavaObjects.*;
 import Model.JavaObjects.Character;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 
 import FileAdapters.Adaptees.JSON;
 import org.json.simple.JSONObject;
+import java.io.FileWriter;
 
 public class JSONComicAdapter implements ComicConverter {
     private JSON adaptee;
@@ -19,12 +21,29 @@ public class JSONComicAdapter implements ComicConverter {
     }
 
     @Override
-    public String convertToFile(Comic comic) {
-        // TODO Auto-generated method stub
+    public String convertToFile(String filename, Comic[] comics) throws Exception {
         //Current plan: use JDBCComicExtractor in ComicController to get All comics, 
         //then insert that array into here to be parsed (with maybe helper method),
         //this method will put it all into file
-        throw new UnsupportedOperationException("Unimplemented method 'convertToFile'");
+        FileWriter file = adaptee.createFile(filename);
+        for(Comic comic : comics){
+            //each comic is translated to a JSON object
+            HashMap<Object, Object> comicDetailMap = new HashMap<Object, Object>();
+            comicDetailMap.put("series", comic.getSeries());
+            comicDetailMap.put("title", comic.getTitle());
+            comicDetailMap.put("volume_number", comic.getVolumeNumber());
+            comicDetailMap.put("issue_number", comic.getIssueNumber());
+            comicDetailMap.put("description", comic.getDescription());
+            comicDetailMap.put("release_date", comic.getPublicationDate());
+            //need to convert Publishers into | concat
+            String publisherAsString = comic.getPublisher().toString();
+            publisherAsString = publisherAsString.replace("[", "").replace("]", "").replace(", ", " | ");
+            comicDetailMap.put("publisher", publisherAsString);
+            JSONObject comicJson = new JSONObject(comicDetailMap);
+            file.write(comicJson.toJSONString());
+        }
+        file.flush();
+        return null;
     }
 
 

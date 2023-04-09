@@ -1,6 +1,7 @@
 package FileAdapters.Adaptees;
 import java.io.FileReader;
 import org.json.simple.parser.*;
+import java.io.FileWriter;
 
 /**
  * This class is meant to represent a JSON libary that can handle
@@ -15,7 +16,8 @@ public class JSON {
 
     }
 
-    public void createFile(String filename){
-        
+    public FileWriter createFile(String filename) throws Exception{
+        FileWriter file = new FileWriter(filename);
+        return file;
     }
 }
