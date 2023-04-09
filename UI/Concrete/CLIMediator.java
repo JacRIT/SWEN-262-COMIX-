@@ -145,8 +145,8 @@ public class CLIMediator implements Mediator {
 
   @Override
   public Boolean canUndo() {
-    this.cli.displayMessage("Size: " + this.sessionCommands.size());
-    this.cli.displayMessage("Index: " + this.sessionCommands.getIndex());
+    // this.cli.displayMessage("Size: " + this.sessionCommands.size());
+    // this.cli.displayMessage("Index: " + this.sessionCommands.getIndex());
     return this.sessionCommands.size() >= 1 && (this.sessionCommands.getIndex() >= 0);
   }
 
