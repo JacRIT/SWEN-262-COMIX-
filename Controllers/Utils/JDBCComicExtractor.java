@@ -124,7 +124,7 @@ public class JDBCComicExtractor extends JDBC {
             slabbed =               rs.getBoolean("slabbed") ;
 
         } else {
-            throw new SQLException() ;
+            return null;
         }
         stmt.close();
 
