@@ -201,8 +201,8 @@ public class ComicController {
     public void delete(int userId, Comic comic) throws Exception {
         int copyId = comic.getCopyId();
         // deletes references and then the copy
-        String deleteRefSql = "DELETE from signature_refrence, collection_refrence WHERE copy_fk = (?);";
-        String deleteCopySql = "DELETE from comic_ownership WHERE id = (?)";
+        String deleteRefSql = "DELETE from signature_refrence, collection_refrence WHERE copy_fk = ?;";
+        String deleteCopySql = "DELETE from comic_ownership WHERE id = ?";
         PreparedStatementContainer psc = new PreparedStatementContainer();
         psc.appendToSql(deleteRefSql);
         psc.appendToObjects(copyId);
@@ -215,25 +215,35 @@ public class ComicController {
     }
 
     /**
-     * Creates a comic in a collection
+     * UNFINISHED
+     * Creates a comic and adds it to the user's personal collection.
      * 
      * @param userId the userId of the collection the comic will be in
      * @param comic  The comic to be inserted
      */
     public void create(int userId, Comic comic) throws Exception {
-        // adding it to comic_ownership
-        int comicId = comic.getId();
-        float comicValue = comic.getValue();
-        int grade = comic.getGrade();
-        boolean slabbed = comic.isSlabbed();
-        String sql = "INSERT INTO comic_ownership(comic_fk, comic_value, grade, slabbed) VALUES( ?, ?, ?, ?)";
+        // adding it to comic_info (comic)
+        String sql = """
+            INSERT INTO comic_info(series, title, vol_num, issue_num, initial_value, descrip, release_date)
+            VALUES (?,?,?,?,?,?,?)
+            """;
         PreparedStatementContainer psc = new PreparedStatementContainer();
         psc.appendToSql(sql);
-        psc.appendToObjects(comicId);
-        psc.appendToObjects(comicValue);
-        psc.appendToObjects(grade);
-        psc.appendToObjects(slabbed);
+        psc.appendToObjects(comic.getSeries());
+        psc.appendToObjects(comic.getTitle());
+        psc.appendToObjects(comic.getVolumeNumber());
+        psc.appendToObjects(comic.getIssueNumber());
+        psc.appendToObjects(comic.getInitialValue());
+        psc.appendToObjects(comic.getDescription());
+        psc.appendToObjects(comic.getPublicationDate());
         jdbcInsert.executePreparedSQL(psc);
+
+        // still need to check if publisher, creator, and characters exist
+        // add if they do not exist (select from ---_info using id)
+            // add to ---_info
+        // and add to ---_refrence tables
+        
+        // creates a new copy (comic_ownership) and adds it to collection_refrence
         addToCollection(userId, comic);
     }
 
@@ -241,13 +251,16 @@ public class ComicController {
      * Adds a comic copy to a collection.
      * 
      * @param userId the userId of the collection the comic will be in
-     * @param comic  the comic to be added
+     * @param comic  the comic to be added (assumed that the copy has not been created)
      */
     public void addToCollection(int userId, Comic comic) throws Exception {
         // create a new copy of a comic (comic_ownership)
-        String sql = "INSERT INTO comic_ownership (comic_fk) VALUES (?)";
+        String sql = "INSERT INTO comic_ownership(comic_fk, comic_value, grade, slabbed) VALUES(?, ?, ?, ?)";
         ArrayList<Object> obj = new ArrayList<>();
         obj.add(comic.getId());
+        obj.add(comic.getValue());
+        obj.add(comic.getGrade());
+        obj.add(comic.isSlabbed());
         int copyId = jdbcInsert.executePreparedSQLGetId(sql, obj);
         // add new entry to collection_refrence
         sql = "INSERT INTO collection_refrence (collection_fk, copy_fk) VALUES (?,?)";
@@ -262,14 +275,16 @@ public class ComicController {
      * Removes a comic from a collection
      * 
      * @param userId the userId of the collection the comic will be removed from
-     * @param comic  the comic to be removed
+     * @param comic  the comic to be removed (copy id must be set)
      * @throws Exception
      */
     public void removeFromCollection(int userId, Comic comic) throws Exception {
-        String comicId = Integer.toString(comic.getId());
-        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = " + Integer.toString(userId)
-                + "AND copy_fk = " + comicId;
-        jdbcInsert.executeSQL(sql);
+        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = ? AND copy_fk = ?";
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(getCollectionIdFromUser(userId));
+        psc.appendToObjects(comic.getCopyId());
+        jdbcInsert.executePreparedSQL(psc);
     }
 
     /**
