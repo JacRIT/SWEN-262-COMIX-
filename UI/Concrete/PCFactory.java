@@ -1,6 +1,6 @@
 package UI.Concrete;
 
-import Api.ComixCommonAPI;
+import Api.GuestComixAPI;
 import Model.Command.PCCommand;
 import Model.Command.ConcreteCommand.AddToPC;
 import Model.Command.ConcreteCommand.GradeComic;
@@ -13,7 +13,7 @@ import UI.Interfaces.CommandFactory;
 public class PCFactory implements CommandFactory {
 
   @Override
-  public PCCommand createCommand(String type, User user, ComixCommonAPI api) throws Exception {
+  public PCCommand createCommand(String type, User user, GuestComixAPI api) throws Exception {
 
     String[] split = type.split(" ");
 

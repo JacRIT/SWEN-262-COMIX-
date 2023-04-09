@@ -2,7 +2,7 @@ package UI.Concrete;
 
 import java.util.Arrays;
 
-import Api.ComixCommonAPI;
+import Api.GuestComixAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -13,7 +13,7 @@ public class AuthInterpreter extends DefaultInterpreter {
 
   private Integer lastViewed;
 
-  public AuthInterpreter(Mediator mediator, ComixCommonAPI api) {
+  public AuthInterpreter(Mediator mediator, GuestComixAPI api) {
     super(mediator);
     this.api = api;
   }
