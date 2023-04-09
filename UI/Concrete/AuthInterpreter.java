@@ -166,7 +166,7 @@ public class AuthInterpreter extends DefaultInterpreter {
       String successMessage = this.mediator.getUser().getName() + "'s Personal Collection:";
 
       for (Comic comic : comics) {
-        successMessage += "\n\t" + comic.toString();
+        successMessage += "\n\n" + comic.toString();
       }
 
       return successMessage;
@@ -204,8 +204,7 @@ public class AuthInterpreter extends DefaultInterpreter {
 
       for (int i = 0; i < comics.length; i++) {
         Comic comic = comics[i];
-        success += "\t" + comic.toString();
-        success += "\n\n";
+        success += "\n\n" + comic.toString();
       }
 
       success += "Total Results: " + comics.length + "\n";
