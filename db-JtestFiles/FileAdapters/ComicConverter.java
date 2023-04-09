@@ -4,18 +4,21 @@ import Model.JavaObjects.*;
 public interface ComicConverter {
     
     /**
-     * This method converts a file to a comic object
+     * Reads the filename and uses the adaptee method of parsing,
+     * the method gets the next line and converts it into the comic
+     * treat this as a getNextLine that will always return the line as a comic
      * @param <T>
      * @param filetype
      * @return
      */
-    public <T> Comic convertToComic(T filetype);
+    public Comic convertToComic(String filename) throws Exception;
 
     /**
-     * This method converts the comic object into a File
+     * This method converts the comic object into the format that is needed,
+     * once in the format, the adaptee will read it into a file
      * @param <T>
      * @param comic
      * @return
      */
-    public <T> T convertToFile(Comic comic);
+    public String convertToFile(Comic comic);
 }
