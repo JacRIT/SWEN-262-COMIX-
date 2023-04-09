@@ -73,7 +73,7 @@ interface ComixAPI {
      * 
      *         null if no personal collection available
      */
-    Map<String, String> generateStatistics(User user);
+    Map<String, String> generateStatistics(User user) throws Exception;
 
     /**
      * Creates a comic
@@ -86,7 +86,7 @@ interface ComixAPI {
      * @param comic  Comic being created.
      * @return Name of the Comic Created.
      */
-    String createComic(int userId, Comic comic);
+    String createComic(int userId, Comic comic) throws Exception;
 
     /**
      * Signs a comic.
@@ -96,21 +96,22 @@ interface ComixAPI {
      * - Each time a comic is signed, its value is increased by 5%.
      * 
      * @param comic comic being signed
-     * @param user user signing comic
+     * @param user  user signing comic
      * @return true : Comic is signed sucessfully
      *         false : Comic is not successfully signed
      *         - comic does not exist in database.
      */
-    Boolean signComic(Signature signature, Comic comic);
+    Boolean signComic(Signature signature, Comic comic) throws Exception;
 
     /**
-     * unSigns a comic.  
+     * unSigns a comic.
+     * 
      * @param comic
-     * @return true : Comic is unSigned sucessfully 
-     *         false : Comic is not successfully unsigned 
-     *                  - comic does not exist in database.
+     * @return true : Comic is unSigned sucessfully
+     *         false : Comic is not successfully unsigned
+     *         - comic does not exist in database.
      */
-    Boolean unSignComic(Signature signature, Comic comic);
+    Boolean unSignComic(Signature signature, Comic comic) throws Exception;
 
     /**
      * Verifies a signed comic.
@@ -121,16 +122,18 @@ interface ComixAPI {
      * 
      * @param signedComic a previously signed comic to be verified.
      */
-    Boolean verifyComic(Signature signature, Comic signedComic);
+    Boolean verifyComic(Signature signature, Comic signedComic) throws Exception;
+
     /**
      * unVerifies a signed comic.
+     * 
      * @param signedComic a previously signed and verified comic to be unverified.
-     * @return  true    : comic sucessfully unverified
-     *          false   : comic NOT sucessfully unverified
-     *                      - comic does not exist
-     *                      - comic not previously verified and signed
+     * @return true : comic sucessfully unverified
+     *         false : comic NOT sucessfully unverified
+     *         - comic does not exist
+     *         - comic not previously verified and signed
      */
-    Boolean unVerifyComic(Signature signature, Comic signedComic);
+    Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception;
 
     /**
      * Marks a comic as "graded" on a scale of 1 to 10. The value of a graded comic
@@ -148,17 +151,18 @@ interface ComixAPI {
      *         - comic not in personal collection
      *         - grade is not inbetween 1-10
      */
-    Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade);
+    Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) throws Exception;
+
     /**
-     * @param user The user ungrading the comic.
+     * @param user  The user ungrading the comic.
      * @param comic The comic being ungraded
-     * @return  true    : comic sucessfully ungraded
-     *          false   : comic not sucessfully ungraded
-     *                      - comic does not exist
-     *                      - comic not in personal collection
-     *                      - comic is not previously graded
+     * @return true : comic sucessfully ungraded
+     *         false : comic not sucessfully ungraded
+     *         - comic does not exist
+     *         - comic not in personal collection
+     *         - comic is not previously graded
      */
-    Boolean ungradeComicInPersonalCollection(User user, Comic comic);
+    Boolean ungradeComicInPersonalCollection(User user, Comic comic) throws Exception;
 
     /**
      * Marks a graded comic as "slabbed." This doubles the value of the comic
@@ -172,19 +176,21 @@ interface ComixAPI {
      *         - Comic not in personal collection.
      *         - Comic does not exist.
      */
-    Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic);
+    Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception;
+
     /**
      * Unslabs a previously slabbed and graded comic in specified users collection.
+     * 
      * @param gradedComic graded comic being unSlabbed.
-     * @param user The user unslabbing the comic.
-     * @return  true    : Comic unslabbed.
-     *          false   : Comic not sucessfully unslabbed.
-     *                      - Comic not previously slabbed.
-     *                      - Comic is not graded.
-     *                      - Comic not in personal collection.
-     *                      - Comic does not exist.
+     * @param user        The user unslabbing the comic.
+     * @return true : Comic unslabbed.
+     *         false : Comic not sucessfully unslabbed.
+     *         - Comic not previously slabbed.
+     *         - Comic is not graded.
+     *         - Comic not in personal collection.
+     *         - Comic does not exist.
      */
-    Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic);
+    Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception;
 
     /**
      * Adds a comic to a users personal collection.
@@ -196,7 +202,7 @@ interface ComixAPI {
      *         - comic does not exist.
      *         - no personal collection found.
      */
-    Boolean addComicToPersonalCollection(User user, Comic comic);
+    Boolean addComicToPersonalCollection(User user, Comic comic) throws Exception;
 
     /**
      * Removes a comic from personal colleciton.
@@ -208,7 +214,6 @@ interface ComixAPI {
      *         - comic does not exist in personal collection.
      *         - no personal collection found.
      */
-    Boolean removeComicFromPersonalCollection(User user, Comic comic);
-
+    Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception;
 
 }

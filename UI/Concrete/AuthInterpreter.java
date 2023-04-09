@@ -2,17 +2,20 @@ package UI.Concrete;
 
 import java.util.Arrays;
 
+import Api.ComixCommonAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
+import Model.Search.ConcreteSearches.PartialKeywordSearch;
 import UI.Interfaces.Mediator;
 
 public class AuthInterpreter extends DefaultInterpreter {
 
   private Integer lastViewed;
 
-  public AuthInterpreter(Mediator mediator) {
+  public AuthInterpreter(Mediator mediator, ComixCommonAPI api) {
     super(mediator);
+    this.api = api;
   }
 
   @Override
@@ -58,6 +61,14 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.search(keyword) + flagMessage;
     }
 
+    if (command.startsWith("S") || command.startsWith("s")) {
+      String flagMessage = this.setSearchFlags(flags);
+      String keyword = command.substring(2, command.length()).trim();
+
+      this.lastViewed = null;
+      return super.search(keyword) + flagMessage;
+    }
+
     if (command.startsWith("AP") || command.startsWith("ap")) {
       String fullCommand = command.trim();
       if (this.lastViewed != null && fullCommand.length() == 2) {
@@ -67,6 +78,34 @@ public class AuthInterpreter extends DefaultInterpreter {
       this.lastViewed = null;
       return this.createCommand(fullCommand);
     }
+
+    if (command.startsWith("UA") || command.startsWith("ua")) {
+      this.lastViewed = null;
+      this.mediator.undoAll();
+      return "";
+    }
+
+    if (command.startsWith("RA") || command.startsWith("ra")) {
+      this.lastViewed = null;
+      this.mediator.redoAll();
+      return "";
+    }
+
+    if (command.startsWith("U") || command.startsWith("u")) {
+      this.lastViewed = null;
+      String message = this.mediator.undo();
+      return message;
+    }
+
+    if (command.startsWith("R") || command.startsWith("r")) {
+      this.lastViewed = null;
+      String message = this.mediator.redo();
+      return message;
+    }
+
+    System.out.println("");
+    System.out.println("Using super");
+    System.out.println("");
 
     this.lastViewed = null;
     return super.interprete(input);
@@ -90,10 +129,19 @@ public class AuthInterpreter extends DefaultInterpreter {
       }
 
       String successMessage = newCommand.execute();
+
+      if (successMessage.contains("could not"))
+        return successMessage;
+
+      // System.out.println("Command Executed Beep Boop");
+      // System.out.println(successMessage);
+
       this.mediator.addCommand(newCommand);
+
+      successMessage += "\nEnter \"U\" to undo this action";
+
       return successMessage;
     } catch (Exception err) {
-      // System.out.println(err);
       System.out.println("Create Command Err:\n" + err.getLocalizedMessage() + "\n" + err.getMessage());
       return "Command: " + input.split(" ")[0] + " could not be executed";
     }
@@ -109,6 +157,7 @@ public class AuthInterpreter extends DefaultInterpreter {
       System.out.println("Loading Personal Collection...");
       System.out.println();
 
+      this.api.setSearchStrategy(new PartialKeywordSearch());
       Comic[] comics = this.api.browsePersonalCollection(this.mediator.getUser().getId());
 
       if (comics == null)

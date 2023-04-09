@@ -1,11 +1,13 @@
 package UI.Concrete;
 
+import UI.Interfaces.Mediator;
+
 public class AuthCLI extends DefaultCLI {
 
-  // private User user;
+  private Mediator mediator;
 
-  public AuthCLI() {
-    // this.user = user;
+  public AuthCLI(Mediator mediator) {
+    this.mediator = mediator;
   }
 
   @Override
@@ -23,6 +25,18 @@ public class AuthCLI extends DefaultCLI {
     super.log("AP <comic id> - Add a comic into your personal collection");
 
     super.log("BP - Browse all the comics in your personal collection");
+
+    if (this.mediator.canUndo())
+      super.log("U - Undo most recent change");
+
+    if (this.mediator.canRedo())
+      super.log("R - Redo most recent undo");
+
+    if (this.mediator.canUndo())
+      super.log("UA - Undo all changes made");
+
+    if (this.mediator.canRedo())
+      super.log("RA - Redo all undone changes");
 
     this.log("L - Logout of your account");
 

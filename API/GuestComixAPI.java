@@ -39,7 +39,7 @@ public class GuestComixAPI implements ComixAPI {
     }
 
     @Override
-    public String createComic(int userId, Comic comic) {
+    public String createComic(int userId, Comic comic) throws Exception {
         comicController.create(userId, comic);
         return comic.getTitle();
     }
@@ -49,13 +49,12 @@ public class GuestComixAPI implements ComixAPI {
         return null;
     }
 
-    
-    
     @Override
     public Boolean signComic(Signature signature, Comic comic) {
         // Guests cannot sign a comic.
         return false;
     }
+
     @Override
     public Boolean unSignComic(Signature signature, Comic comic) {
         // Guests cannot unsign a comic.
@@ -67,47 +66,48 @@ public class GuestComixAPI implements ComixAPI {
         // Guests cannot verify a Comic
         return false;
     }
+
     @Override
     public Boolean unVerifyComic(Signature signature, Comic signedComic) {
         // Guests cannot unVerify a comic.
         return false;
     }
-    
-	@Override
-	public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
-        // TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'gradeComicInPersonalCollection'");
-	}
-    
-	@Override
-	public Boolean ungradeComicInPersonalCollection(User user, Comic comic) {
-        // TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'ungradeComicInPersonalCollection'");
-	}
-    
-	@Override
-	public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) {
-        // TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'slabGradedComicInPersonalCollection'");
-	}
 
-	@Override
-	public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+    @Override
+    public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
         // TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'unslabGradedComicInPersonalCollection'");
-	}
-    
-	@Override
-	public Boolean addComicToPersonalCollection(User user, Comic comic) {
+        throw new UnsupportedOperationException("Unimplemented method 'gradeComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean ungradeComicInPersonalCollection(User user, Comic comic) {
         // TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'addComicToPersonalCollection'");
-	}
-    
-	@Override
-	public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'removeComicFromPersonalCollection'");
-	}
+        throw new UnsupportedOperationException("Unimplemented method 'ungradeComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'slabGradedComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'unslabGradedComicInPersonalCollection'");
+    }
+
+    @Override
+    public Boolean addComicToPersonalCollection(User user, Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addComicToPersonalCollection'");
+    }
+
+    @Override
+    public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeComicFromPersonalCollection'");
+    }
 
     public Comic getComic(int comicId) throws Exception {
         return this.comicController.get(comicId);

@@ -3,6 +3,7 @@ package Model.Command.ConcreteCommand;
 import Api.ComixCommonAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
+import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
 
 public class AuthenticateComic implements PCCommand {
@@ -19,15 +20,22 @@ public class AuthenticateComic implements PCCommand {
   }
 
   @Override
-  public String execute() {
-    // this.api.verifyComic(this.user, this.comic);
-    return "Comic (" + this.comic.getTitle() + ") has been verified";
+  public String execute() throws Exception {
+    Signature signature = new Signature(this.user.getId(), this.user.getName());
+    Boolean success = this.api.verifyComic(signature, this.comic);
+    if (success)
+      return "Comic (" + this.comic.getTitle() + ") has been verified";
+    return "Comic (" + this.comic.getTitle() + ") could not be verified";
   }
 
   @Override
-  public String unExecute() {
-    // this.api.unVerifyComic(this.user, this.comic);
-    return "Comic (" + this.comic.getTitle() + ") has been unverified";
+  public String unExecute() throws Exception {
+    Signature signature = new Signature(this.user.getId(), this.user.getName());
+    Boolean success = this.api.verifyComic(signature, this.comic);
+    if (success)
+      return "Comic (" + this.comic.getTitle() + ") has been unverified";
+    return "Comic (" + this.comic.getTitle() + ") could not be unverified";
+
   }
 
 }

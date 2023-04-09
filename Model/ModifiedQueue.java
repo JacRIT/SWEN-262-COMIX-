@@ -14,38 +14,48 @@ public class ModifiedQueue<T> {
   }
 
   public void addToQueue(T object) {
-    if (this.list.size() - 1 == this.index) {
+
+    if (this.list.size() == 0) {
       this.list.add(object);
       return;
     }
 
-    for (int i = this.index; i < this.list.size(); i++) {
-      this.list.remove(i);
-    }
+    if (this.list.size() - 1 != this.index)
+      for (int i = this.index; i < this.list.size(); i++) {
+        this.list.remove(i);
+      }
 
     this.list.add(object);
-
+    this.index += 1;
   }
 
   public T moveForward() {
     if (this.list.size() - 1 == this.index) {
-      return this.list.get(this.index);
+      return this.getCurrent();
     }
 
     this.index += 1;
-    return this.list.get(this.index);
+    return this.getCurrent();
   }
 
   public T getCurrent() {
     return this.list.get(this.index);
   }
 
+  public int size() {
+    return this.list.size();
+  }
+
+  public int getIndex() {
+    return this.index;
+  }
+
   public T moveBackward() {
-    if (this.index <= 0)
+    if (this.index < 0)
       return null;
 
     this.index -= 1;
-    return this.list.get(this.index);
+    return this.getCurrent();
   }
 
 }

@@ -152,7 +152,7 @@ public abstract class DefaultInterpreter implements Interpreter {
     SearchAlgorithm search = this.searchFactory.createAlgorithim(null);
 
     if (flags.length == 0) {
-      successMessage = "Results sorted by: DefaultSort\nResults searched by: PartialSort";
+      successMessage = "Results sorted by: " + sort.getClass() + "\nResults searched by: " + search.getClass();
     } else
       for (String unseperated : flags) {
         System.out.println("");
@@ -169,7 +169,7 @@ public abstract class DefaultInterpreter implements Interpreter {
 
         if (this.sortFactory.createAlgorithim(flag) != null) {
           sort = this.sortFactory.createAlgorithim(flag);
-          successMessage += "Results sorted by: " + flag + "\n";
+          successMessage += "Results sorted by: " + sort.getClass() + "\n";
         }
 
         if (flagType.equals("sortBy") && this.sortFactory.createAlgorithim(flag) == null) {
@@ -178,15 +178,13 @@ public abstract class DefaultInterpreter implements Interpreter {
 
         if (this.searchFactory.createAlgorithim(flag) != null) {
           search = this.searchFactory.createAlgorithim(flag);
-          successMessage += "Results searched by: " + flag + "\n";
+          successMessage += "Results searched by: " + search.getClass() + "\n";
         }
 
         if (flagType.equals("searchBy") && this.searchFactory.createAlgorithim(flag) == null) {
           successMessage += "Flag " + seperated[0] + " provided with invalid value: " + flag + "\n";
         }
       }
-
-    System.out.println("Success: " + successMessage);
 
     this.api.setSearchStrategy(search);
     this.api.setSortStrategy(sort);

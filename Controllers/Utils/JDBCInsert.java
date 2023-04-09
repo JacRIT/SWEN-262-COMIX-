@@ -8,58 +8,52 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-
 public class JDBCInsert extends JDBC {
 
-    public int executePreparedSQLGetId(String SQL, ArrayList<Object> prepareds) {
+    public int executePreparedSQLGetId(String SQL, ArrayList<Object> prepareds) throws Exception {
         System.out.println("Creating Connection...");
 
-        
         try (
-            Connection conn = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS) ;
-        ) {
+                Connection conn = DriverManager.getConnection(URL, USER, PASS);
+                PreparedStatement stmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);) {
 
-            int x = 1 ;
+            int x = 1;
             System.out.println("Preparing Statement...");
-            for (Object obj :prepareds) {
+            for (Object obj : prepareds) {
                 stmt.setObject(x, obj);
-                x++ ;
+                x++;
                 System.out.println("Preparing Statement..." + obj);
             }
             System.out.println("Executing Command...");
 
             stmt.executeUpdate();
             System.out.println("Command Executed!");
-            
+
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     return (int) generatedKeys.getLong(1);
-                }
-                else {
+                } else {
                     throw new SQLException("Creating user failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {
-            throw new Error("Outer Problem", e);
-        } 
+            throw new Exception("Outer Problem", e);
+        }
 
     }
-    
-    public int executePreparedSQL(PreparedStatementContainer statementDetails) {
+
+    public int executePreparedSQL(PreparedStatementContainer statementDetails) throws Exception {
         System.out.println("Creating Connection...");
 
-        
         try (
-            Connection conn = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement(statementDetails.getSql()) ;
-        ) {
+                Connection conn = DriverManager.getConnection(URL, USER, PASS);
+                PreparedStatement stmt = conn.prepareStatement(statementDetails.getSql());) {
 
-            int x = 1 ;
+            int x = 1;
             System.out.println("Preparing Statement...");
-            for (Object obj :statementDetails.getObjects()) {
+            for (Object obj : statementDetails.getObjects()) {
                 stmt.setObject(x, obj);
-                x++ ;
+                x++;
                 System.out.println("Preparing Statement..." + obj);
             }
             System.out.println("Executing Command...");
@@ -69,18 +63,18 @@ public class JDBCInsert extends JDBC {
             return 1;
 
         } catch (SQLException e) {
-            throw new Error("Outer Problem", e);
-        } 
+            throw new Exception("Outer Problem", e);
+        }
 
     }
-    public int executeSQL(String sql) {
+
+    public int executeSQL(String sql) throws Exception {
 
         System.out.println("Creating Connection...");
 
         try (
-            Connection conn = DriverManager.getConnection(URL, USER, PASS);
-            Statement stmt = conn.createStatement() ;
-        ) {
+                Connection conn = DriverManager.getConnection(URL, USER, PASS);
+                Statement stmt = conn.createStatement();) {
 
             System.out.println("Executing Command...");
 
@@ -89,8 +83,8 @@ public class JDBCInsert extends JDBC {
             return 1;
 
         } catch (SQLException e) {
-            throw new Error("Outer Problem", e);
-        } 
+            throw new Exception("Outer Problem", e);
+        }
 
     }
 }

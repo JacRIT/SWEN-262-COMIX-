@@ -12,28 +12,26 @@ public class SlabComic implements PCCommand {
   private ComixCommonAPI api;
 
   public SlabComic(User user,
-      ComixCommonAPI api, Comic comic) {
+      Comic comic, ComixCommonAPI api) {
     this.user = user;
     this.comic = comic;
     this.api = api;
   }
 
   @Override
-  public String execute() {
-    // Comic comic = this.api.getComic(this.comicId);
-
-    // this.api.slabGradedComicInPersonalCollection(this.user, comic);
-
-    return "Comic (" + this.comic.getTitle() + ") has been slabbed";
+  public String execute() throws Exception {
+    Boolean success = this.api.slabGradedComicInPersonalCollection(this.user, comic);
+    if (success)
+      return "Comic (" + this.comic.getTitle() + ") has been slabbed";
+    return "Comic (" + this.comic.getTitle() + ") could not be slabbed";
   }
 
   @Override
-  public String unExecute() {
-    // Comic comic = this.api.getComic(this.comicId);
-
-    // this.api.unslabGradedComicInPersonalCollection(this.user, comic);
-
-    return "Comic (" + this.comic.getTitle() + ") has been unslabbed";
+  public String unExecute() throws Exception {
+    Boolean success = this.api.unslabGradedComicInPersonalCollection(this.user, comic);
+    if (success)
+      return "Comic (" + this.comic.getTitle() + ") has been unslabbed";
+    return "Comic (" + this.comic.getTitle() + ") could not be unslabbed";
   }
 
 }

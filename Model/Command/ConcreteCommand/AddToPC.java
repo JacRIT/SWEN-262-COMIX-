@@ -19,11 +19,11 @@ public class AddToPC implements PCCommand {
   }
 
   @Override
-  public String execute() {
+  public String execute() throws Exception {
 
     Boolean success = this.api.addComicToPersonalCollection(this.user,
         this.comic);
-    // Boolean success = true;
+
     if (success)
       return "Comic \"" + this.comic.getTitle() + "\" successfully added to " + this.user.getName() + "'s collection";
 
@@ -32,10 +32,10 @@ public class AddToPC implements PCCommand {
   }
 
   @Override
-  public String unExecute() {
+  public String unExecute() throws Exception {
     Boolean success = this.api.removeComicFromPersonalCollection(this.user,
         this.comic);
-    // Boolean success = true;
+
     if (success)
       return "Comic \"" + this.comic.getTitle() + "\" successfully removed from " + this.user.getName()
           + "'s collection";

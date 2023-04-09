@@ -55,14 +55,24 @@ public interface Mediator {
   public void instructions();
 
   /**
+   * Decides if the user can undo a command
+   */
+  public Boolean canUndo();
+
+  /**
+   * Decides if the user can redo a command
+   */
+  public Boolean canRedo();
+
+  /**
    * Undo the most recent command
    */
-  public void undo();
+  public String undo();
 
   /**
    * Redo the most recent undo
    */
-  public void redo();
+  public String redo();
 
   /**
    * Undo all changes made within the session

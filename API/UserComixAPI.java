@@ -35,12 +35,12 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Map<String, String> generateStatistics(User user) {
+    public Map<String, String> generateStatistics(User user) throws Exception {
         return comicController.getStatistics(user.getId());
     }
 
     @Override
-    public String createComic(int userId, Comic comic) {
+    public String createComic(int userId, Comic comic) throws Exception {
         comicController.create(userId, comic);
         return comic.getTitle();
     }
@@ -60,13 +60,14 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean signComic(Signature signature, Comic comic) {
+    public Boolean signComic(Signature signature, Comic comic) throws Exception {
         comic.addSignature(signature);
         comicController.updateCopy(signature.getId(), comic);
         return true; // TODO : no checks implemented.
     }
+
     @Override
-    public Boolean unSignComic(Signature signature, Comic comic) {
+    public Boolean unSignComic(Signature signature, Comic comic) throws Exception {
         comic.removeSignature(signature);
         comicController.updateCopy(signature.getId(), comic);
         return true; // TODO : no checks implemented.
@@ -74,61 +75,62 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean verifyComic(Signature signature, Comic signedComic) {
+    public Boolean verifyComic(Signature signature, Comic signedComic) throws Exception {
         signedComic.verifyComic(signature);
         comicController.updateCopy(signature.getId(), signedComic);
         return true; // TODO : no checks implemented.
     }
+
     @Override
-    public Boolean unVerifyComic(Signature signature, Comic signedComic) {
+    public Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception {
         signedComic.unVerifyComic(signature);
         comicController.updateCopy(signature.getId(), signedComic);
         return true; // TODO : no checks implemented.
     }
 
     @Override
-    public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) {
+    public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) throws Exception {
         if (comic.gradeComic(grade)) {
             comicController.updateCopy(user.getId(), comic);
             return true;
         } else {
             return false;
         }
-         // TODO : some checks not implemented.
+        // TODO : some checks not implemented.
     }
+
     @Override
-    public Boolean ungradeComicInPersonalCollection(User user, Comic comic) {
+    public Boolean ungradeComicInPersonalCollection(User user, Comic comic) throws Exception {
         comic.unGradeComic();
         comicController.updateCopy(user.getId(), comic);
         return true; // TODO : no checks implemented.
     }
 
     @Override
-    public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+    public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
         gradedComic.slabComic();
         comicController.updateCopy(user.getId(), gradedComic);
         return true; // TODO : no checks implemented.
     }
+
     @Override
-    public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) {
+    public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
         gradedComic.unSlabComic();
         comicController.updateCopy(user.getId(), gradedComic);
         return true; // TODO : no checks implemented.
     }
 
     @Override
-    public Boolean addComicToPersonalCollection(User user, Comic comic) {
+    public Boolean addComicToPersonalCollection(User user, Comic comic) throws Exception {
         this.comicController.addToCollection(user.getId(), comic);
         return true; // TODO : no checks implemented.
     }
 
     @Override
-    public Boolean removeComicFromPersonalCollection(User user, Comic comic) {
+    public Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception {
         this.comicController.removeFromCollection(user.getId(), comic);
         return true; // TODO : no checks implemented.
     }
-
-
 
     public Comic getComic(int comicId) throws Exception {
         return this.comicController.get(comicId);
