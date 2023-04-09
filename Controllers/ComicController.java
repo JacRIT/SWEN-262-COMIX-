@@ -284,7 +284,7 @@ public class ComicController {
      * @throws Exception
      */
     public void removeFromCollection(int userId, Comic comic) throws Exception {
-        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = ? AND copy_fk = ?";
+        String sql = "DELETE FROM collection_refrence WHERE collection_fk = ? AND copy_fk = ?";
         PreparedStatementContainer psc = new PreparedStatementContainer();
         psc.appendToSql(sql);
         psc.appendToObjects(getCollectionIdFromUser(userId));
