@@ -45,7 +45,7 @@ public class UserComixAPI implements ComixAPI {
             Map<String, Float> statistics = new HashMap<String, Float>();
             float personalCollectionValue = 0;
             for (Comic comic : comicsInPersonalCollection) {
-                float calculatedComicValue = comic.getCalculatedValue();
+                float calculatedComicValue = comic.getValue();
                 personalCollectionValue += calculatedComicValue;
             }
             statistics.put("Number Of Issues", (float)(Integer)comicsInPersonalCollection.length);
