@@ -1,6 +1,6 @@
 package Model.Command.ConcreteCommand;
 
-import Api.ComixCommonAPI;
+import Api.GuestComixAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -10,9 +10,9 @@ public class PCRemoveComic implements PCCommand {
   private User user;
   private Comic comic;
 
-  private ComixCommonAPI api;
+  private GuestComixAPI api;
 
-  public PCRemoveComic(User user, Comic comic, ComixCommonAPI api) {
+  public PCRemoveComic(User user, Comic comic, GuestComixAPI api) {
     this.user = user;
     this.comic = comic;
     this.api = api;
