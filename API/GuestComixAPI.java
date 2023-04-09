@@ -83,7 +83,7 @@ public class GuestComixAPI implements ComixAPI {
 
 
     @Override
-    public Map<String, String> generateStatistics(User user) throws Exception{
+    public Map<String, Float> generateStatistics(User user) throws Exception{
         if (isAuthenticated) {
             return userComixAPI.generateStatistics(user);
         } else {
@@ -194,4 +194,5 @@ public class GuestComixAPI implements ComixAPI {
     public Comic getComic(int comicId) throws Exception {
         return this.comicController.get(comicId);
     }
+
 }

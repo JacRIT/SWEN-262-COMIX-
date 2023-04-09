@@ -43,13 +43,13 @@ public class UserComixAPI implements ComixAPI {
         if (userExists(user)) {
             Comic[] comicsInPersonalCollection = this.browsePersonalCollection(user.getId());
             Map<String, Float> statistics = new HashMap<String, Float>();
-            float value = 0;
+            float personalCollectionValue = 0;
             for (Comic comic : comicsInPersonalCollection) {
                 float calculatedComicValue = comic.getCalculatedValue();
-                value += calculatedComicValue;
+                personalCollectionValue += calculatedComicValue;
             }
             statistics.put("Number Of Issues", (float)(Integer)comicsInPersonalCollection.length);
-            statistics.put("value", value);
+            statistics.put("value", personalCollectionValue);
             return statistics;
         } else {
             System.out.println("\n======\n USER DOES NOT EXIST \n======\n");
