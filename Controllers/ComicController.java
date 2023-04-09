@@ -9,6 +9,8 @@ import Controllers.Utils.JDBCInsert;
 import Controllers.Utils.JDBCRead;
 import Controllers.Utils.PreparedStatementContainer;
 import Model.JavaObjects.Comic;
+import Model.JavaObjects.Creator;
+import Model.JavaObjects.Publisher;
 import Model.JavaObjects.Signature;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
@@ -197,11 +199,10 @@ public class ComicController {
     }
 
     /**
-     * TESTED: returns false and does not delete if comic is in database
-     * NOT TESTED: deletes manually created comics correctly
      * 
      * Deletes the copy, collection reference, AND comic info.
      * Will not allow deletion of a comic in the database (not manually created).
+     * Does not delete now unused entries in publisher_info or creator_info.
      * 
      * @param userId the userId of the collection the comic is in
      * @param comic  The comic to be deleted
@@ -246,16 +247,16 @@ public class ComicController {
     }
 
     /**
-     * UNFINISHED
      * Creates a comic and adds it to the user's personal collection.
      * 
      * @param userId the userId of the collection the comic will be in
      * @param comic  The comic to be inserted
+     * @return the copy id of the initial copy the user owns of the new comic
      */
-    public void create(int userId, Comic comic) throws Exception {
+    public int create(int userId, Comic comic) throws Exception {
         // adding it to comic_info (comic)
         String sql = """
-            INSERT INTO comic_info(series, title, vol_num, issue_num, initial_value, descrip, release_date)
+            INSERT INTO comic_info(series, title, volume_num, issue_num, initial_value, descrip, release_date)
             VALUES (?,?,?,?,?,?,?)
             """;
         ArrayList<Object> obj = new ArrayList<>();
@@ -269,13 +270,68 @@ public class ComicController {
         int comicId = jdbcInsert.executePreparedSQLGetId(sql, obj);
         comic.setId(comicId);
 
-        // still need to check if publisher, creator, and characters exist
-        // add if they do not exist (select from ---_info using id)
-            // add to ---_info
-        // and add to ---_refrence tables
+        // publishers
+        for (Publisher p : comic.getPublisher()) {
+            // check if publisher exists in publisher_info already
+            sql = """
+                    SELECT id FROM publisher_info WHERE p_name = ?
+                    """;
+            obj = new ArrayList<>();
+            obj.add(p.getName());
+            ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, obj);
+            // if they don't exist, add to publisher_info and set the correct id
+            if (result.size() == 0) {
+                sql = """
+                        INSERT INTO publisher_info (p_name) VALUES (?)
+                        """;
+                obj = new ArrayList<>();
+                obj.add(p.getName());
+                p.setId(jdbcInsert.executePreparedSQLGetId(sql, obj));
+            }
+            // add to publisher_refrence
+            sql = """
+                    INSERT INTO publisher_refrence (publisher_fk, comic_fk)
+                    VALUES (?,?)
+                    """;
+            PreparedStatementContainer psc = new PreparedStatementContainer();
+            psc.appendToSql(sql);
+            psc.appendToObjects(p.getId());
+            psc.appendToObjects(comic.getId());
+            jdbcInsert.executePreparedSQL(psc);
+        }
+
+        // creators
+        for (Creator c : comic.getCreators()) {
+            // check if creator exists in creator_info already
+            sql = """
+                    SELECT id FROM creator_info WHERE c_name = ?
+                    """;
+            obj = new ArrayList<>();
+            obj.add(c.getName());
+            ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, obj);
+            // if they don't exist, add to creator_info and set the correct id
+            if (result.size() == 0) {
+                sql = """
+                        INSERT INTO creator_info (c_name) VALUES (?)
+                        """;
+                obj = new ArrayList<>();
+                obj.add(c.getName());
+                c.setId(jdbcInsert.executePreparedSQLGetId(sql, obj));
+            }
+            // add to creator_refrence
+            sql = """
+                    INSERT INTO creator_refrence (creator_fk, comic_fk)
+                    VALUES (?,?)
+                    """;
+            PreparedStatementContainer psc = new PreparedStatementContainer();
+            psc.appendToSql(sql);
+            psc.appendToObjects(c.getId());
+            psc.appendToObjects(comic.getId());
+            jdbcInsert.executePreparedSQL(psc);
+        }
         
         // creates a new copy (comic_ownership) and adds it to collection_refrence
-        addToCollection(userId, comic);
+        return addToCollection(userId, comic);
     }
 
     /**
@@ -326,90 +382,6 @@ public class ComicController {
     }
 
     /**
-     * CURRENTLY INCORRECT
-     * Gets the statistics: the total number of comics in the collection and the
-     * total value of the collection.
-     * 
-     * @param userId - the id of the user whose collection the statistics are being
-     *               gathered for
-     * @return a map with the keys of "count" and "value", with String values
-     * @throws Exception
-     */
-    public Map<String, String> getStatistics(int userId) throws Exception {
-        /*
-         * also need to know how many signatures and how many of them are authenticated
-         */
-        String sql = """
-                SELECT comic_info.initial_value, comic_ownership.grade, comic_ownership.slabbed
-                FROM comic_ownership
-                INNER JOIN comic_info ON comic_info.id = comic_ownership.comic_fk
-                INNER JOIN collection_refrence ON collection_refrence.copy_fk = comic_ownership.id
-                WHERE collection_refrence.collection_fk = ?
-                """;
-        ArrayList<Object> obj = new ArrayList<>();
-        obj.add(getCollectionIdFromUser(userId));
-        ArrayList<ArrayList<Object>> results = jdbcRead.readListofLists(sql, obj, 3);
-        int count = results.size();
-        double totalValue = 0;
-        for (ArrayList<Object> entry : results) {
-            // initial value
-            double initialValue;
-            if (entry.get(0) == null)
-                initialValue = 0;
-            else
-                initialValue = (double) entry.get(0);
-            // grade
-            int grade;
-            if (entry.get(1) == null)
-                grade = 0;
-            else
-                grade = (int) entry.get(1);
-            // slabbed
-            boolean slabbed;
-            if (entry.get(2) == null)
-                slabbed = false;
-            else
-                slabbed = (boolean) entry.get(2);
-            // caluculating total
-            double value = initialValue;
-            if (grade == 1)
-                value = initialValue * 0.1;
-            else if (grade > 1)
-                value = initialValue * Math.log10(grade);
-            if (slabbed)
-                value *= 2;
-            totalValue += value;
-        }
-        // signatures
-        sql = """
-                    SELECT COUNT(*), authenticated FROM signature_info
-                    INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id
-                    INNER JOIN collection_refrence ON collection_refrence.copy_fk = signature_refrence.copy_fk
-                    WHERE collection_refrence.collection_fk = ?
-                    GROUP BY authenticated;
-                """;
-        obj = new ArrayList<>();
-        obj.add(getCollectionIdFromUser(userId));
-        results = jdbcRead.readListofLists(sql, obj, 2);
-        long totalNumSigs = (long) results.get(0).get(0) + (long) results.get(1).get(0); // first get row, then get
-                                                                                         // count (index 0)
-        // value increases by 5% for every signature
-        for (int i = 0; i < totalNumSigs + .25; i++) {
-            totalValue *= 1.05;
-        }
-        System.out.println(results.get(1).get(1));
-        // value increased by an additional 20% for every authentication
-        for (int i = 0; i < (long) results.get(1).get(0) + .25; i++) {
-            totalValue *= 1.2;
-        }
-        // output
-        Map<String, String> stats = new HashMap<>();
-        stats.put("count", Integer.toString(count));
-        stats.put("value", Double.toString(totalValue));
-        return stats;
-    }
-
-    /**
      * Gets the collection id in the database for the given user.
      * 
      * @param userId - the id of the user to get the personal collection id of
@@ -426,38 +398,21 @@ public class ComicController {
 
     public static void main(String[] args) throws Exception {
         ComicController cc = new ComicController();
-        // Comic comic = cc.get(1);
-        // System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
-        // SearchAlgorithm sa = new PartialKeywordSearch();
-        // cc.setSearch(sa);
-        // Comic[] comics = cc.search(2, "");
-        // for (Comic comic : comics) {
-        // System.out.println(comic.getTitle()+" "+comic.getId()+" "+comic.getCopyId());
-        // }
+        // ArrayList<Publisher> publishers = new ArrayList<>();
+        // publishers.add(new Publisher(0, "Marvel Comics"));
+        // publishers.add(new Publisher(0, "new publisher"));
+        // ArrayList<Creator> creators = new ArrayList<>();
+        // creators.add(new Creator(0, "Stan Lee"));
+        // creators.add(new Creator(0, "new creator"));
 
-        // Comic comic = cc.get(14241);
-        // System.out.println(comic);
-        // Signature s = new Signature(0, "Joe", false);
-        // Signature s = comic.getSignatures().get(comic.getSignatures().size()-1);
-        // cc.removeSignature(s);
-        // comic.addSignature(s);
-        // comic.getSignatures().get(1).setAuthenticated(false);
-        // cc.updateCopy(2, comic);
-        // System.out.println(cc.get(14241));
+        // Comic comic = new Comic();
+        // comic.setTitle("manually created comic");
+        // comic.setPublisher(publishers);
+        // comic.setCreators(creators);
 
-        // Map<String, String> stats = cc.getStatistics(2);
-        // System.out.println("count = " + stats.get("count") + ", total value = " + stats.get("value"));
-        
-        // Comic comic = cc.get(14240);
-        // cc.removeFromCollection(2, comic);
+        // System.out.println(cc.create(2, comic));
 
-        Comic comic = cc.get(6);
-        comic.setGrade(4);
-        comic.setSlabbed(true);
-        System.out.println(comic);
-        int copyId = cc.addToCollection(2, comic);
-        System.out.println(cc.get(copyId));
-
+        // cc.delete(2, comic);
 
     }
 }
