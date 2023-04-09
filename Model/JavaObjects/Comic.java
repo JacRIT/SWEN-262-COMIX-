@@ -47,43 +47,53 @@ public class Comic {
     @Override
     public String toString() {
 
-        String simpleSeries;
-        String simpleTitle;
-        int CHAR_COUNT = 30;
+        // String simpleSeries;
+        // String simpleTitle;
+        // int CHAR_COUNT = 30;
 
-        if (this.series.length() > CHAR_COUNT) {
-            simpleSeries = this.series.substring(0, CHAR_COUNT - 4) + "...";
-        } else if (this.series.length() == CHAR_COUNT) {
-            simpleSeries = this.series;
-        } else {
-            simpleSeries = this.series;
-            for (int i = this.series.length(); i < CHAR_COUNT - 1; i++) {
-                simpleSeries += " ";
-            }
-        }
+        // if (this.series.length() > CHAR_COUNT) {
+        // simpleSeries = this.series.substring(0, CHAR_COUNT - 4) + "...";
+        // } else if (this.series.length() == CHAR_COUNT) {
+        // simpleSeries = this.series;
+        // } else {
+        // simpleSeries = this.series;
+        // for (int i = this.series.length(); i < CHAR_COUNT - 1; i++) {
+        // simpleSeries += " ";
+        // }
+        // }
 
-        if (this.title.length() > CHAR_COUNT) {
-            simpleTitle = this.title.substring(0, CHAR_COUNT - 4) + "...";
-        } else if (this.title.length() == CHAR_COUNT) {
-            simpleTitle = this.title;
-        } else {
-            simpleTitle = this.title;
-            for (int i = this.title.length(); i < CHAR_COUNT - 1; i++) {
-                simpleTitle += " ";
-            }
-        }
+        // if (this.title.length() > CHAR_COUNT) {
+        // simpleTitle = this.title.substring(0, CHAR_COUNT - 4) + "...";
+        // } else if (this.title.length() == CHAR_COUNT) {
+        // simpleTitle = this.title;
+        // } else {
+        // simpleTitle = this.title;
+        // for (int i = this.title.length(); i < CHAR_COUNT - 1; i++) {
+        // simpleTitle += " ";
+        // }
+        // }
 
-        return simpleSeries + "\t" + simpleTitle + "\t issue #" + this.issueNumber + "\t copy id #" + this.copyId
-                + "\t comic id " + this.id;
+        // return simpleSeries + "\t" + simpleTitle + "\t issue #" + this.issueNumber +
+        // "\t copy id #" + this.copyId
+        // + "\t comic id " + this.id;
+
+        return "Comic [\n\tid=                 " + id
+                + "\n\tcopyId=             " + copyId
+                + "\n\ttitle=              " + title
+                + "\n\tseries=             " + series
+                + "\n\tissueNumber=        " + issueNumber
+                + "\n\tvalue=              " + value
+                + "\n\tgrade=              " + grade
+                + "\n]";
 
     }
 
     public String toStringDetailed() {
         return "Comic [\n\tid=                 " + id
                 + "\n\tcopyId=             " + copyId
+                + "\n\ttitle=              " + title
                 + "\n\tpublisher=          " + publisher
                 + "\n\tseries=             " + series
-                + "\n\ttitle=              " + title
                 + "\n\tvolumeNumber=       " + volumeNumber
                 + "\n\tissueNumber=        " + issueNumber
                 + "\n\tpublicationDate=    " + publicationDate
@@ -202,19 +212,22 @@ public class Comic {
     public void addSignature(Signature signature) {
         this.signatures.add(signature);
     }
+
     public void removeSignature(Signature signature) {
         this.signatures.remove(signature);
     }
+
     public void verifyComic(Signature signature) {
-        for(Signature currentSignature : signatures) {
-            if ( currentSignature.equals(signature)) {
+        for (Signature currentSignature : signatures) {
+            if (currentSignature.equals(signature)) {
                 currentSignature.setAuthenticated(true);
             }
         }
     }
+
     public void unVerifyComic(Signature signature) {
-        for(Signature currentSignature : signatures) {
-            if ( currentSignature.equals(signature) ) {
+        for (Signature currentSignature : signatures) {
+            if (currentSignature.equals(signature)) {
                 currentSignature.setAuthenticated(false);
             }
         }
@@ -245,16 +258,20 @@ public class Comic {
     }
 
     public Boolean gradeComic(int grade) {
-        if (grade < 0 || grade > 10) return false;
+        if (grade < 0 || grade > 10)
+            return false;
         this.grade = grade;
         return true;
     }
+
     public void unGradeComic() {
         this.grade = 0;
     }
+
     public void slabComic() {
         this.isSlabbed = true;
     }
+
     public void unSlabComic() {
         this.isSlabbed = false;
     }

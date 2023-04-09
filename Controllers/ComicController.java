@@ -97,8 +97,9 @@ public class ComicController {
     }
 
     /**
-     * Updates the copy (grade, slabbed, signatures) to reflect the given updated
+     * Updates the copy (grade, slabbed) to reflect the given updated
      * version of the copy.
+     * This method does not update signatures.
      * The updated version of the comic should not have any id fields changed from
      * the original.
      * Any information in fields not specific to a copy will be ignored.
@@ -138,57 +139,61 @@ public class ComicController {
         psc.appendToObjects(updatedCopy.isSlabbed());
         psc.appendToObjects(updatedCopy.getCopyId());
         jdbcInsert.executePreparedSQL(psc);
-        // signatures split between signature_refrence and signature_info
-        // check if signature is already in signature_reference
-        for (Signature s : updatedCopy.getSignatures()) {
-            sql = """
-                        SELECT authenticated FROM signature_info
-                        INNER JOIN signature_refrence ON signature_refrence.signature_fk = signature_info.id
-                        WHERE signature_info.id = ? AND signature_refrence.copy_fk = ?;
-                    """;
-            obj = new ArrayList<>();
-            obj.add(s.getId());
-            obj.add(updatedCopy.getCopyId());
-            result = jdbcRead.executePreparedSQL(sql, obj);
-            System.out.println("\tselect done");
-            // if signature not already there, add it
-            if (result.size() == 0) {
-                // add entry to signature_info
-                sql = """
-                        INSERT INTO signature_info (s_name, authenticated)
-                        VALUES (?, ?)
-                        """;
-                obj = new ArrayList<>();
-                obj.add(s.getName());
-                obj.add(s.isAuthenticated());
-                int id = jdbcInsert.executePreparedSQLGetId(sql, obj);
-                System.out.println("\tinfo insert done");
-                // add entry to signature_refrence
-                sql = """
-                        INSERT INTO signature_refrence (signature_fk, copy_fk)
-                        VALUES (?, ?)
-                        """;
-                psc = new PreparedStatementContainer();
-                psc.appendToSql(sql);
-                psc.appendToObjects(id);
-                psc.appendToObjects(updatedCopy.getCopyId());
-                jdbcInsert.executePreparedSQL(psc);
-                System.out.println("\trefrence insert done");
-            }
-            // if signature authentication has changed, update signature_info
-            else if ((boolean) result.get(0) != s.isAuthenticated()) {
-                sql = """
-                        UPDATE signature_info SET authenticated = ? WHERE id = ?
-                        """;
-
-                psc = new PreparedStatementContainer();
-                psc.appendToSql(sql);
-                psc.appendToObjects(s.isAuthenticated());
-                psc.appendToObjects(s.getId());
-                jdbcInsert.executePreparedSQL(psc);
-            }
-        }
         return true;
+    }
+
+    /**
+     * Adds a signature to a copy of a comic.
+     * @param copyId the id of the copy the signature is being added to
+     * @param s the Signature being added to the copy
+     * @return the Signature that was added with the updated id
+     * @throws Exception
+     */
+    public Signature addSignature(int copyId, Signature s) throws Exception {
+        // signatures split between signature_refrence and signature_info
+        // add entry to signature_info
+        String sql = """
+                INSERT INTO signature_info (s_name, authenticated)
+                VALUES (?, ?)
+                """;
+        ArrayList<Object> obj = new ArrayList<>();
+        obj.add(s.getName());
+        obj.add(s.isAuthenticated());
+        int id = jdbcInsert.executePreparedSQLGetId(sql, obj);
+        System.out.println("\tinfo insert done");
+        // add entry to signature_refrence
+        sql = """
+                INSERT INTO signature_refrence (signature_fk, copy_fk)
+                VALUES (?, ?)
+                """;
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(id);
+        psc.appendToObjects(copyId);
+        jdbcInsert.executePreparedSQL(psc);
+        System.out.println("\trefrence insert done");
+        s.setId(id);
+        return s;
+    }
+
+    /**
+     * Removes the given signature from the database and its copy.
+     * @param s the Signature being removed (id must be correct)
+     * @throws Exception
+     */
+    public void removeSignature(Signature s) throws Exception {
+        // remove from signature_refrence
+        String sql = "DELETE FROM signature_refrence WHERE signature_fk = ?";
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(s.getId());
+        jdbcInsert.executePreparedSQL(psc);
+        // remove fro signature_info
+        sql = "DELETE FROM signature_info WHERE id = ?";
+        psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(s.getId());
+        jdbcInsert.executePreparedSQL(psc);
     }
 
     /**
@@ -279,7 +284,7 @@ public class ComicController {
      * @throws Exception
      */
     public void removeFromCollection(int userId, Comic comic) throws Exception {
-        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = ? AND copy_fk = ?";
+        String sql = "DELETE FROM collection_refrence WHERE collection_fk = ? AND copy_fk = ?";
         PreparedStatementContainer psc = new PreparedStatementContainer();
         psc.appendToSql(sql);
         psc.appendToObjects(getCollectionIdFromUser(userId));
