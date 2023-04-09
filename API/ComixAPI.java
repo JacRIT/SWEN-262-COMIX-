@@ -122,7 +122,7 @@ interface ComixAPI {
      * 
      * @param signedComic a previously signed comic to be verified.
      */
-    Boolean verifyComic(Signature signature, Comic signedComic) throws Exception;
+    Signature verifyComic(Signature signature, Comic signedComic) throws Exception;
 
     /**
      * unVerifies a signed comic.
