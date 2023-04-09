@@ -16,6 +16,7 @@ public class Signature {
         this.name = name;
         this.authenticated = false;
     }
+    
     public int getId() {
         return id;
     }
