@@ -1,6 +1,6 @@
 package UI.Interfaces;
 
-import Api.ComixCommonAPI;
+import Api.GuestComixAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.User;
 
@@ -16,6 +16,6 @@ public interface CommandFactory {
    * 
    * @return Personal Collection Command Object
    */
-  public PCCommand createCommand(String type, User user, ComixCommonAPI api) throws Exception;
+  public PCCommand createCommand(String type, User user, GuestComixAPI api) throws Exception;
 
 }

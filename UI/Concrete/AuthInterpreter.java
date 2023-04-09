@@ -2,7 +2,7 @@ package UI.Concrete;
 
 import java.util.Arrays;
 
-import Api.ComixCommonAPI;
+import Api.GuestComixAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -13,7 +13,7 @@ public class AuthInterpreter extends DefaultInterpreter {
 
   private Integer lastViewed;
 
-  public AuthInterpreter(Mediator mediator, ComixCommonAPI api) {
+  public AuthInterpreter(Mediator mediator, GuestComixAPI api) {
     super(mediator);
     this.api = api;
   }
@@ -33,6 +33,7 @@ public class AuthInterpreter extends DefaultInterpreter {
       }).toArray(String[]::new);
     }
 
+    // View a specific comic
     if (command.startsWith("V") || command.startsWith("v")) {
       Boolean detailed = this.isComicDetailed(flags);
 
@@ -47,12 +48,14 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.viewComic(comicId, detailed);
     }
 
+    // Browse personal collection
     if (command.startsWith("BP") || command.startsWith("bp")) {
       String personalCollection = this.browsePC();
       this.lastViewed = null;
       return personalCollection;
     }
 
+    // Search personal collection
     if (command.startsWith("SP") || command.startsWith("sp")) {
       String flagMessage = this.setSearchFlags(flags);
       String keyword = command.substring(2, command.length()).trim();
@@ -61,14 +64,7 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.search(keyword) + flagMessage;
     }
 
-    if (command.startsWith("S") || command.startsWith("s")) {
-      String flagMessage = this.setSearchFlags(flags);
-      String keyword = command.substring(2, command.length()).trim();
-
-      this.lastViewed = null;
-      return super.search(keyword) + flagMessage;
-    }
-
+    // Add to personal collection
     if (command.startsWith("AP") || command.startsWith("ap")) {
       String fullCommand = command.trim();
       if (this.lastViewed != null && fullCommand.length() == 2) {
@@ -79,28 +75,63 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.createCommand(fullCommand);
     }
 
+    // Remove from personal collection
+    if (command.startsWith("RE") || command.startsWith("re")) {
+      String fullCommand = command.trim();
+      if (this.lastViewed != null && fullCommand.length() == 2) {
+        fullCommand += " " + this.lastViewed.toString();
+      }
+
+      this.lastViewed = null;
+      return this.createCommand(fullCommand);
+    }
+
+    // Grade comic in personal collection
+    if (command.startsWith("G") || command.startsWith("g")) {
+      String fullCommand = command.trim();
+      if (this.lastViewed != null && fullCommand.length() == 2) {
+        fullCommand += " " + this.lastViewed.toString();
+      }
+
+      this.lastViewed = null;
+      return this.createCommand(fullCommand);
+    }
+
+    // Undo all commands
     if (command.startsWith("UA") || command.startsWith("ua")) {
       this.lastViewed = null;
       this.mediator.undoAll();
       return "";
     }
 
+    // Redo all commands
     if (command.startsWith("RA") || command.startsWith("ra")) {
       this.lastViewed = null;
       this.mediator.redoAll();
       return "";
     }
 
+    // Undo command
     if (command.startsWith("U") || command.startsWith("u")) {
       this.lastViewed = null;
       String message = this.mediator.undo();
       return message;
     }
 
+    // Redo command
     if (command.startsWith("R") || command.startsWith("r")) {
       this.lastViewed = null;
       String message = this.mediator.redo();
       return message;
+    }
+
+    // Search entire database
+    if (command.startsWith("S") || command.startsWith("s")) {
+      String flagMessage = this.setSearchFlags(flags);
+      String keyword = command.substring(2, command.length()).trim();
+
+      this.lastViewed = null;
+      return super.search(keyword) + flagMessage;
     }
 
     System.out.println("");
@@ -166,7 +197,7 @@ public class AuthInterpreter extends DefaultInterpreter {
       String successMessage = this.mediator.getUser().getName() + "'s Personal Collection:";
 
       for (Comic comic : comics) {
-        successMessage += "\n\t" + comic.toString();
+        successMessage += "\n\n" + comic.toString();
       }
 
       return successMessage;
@@ -204,8 +235,7 @@ public class AuthInterpreter extends DefaultInterpreter {
 
       for (int i = 0; i < comics.length; i++) {
         Comic comic = comics[i];
-        success += "\t" + comic.toString();
-        success += "\n\n";
+        success += "\n\n" + comic.toString();
       }
 
       success += "Total Results: " + comics.length + "\n";
@@ -226,11 +256,13 @@ public class AuthInterpreter extends DefaultInterpreter {
     // String addComicInstructions = "\nEnter \"AP\" to add to your personal
     // collection.";
     String addComicInstructions = "\nEnter \"AP\" to add to your personal collection.";
+    String removeComicInstructions = "\nEnter \"RE\" to remove from your personal collection.";
     String signComicInstructions = "\nEnter \"SG\" to add your signature to the comic";
     String slabComicInstructions = "\nEnter \"SL\" to slab this comic";
     String gradeComicInstructions = "\nEnter \"G <Graded Value>\" to grade this comic on a scale of 1-10";
     String authenticateInstructions = "\nEnter \"A\" to authenticate the signatures on the comic";
-    return defaultBehavior + addComicInstructions + signComicInstructions + slabComicInstructions
+    return defaultBehavior + addComicInstructions + removeComicInstructions + signComicInstructions
+        + slabComicInstructions
         + gradeComicInstructions + authenticateInstructions;
   }
 }

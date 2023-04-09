@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import Model.ModifiedQueue;
 import Model.Command.PCCommand;
+import Model.Command.ConcreteCommand.EmptyCommand;
 import Model.JavaObjects.User;
 import UI.Interfaces.CLI;
 import UI.Interfaces.Interpreter;
@@ -20,6 +21,7 @@ public class CLIMediator implements Mediator {
     this.cli = new GuestCLI();
     this.reader = new GuestInterpreter(this);
     this.sessionCommands = new ModifiedQueue<PCCommand>();
+    this.sessionCommands.addToQueue(new EmptyCommand());
   }
 
   @Override
@@ -79,7 +81,7 @@ public class CLIMediator implements Mediator {
       PCCommand current = this.sessionCommands.getCurrent();
       String message = current.unExecute();
 
-      if (!message.contains("could not") || !message.contains("Could not"))
+      if ((!message.contains("could not") || !message.contains("Could not")) && this.sessionCommands.getIndex() > 0)
         this.sessionCommands.moveBackward();
 
       return message;
@@ -100,7 +102,7 @@ public class CLIMediator implements Mediator {
         return "There is no command to redo";
 
       PCCommand lastUndo = this.sessionCommands.moveForward();
-      String message = lastUndo.unExecute();
+      String message = lastUndo.execute();
 
       if (message.contains("could not") || message.contains("Could not"))
         this.sessionCommands.moveBackward();

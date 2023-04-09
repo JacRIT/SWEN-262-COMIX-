@@ -36,7 +36,7 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Map<String, String> generateStatistics(User user) throws Exception {
-        return comicController.getStatistics(user.getId());
+        return comicController.getStatistics(user.getId()); //TODO : generate by getting personal collection. 
     }
 
     @Override
@@ -60,32 +60,29 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean signComic(Signature signature, Comic comic) throws Exception {
+    public Signature signComic(Signature signature, Comic comic) throws Exception {
         comic.addSignature(signature);
-        comicController.updateCopy(signature.getId(), comic);
-        return true; // TODO : no checks implemented.
+        return comicController.addSignature(comic.getCopyId(), signature);
     }
 
     @Override
     public Boolean unSignComic(Signature signature, Comic comic) throws Exception {
         comic.removeSignature(signature);
-        comicController.updateCopy(signature.getId(), comic);
-        return true; // TODO : no checks implemented.
-
+        comicController.removeSignature(signature);
+        return false; // TODO : no checks implemented (if signature exists)
     }
 
     @Override
-    public Boolean verifyComic(Signature signature, Comic signedComic) throws Exception {
+    public Signature verifyComic(Signature signature, Comic signedComic) throws Exception {
         signedComic.verifyComic(signature);
-        comicController.updateCopy(signature.getId(), signedComic);
-        return true; // TODO : no checks implemented.
+        return comicController.addSignature(signedComic.getCopyId(), signature);
     }
 
     @Override
     public Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception {
         signedComic.unVerifyComic(signature);
-        comicController.updateCopy(signature.getId(), signedComic);
-        return true; // TODO : no checks implemented.
+        comicController.removeSignature(signature);
+        return true; // TODO : no checks implemented(if signature exists).
     }
 
     @Override

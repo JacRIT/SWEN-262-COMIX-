@@ -1,6 +1,6 @@
 package Model.Command.ConcreteCommand;
 
-import Api.ComixCommonAPI;
+import Api.GuestComixAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
@@ -11,9 +11,9 @@ public class GradeComic implements PCCommand {
   private Comic comic;
   private User user;
 
-  private ComixCommonAPI api;
+  private GuestComixAPI api;
 
-  public GradeComic(int newGrade, User user, Comic comic, ComixCommonAPI api) {
+  public GradeComic(int newGrade, User user, Comic comic, GuestComixAPI api) {
     this.newGrade = newGrade;
     this.comic = comic;
     this.user = user;

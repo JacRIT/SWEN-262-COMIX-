@@ -2,7 +2,7 @@ package UI.Concrete;
 
 import java.util.Arrays;
 
-import Api.ComixCommonAPI;
+import Api.GuestComixAPI;
 import Model.JavaObjects.Comic;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
@@ -13,7 +13,7 @@ import UI.Interfaces.Mediator;
 
 public abstract class DefaultInterpreter implements Interpreter {
 
-  protected ComixCommonAPI api;
+  protected GuestComixAPI api;
   protected Mediator mediator;
   protected Factory<SearchAlgorithm> searchFactory;
   protected Factory<SortAlgorithm> sortFactory;
@@ -21,7 +21,7 @@ public abstract class DefaultInterpreter implements Interpreter {
 
   public DefaultInterpreter(Mediator mediator) {
     try {
-      this.api = new ComixCommonAPI();
+      this.api = new GuestComixAPI();
     } catch (Exception e) {
       System.out.println("Server could not connect");
     }
