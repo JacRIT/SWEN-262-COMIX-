@@ -4,6 +4,7 @@ import Api.GuestComixAPI;
 import Model.Command.PCCommand;
 import Model.Command.ConcreteCommand.AddToPC;
 import Model.Command.ConcreteCommand.GradeComic;
+import Model.Command.ConcreteCommand.PCRemoveComic;
 import Model.Command.ConcreteCommand.SignComic;
 import Model.Command.ConcreteCommand.SlabComic;
 import Model.JavaObjects.Comic;
@@ -29,6 +30,14 @@ public class PCFactory implements CommandFactory {
         int comicId = Integer.parseInt(split[1]);
         Comic comic = api.getComic(comicId);
         return new AddToPC(user, comic, api);
+      }
+
+      if (type.startsWith("RE") || type.startsWith("re")) {
+        if (split.length != 2)
+          return null;
+        int comicId = Integer.parseInt(split[1]);
+        Comic comic = api.getComic(comicId);
+        return new PCRemoveComic(user, comic, api);
       }
 
       if (type.startsWith("SG") || type.startsWith("sg")) {
