@@ -27,7 +27,8 @@ public class CSVComicAdapter implements ComicConverter {
         writer.writeNext(header);
 
         for(Comic comic : comics){
-            //SO. What's gonna happen is that for each comic, if there is a volume comic 
+            //SO. What's gonna happen is that for each comic add a Vol. to the series title
+            //and publisher, creators, uses the helper method
         }
         return null;
     }
