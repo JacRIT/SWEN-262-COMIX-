@@ -60,18 +60,16 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Boolean signComic(Signature signature, Comic comic) throws Exception {
+    public Signature signComic(Signature signature, Comic comic) throws Exception {
         comic.addSignature(signature);
-        comicController.updateCopy(signature.getId(), comic);
-        return true; // TODO : no checks implemented.
+        return comicController.addSignature(comic.getCopyId(), signature);
     }
 
     @Override
     public Boolean unSignComic(Signature signature, Comic comic) throws Exception {
         comic.removeSignature(signature);
-        comicController.updateCopy(signature.getId(), comic);
-        return true; // TODO : no checks implemented.
-
+        comicController.removeSignature(signature);
+        return false; // TODO : no checks implemented
     }
 
     @Override

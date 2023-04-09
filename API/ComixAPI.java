@@ -101,7 +101,7 @@ interface ComixAPI {
      *         false : Comic is not successfully signed
      *         - comic does not exist in database.
      */
-    Boolean signComic(Signature signature, Comic comic) throws Exception;
+    Signature signComic(Signature signature, Comic comic) throws Exception;
 
     /**
      * unSigns a comic.

@@ -19,6 +19,7 @@ public class GuestComixAPI implements ComixAPI {
 
     public GuestComixAPI() throws Exception {
         this.comicController = new ComicController();
+        this.userController = new UserController();
         this.userComixAPI = new UserComixAPI();
         this.comicController.setSearch(new PartialKeywordSearch());
         this.isAuthenticated = false;
@@ -99,11 +100,11 @@ public class GuestComixAPI implements ComixAPI {
     
     
     @Override
-    public Boolean signComic(Signature signature, Comic comic) throws Exception {
+    public Signature signComic(Signature signature, Comic comic) throws Exception {
         if(isAuthenticated) {
             return userComixAPI.signComic(signature, comic);
         } else {
-            return false;
+            return null;
         }
     }
     @Override
