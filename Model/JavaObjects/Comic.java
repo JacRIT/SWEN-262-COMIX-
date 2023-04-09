@@ -234,8 +234,43 @@ public class Comic {
     }
 
     public float getValue() {
-        return value;
+        return this.value;
     }
+
+    public float getCalculatedValue() throws Exception{
+        float actualValue = this.value;
+            
+        //Order is Important!
+        actualValue = calculateValueBasedOnGrade(actualValue);
+        actualValue = calculateComicBasedOnSignatures(actualValue);
+        if(isSlabbed) actualValue *= 2;
+
+        return actualValue;
+    }
+
+    public float calculateValueBasedOnGrade(float actualValue) throws Exception{
+        if (this.grade == 1) {
+            actualValue *= .1;
+        } else if (this.grade <= 10) {
+            actualValue *= Math.log10(value);
+        } else {
+            throw new Exception();
+            // A comic in the database has a grade that is not inbetween 1 and 10.
+        }  
+        return actualValue;
+    }
+
+    public float calculateComicBasedOnSignatures(float actualValue) {
+        for (Signature signature : signatures) {
+            if (signature.isAuthenticated()) {
+                actualValue *= 1.05;
+            } else {
+                actualValue *= 1.20;
+            }
+        }
+        return actualValue;
+    }
+
 
     public void setValue(float value) {
         this.value = value;

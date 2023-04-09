@@ -1,8 +1,10 @@
 package Api;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import Controllers.ComicController;
+import Controllers.UserController;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
@@ -13,9 +15,11 @@ import Model.Search.ConcreteSorts.BrowseSort;
 
 public class UserComixAPI implements ComixAPI {
     private ComicController comicController;
+    private UserController userController;
 
     public UserComixAPI() throws Exception {
         this.comicController = new ComicController();
+        this.userController = new UserController();
         comicController.setSearch(new PartialKeywordSearch());
     }
 
@@ -35,8 +39,22 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public Map<String, String> generateStatistics(User user) throws Exception {
-        return comicController.getStatistics(user.getId()); //TODO : generate by getting personal collection. 
+    public Map<String, Float> generateStatistics(User user) throws Exception {
+        if (userExists(user)) {
+            Comic[] comicsInPersonalCollection = this.browsePersonalCollection(user.getId());
+            Map<String, Float> statistics = new HashMap<String, Float>();
+            float value = 0;
+            for (Comic comic : comicsInPersonalCollection) {
+                float calculatedComicValue = comic.getCalculatedValue();
+                value += calculatedComicValue;
+            }
+            statistics.put("Number Of Issues", (float)(Integer)comicsInPersonalCollection.length);
+            statistics.put("value", value);
+            return statistics;
+        } else {
+            System.out.println("\n======\n USER DOES NOT EXIST \n======\n");
+            return null;
+        }
     }
 
     @Override
@@ -131,5 +149,23 @@ public class UserComixAPI implements ComixAPI {
 
     public Comic getComic(int comicId) throws Exception {
         return this.comicController.get(comicId);
+    }
+
+    /**
+     * @param user user being tested
+     * @return  True    : User Exists
+     *          False   : User Does Not Exist
+     */
+    private Boolean userExists(User user) throws Exception{
+        return userController.get(user.getId()) != null;
+    }
+
+    /**
+     * @param comic copy being tested 
+     * @return  True    : Comic Exists
+     *          False   : Comic Does not exist
+     */
+    private Boolean copyExists(Comic copy) throws Exception {
+        return comicController.get(copy.getCopyId()) != null;
     }
 }
