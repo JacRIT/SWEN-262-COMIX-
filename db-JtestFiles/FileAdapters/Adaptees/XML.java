@@ -1,6 +1,7 @@
 package FileAdapters.Adaptees;
 import javax.xml.parsers.*;
 import java.io.File;
+
 import org.w3c.dom.Document;
 
 /**
@@ -15,7 +16,10 @@ public class XML {
         return doc;
     }
 
-    public void createFile(String filename){
-        
+    public Document createFile() throws Exception{
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        return db.newDocument();
+
     }
 }

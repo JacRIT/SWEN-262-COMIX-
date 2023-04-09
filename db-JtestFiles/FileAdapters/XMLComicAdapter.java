@@ -3,7 +3,13 @@ package FileAdapters;
 import Model.JavaObjects.*;
 import Model.JavaObjects.Character;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,12 +26,66 @@ public class XMLComicAdapter implements ComicConverter {
         this.adaptee = adapteeXml;
     }
     @Override
-    public String convertToFile(String filename, Comic[] comics) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'convertToFile'");
+    public String convertToFile(String filename, Comic[] comics) throws Exception{
+        FileOutputStream output = new FileOutputStream(filename);
+        Document doc = adaptee.createFile();
+        Element rootElement = doc.createElement("Comics");
+        for(Comic comicObj : comics){ //For each comic in the array, creates an XML element 
+        doc.appendChild(rootElement);
+        Element comic = doc.createElement("comic");
+        rootElement.appendChild(comic);
+
+        Element series = doc.createElement("series");
+        series.setTextContent(comicObj.getSeries());
+        comic.appendChild(series);
+
+        Element title = doc.createElement("title");
+        title.setTextContent(comicObj.getTitle());
+        comic.appendChild(title);
+
+        Element vol = doc.createElement("vol");
+        vol.setTextContent(String.valueOf(comicObj.getVolumeNumber()));
+        comic.appendChild(vol);
+
+        Element issue = doc.createElement("issue");
+        issue.setTextContent(comicObj.getIssueNumber());
+        comic.appendChild(issue);
+
+        Element desc = doc.createElement("desc");
+        desc.setTextContent(comicObj.getDescription());
+        comic.appendChild(desc);
+
+        Element release = doc.createElement("release");
+        release.setTextContent(comicObj.getPublicationDate());
+        comic.appendChild(release);
+
+        Element pub = doc.createElement("pub");
+        pub.setTextContent(formatString(comicObj.getPublisher()));
+        comic.appendChild(pub);
+
+        Element creator = doc.createElement("creator");
+        creator.setTextContent(formatString(comicObj.getCreators()));
+        comic.appendChild(creator);
+        }
+        writeToFile(doc, output);
+        return null;
+
     }
 
+    private void writeToFile(Document doc, OutputStream output) throws Exception{
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //This indents the child <>'s'
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(output);
+        transformer.transform(source, result);
 
+    }
+
+    private <T> String formatString(ArrayList<T> unformattedArray){
+        String unformattedString = unformattedArray.toString();
+        return unformattedString.replace("[", "").replace("]", "").replace(", ", " | ");
+    }
 
     @Override
     public Comic convertToComic(String filename) throws Exception{

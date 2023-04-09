@@ -6,8 +6,8 @@
         "issue_number": 1,
         "description": "",
         "release_date": "Jan 1986",
-        "Publisher": "DC Comics",
-        "Creators": "Bob Rozakis | Stephen DeStefano | Karl Kesel"
+        "publisher": "DC Comics",
+        "creators": "Bob Rozakis | Stephen DeStefano | Karl Kesel"
     },
     {
         "series": "Fables",
@@ -16,7 +16,7 @@
         "issue_number": 1,
         "description": "Trouble in Fabletown",
         "release_date": "April 25, 2003",
-        "Publisher": "DC Comics",
-        "Creators": "Bill Willingham"
+        "publisher": "DC Comics",
+        "creators": "Bill Willingham"
     }
 ]

@@ -36,9 +36,8 @@ public class JSONComicAdapter implements ComicConverter {
             comicDetailMap.put("description", comic.getDescription());
             comicDetailMap.put("release_date", comic.getPublicationDate());
             //need to convert Publishers into | concat
-            String publisherAsString = comic.getPublisher().toString();
-            publisherAsString = publisherAsString.replace("[", "").replace("]", "").replace(", ", " | ");
-            comicDetailMap.put("publisher", publisherAsString);
+            comicDetailMap.put("publisher", formatString(comic.getPublisher()));
+            comicDetailMap.put("creators", formatString(comic.getCreators()));
             JSONObject comicJson = new JSONObject(comicDetailMap);
             file.write(comicJson.toJSONString());
         }
@@ -46,6 +45,10 @@ public class JSONComicAdapter implements ComicConverter {
         return null;
     }
 
+    private <T> String formatString(ArrayList<T> unformattedArray){
+        String unformattedString = unformattedArray.toString();
+        return unformattedString.replace("[", "").replace("]", "").replace(", ", " | ");
+    }
 
     @Override
     public Comic convertToComic(String filename) throws Exception{
