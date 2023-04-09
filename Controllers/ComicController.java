@@ -197,26 +197,52 @@ public class ComicController {
     }
 
     /**
-     * Deletes the copy and the collection reference, comic info is kept
+     * TESTED: returns false and does not delete if comic is in database
+     * NOT TESTED: deletes manually created comics correctly
+     * 
+     * Deletes the copy, collection reference, AND comic info.
+     * Will not allow deletion of a comic in the database (not manually created).
      * 
      * @param userId the userId of the collection the comic is in
      * @param comic  The comic to be deleted
      * @throws Exception
      */
-    public void delete(int userId, Comic comic) throws Exception {
-        int copyId = comic.getCopyId();
-        // deletes references and then the copy
-        String deleteRefSql = "DELETE from signature_refrence, collection_refrence WHERE copy_fk = ?;";
-        String deleteCopySql = "DELETE from comic_ownership WHERE id = ?";
+    public boolean delete(int userId, Comic comic) throws Exception {
+        // checks if the comic is in the database
+        String sql = """
+            SELECT comic_ownership.id FROM comic_ownership 
+            INNER JOIN collection_refrence ON collection_refrence.copy_fk = comic_ownership.id
+            WHERE comic_ownership.comic_fk = ? AND collection_refrence.collection_fk = ?""";
+        ArrayList<Object> obj = new ArrayList<>();
+        obj.add(comic.getId());
+        obj.add(getCollectionIdFromUser(1));
+        ArrayList<Object> results = jdbcRead.executePreparedSQL(sql, obj);
+        if (results.size() > 0)
+            return false;
+        // otherwise it is manually created and can be deleted
+        // deletes singatures
+        for (Signature s : comic.getSignatures()) {
+            removeSignature(s);
+        }
+        // deletes collection_refrence
+        String deleteRefSql = "DELETE FROM collection_refrence WHERE copy_fk = ?;";
         PreparedStatementContainer psc = new PreparedStatementContainer();
         psc.appendToSql(deleteRefSql);
-        psc.appendToObjects(copyId);
+        psc.appendToObjects(comic.getCopyId());
         jdbcInsert.executePreparedSQL(psc);
         // now deletes copy
+        String deleteCopySql = "DELETE FROM comic_ownership WHERE id = ?";
         psc = new PreparedStatementContainer();
         psc.appendToSql(deleteCopySql);
-        psc.appendToObjects(copyId);
+        psc.appendToObjects(comic.getCopyId());
         jdbcInsert.executePreparedSQL(psc);
+        // deletes comic_info
+        String deleteComicSql = "DELETE FROM comic_info WHERE id = ?";
+        psc = new PreparedStatementContainer();
+        psc.appendToSql(deleteComicSql);
+        psc.appendToObjects(comic.getId());
+        jdbcInsert.executePreparedSQL(psc);
+        return true;
     }
 
     /**
@@ -256,9 +282,10 @@ public class ComicController {
      * Adds a comic copy to a collection.
      * 
      * @param userId the userId of the collection the comic will be in
-     * @param comic  the comic to be added (assumed that the copy has not been created)
+     * @param comic  the comic to be added (assumed that the copy has not been created, copy id not used)
+     * @return the new copy's id 
      */
-    public void addToCollection(int userId, Comic comic) throws Exception {
+    public int addToCollection(int userId, Comic comic) throws Exception {
         // create a new copy of a comic (comic_ownership)
         String sql = "INSERT INTO comic_ownership(comic_fk, comic_value, grade, slabbed) VALUES(?, ?, ?, ?)";
         ArrayList<Object> obj = new ArrayList<>();
@@ -274,25 +301,32 @@ public class ComicController {
         psc.appendToObjects(getCollectionIdFromUser(userId));
         psc.appendToObjects(copyId);
         jdbcInsert.executePreparedSQL(psc);
+        return copyId;
     }
 
     /**
-     * Removes a comic from a collection
+     * Removes a comic from a collection, deletes the copy's info.
      * 
      * @param userId the userId of the collection the comic will be removed from
      * @param comic  the comic to be removed (copy id must be set)
      * @throws Exception
      */
     public void removeFromCollection(int userId, Comic comic) throws Exception {
-        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = ? AND copy_fk = ?";
+        String sql = "DELETE FROM collection_refrence WHERE collection_fk = ? AND copy_fk = ?";
         PreparedStatementContainer psc = new PreparedStatementContainer();
         psc.appendToSql(sql);
         psc.appendToObjects(getCollectionIdFromUser(userId));
         psc.appendToObjects(comic.getCopyId());
         jdbcInsert.executePreparedSQL(psc);
+        sql = "DELETE FROM comic_ownership WHERE id = ?";
+        psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(comic.getCopyId());
+        jdbcInsert.executePreparedSQL(psc);
     }
 
     /**
+     * CURRENTLY INCORRECT
      * Gets the statistics: the total number of comics in the collection and the
      * total value of the collection.
      * 
@@ -403,14 +437,27 @@ public class ComicController {
 
         // Comic comic = cc.get(14241);
         // System.out.println(comic);
-        // Signature s = new Signature(0, "Jim", true);
+        // Signature s = new Signature(0, "Joe", false);
+        // Signature s = comic.getSignatures().get(comic.getSignatures().size()-1);
+        // cc.removeSignature(s);
         // comic.addSignature(s);
         // comic.getSignatures().get(1).setAuthenticated(false);
         // cc.updateCopy(2, comic);
         // System.out.println(cc.get(14241));
 
-        Map<String, String> stats = cc.getStatistics(2);
-        System.out.println("count = " + stats.get("count") + ", total value = " + stats.get("value"));
+        // Map<String, String> stats = cc.getStatistics(2);
+        // System.out.println("count = " + stats.get("count") + ", total value = " + stats.get("value"));
+        
+        // Comic comic = cc.get(14240);
+        // cc.removeFromCollection(2, comic);
+
+        Comic comic = cc.get(6);
+        comic.setGrade(4);
+        comic.setSlabbed(true);
+        System.out.println(comic);
+        int copyId = cc.addToCollection(2, comic);
+        System.out.println(cc.get(copyId));
+
 
     }
 }
