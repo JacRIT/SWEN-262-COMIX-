@@ -1,8 +1,6 @@
 package Controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import Controllers.Utils.JDBCComicExtractor;
 import Controllers.Utils.JDBCInsert;
@@ -91,11 +89,47 @@ public class ComicController {
      * Any information in fields specific to a copy will be ignored.
      * Only manually created comics can be edited.
      * 
-     * @param updatedComic the new comic replacing the old data
+     * @param updatedComic the new comic replacing the old data, must have correct comic id
+     * @return true if the comic was updated, false if the comic was not manually created and not updated
+     * @throws Exception
      */
-    public void updateComic(Comic updatedComic) {
-        // check to make sure comic is not in the database-> if it is, throw error
-        // update sql call
+    public boolean updateComic(Comic updatedComic) throws Exception {
+        // check to make sure comic is not in the database-> if it is, return false
+        String sql = """
+            SELECT comic_ownership.id FROM comic_ownership 
+            INNER JOIN collection_refrence ON collection_refrence.copy_fk = comic_ownership.id
+            WHERE comic_ownership.comic_fk = ? AND collection_refrence.collection_fk = ?""";
+        ArrayList<Object> obj = new ArrayList<>();
+        obj.add(updatedComic.getId());
+        obj.add(getCollectionIdFromUser(1));
+        ArrayList<Object> results = jdbcRead.executePreparedSQL(sql, obj);
+        if (results.size() > 0)
+            return false;
+        // otherwise, update comic_info fields
+        sql = """
+                UPDATE comic_info 
+                SET 
+                    series = ?, 
+                    title = ?,
+                    volume_num = ?,
+                    issue_num = ?,
+                    initial_value = ?,
+                    descrip = ?,
+                    release_date = ?
+                WHERE id = ?
+                """;
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(updatedComic.getSeries());
+        psc.appendToObjects(updatedComic.getTitle());
+        psc.appendToObjects(updatedComic.getVolumeNumber());
+        psc.appendToObjects(updatedComic.getIssueNumber());
+        psc.appendToObjects(updatedComic.getInitialValue());
+        psc.appendToObjects(updatedComic.getDescription());
+        psc.appendToObjects(updatedComic.getPublicationDate());
+        psc.appendToObjects(updatedComic.getId());
+        jdbcInsert.executePreparedSQL(psc);
+        return true;
     }
 
     /**
@@ -413,6 +447,15 @@ public class ComicController {
         // System.out.println(cc.create(2, comic));
 
         // cc.delete(2, comic);
+
+        // Comic comic = cc.get(14241);
+        Comic comic = cc.get(14299);
+        System.out.println(comic.toStringDetailed());
+        comic.setDescription("this is an edited description");
+        System.out.println(cc.updateComic(comic));
+        comic = cc.get(14299);
+        System.out.println(comic.toStringDetailed());
+
 
     }
 }
