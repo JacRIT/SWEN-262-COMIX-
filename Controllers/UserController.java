@@ -23,8 +23,9 @@ public class UserController {
      * @param username the username of the user being added to the database
      * @return a User object with the id of the new user entry in the database and
      *         the given username
+     * @throws Exception
      */
-    public User create(String username) {
+    public User create(String username) throws Exception {
         // add a row to collection_info (SERIAL id, nickname)
         // get the id of the new collection
         String sql = "INSERT INTO collection_info (nickname) VALUES (?);";

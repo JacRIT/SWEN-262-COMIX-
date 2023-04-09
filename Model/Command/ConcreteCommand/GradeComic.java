@@ -13,7 +13,7 @@ public class GradeComic implements PCCommand {
 
   private ComixCommonAPI api;
 
-  public GradeComic(int lastGrade, int newGrade, Comic comic, User user, ComixCommonAPI api) {
+  public GradeComic(int newGrade, User user, Comic comic, ComixCommonAPI api) {
     this.newGrade = newGrade;
     this.comic = comic;
     this.user = user;
@@ -21,17 +21,20 @@ public class GradeComic implements PCCommand {
   }
 
   @Override
-  public String execute() {
-    // this.api.gradeComicInPersonalCollection(this.user, this.oldComic,
-    // this.newGrade);
-    return "Comic (" + this.comic.getTitle() + ") has been graded at " + this.newGrade;
+  public String execute() throws Exception {
+    Boolean success = this.api.gradeComicInPersonalCollection(this.user, this.comic,
+        this.newGrade);
+    if (success)
+      return "Comic (" + this.comic.getTitle() + ") has been graded at " + this.newGrade;
+    return "Comic (" + this.comic.getTitle() + ") could not graded at " + this.newGrade;
   }
 
   @Override
-  public String unExecute() {
-    // this.api.gradeComicInPersonalCollection(this.user, this.oldComic,
-    // this.oldComic.getGrade());
-    return "Comic (" + this.comic.getTitle() + ") has been graded at " + this.comic.getGrade();
+  public String unExecute() throws Exception {
+    Boolean success = this.api.ungradeComicInPersonalCollection(this.user, this.comic);
+    if (success)
+      return "Comic (" + this.comic.getTitle() + ") has been ungraded at " + this.comic.getGrade();
+    return "Comic (" + this.comic.getTitle() + ") could not be ungraded at " + this.comic.getGrade();
   }
 
 }

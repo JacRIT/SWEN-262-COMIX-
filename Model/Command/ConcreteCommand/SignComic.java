@@ -3,6 +3,7 @@ package Model.Command.ConcreteCommand;
 import Api.ComixCommonAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
+import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
 
 public class SignComic implements PCCommand {
@@ -20,20 +21,30 @@ public class SignComic implements PCCommand {
 
   /**
    * Waiting on api responses
+   * 
+   * @throws Exception
    */
   @Override
-  public String execute() {
-
-    return "Comic (" + this.comic.getTitle() + ") has been signed by " + this.user.getName();
+  public String execute() throws Exception {
+    Signature signature = new Signature(this.user.getId(), this.user.getName());
+    Boolean success = this.api.signComic(signature, comic);
+    if (success)
+      return "Comic (" + this.comic.getTitle() + ") has been signed by " + this.user.getName();
+    return "Comic (" + this.comic.getTitle() + ") could not be signed by " + this.user.getName();
   }
 
   /**
    * Waiting on api responses
+   * 
+   * @throws Exception
    */
   @Override
-  public String unExecute() {
-
-    return this.user.getName() + " signature has been removed from Comic (" + this.comic.getTitle() + ")";
+  public String unExecute() throws Exception {
+    Signature signature = new Signature(this.user.getId(), this.user.getName());
+    Boolean success = this.api.signComic(signature, comic);
+    if (success)
+      return this.user.getName() + " signature has been removed from Comic (" + this.comic.getTitle() + ")";
+    return this.user.getName() + " signature could not be removed from Comic (" + this.comic.getTitle() + ")";
   }
 
 }

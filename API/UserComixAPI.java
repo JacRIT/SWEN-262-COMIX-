@@ -40,7 +40,7 @@ public class UserComixAPI implements ComixAPI {
     }
 
     @Override
-    public String createComic(int userId, Comic comic) {
+    public String createComic(int userId, Comic comic) throws Exception {
         comicController.create(userId, comic);
         return comic.getTitle();
     }

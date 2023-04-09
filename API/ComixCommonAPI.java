@@ -47,8 +47,9 @@ public class ComixCommonAPI implements ComixAPI {
      * 
      * @param username
      * @return a User object with the id and username of the newly created user
+     * @throws Exception
      */
-    public User register(String username) {
+    public User register(String username) throws Exception {
         return userController.create(username);
     }
 

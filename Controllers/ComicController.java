@@ -196,8 +196,9 @@ public class ComicController {
      * 
      * @param userId the userId of the collection the comic is in
      * @param comic  The comic to be deleted
+     * @throws Exception
      */
-    public void delete(int userId, Comic comic) {
+    public void delete(int userId, Comic comic) throws Exception {
         int copyId = comic.getCopyId();
         // deletes references and then the copy
         String deleteRefSql = "DELETE from signature_refrence, collection_refrence WHERE copy_fk = (?);";
@@ -238,6 +239,7 @@ public class ComicController {
 
     /**
      * Adds a comic copy to a collection.
+     * 
      * @param userId the userId of the collection the comic will be in
      * @param comic  the comic to be added
      */
@@ -261,14 +263,12 @@ public class ComicController {
      * 
      * @param userId the userId of the collection the comic will be removed from
      * @param comic  the comic to be removed
+     * @throws Exception
      */
-    public void removeFromCollection(int userId, Comic comic) {
-        int comicId = comic.getId();
-        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = ? AND copy_fk = ?;";
-        PreparedStatementContainer psc = new PreparedStatementContainer();
-        psc.appendToSql(sql);
-        psc.appendToObjects(userId);
-        psc.appendToObjects(comicId);
+    public void removeFromCollection(int userId, Comic comic) throws Exception {
+        String comicId = Integer.toString(comic.getId());
+        String sql = "DELETE * FROM collection_refrence WHERE collection_fk = " + Integer.toString(userId)
+                + "AND copy_fk = " + comicId;
         jdbcInsert.executeSQL(sql);
     }
 
