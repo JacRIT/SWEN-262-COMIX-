@@ -21,6 +21,10 @@ public class Comic {
     private int grade;
     private boolean isSlabbed;
 
+    public Comic() {
+        this(0, 0, new ArrayList<>(), "", "", 0, "", "", new ArrayList<>(), new ArrayList<>(), "", 0, new ArrayList<>(), 0, 0, false);
+    }
+
     public Comic(int id, int copyId, ArrayList<Publisher> publisher, String series, String title, int volumeNumber,
             String issueNumber, String publicationDate, ArrayList<Creator> creators,
             ArrayList<Character> principlCharacters, String description, float initialValue,
