@@ -21,6 +21,9 @@ public class JSONComicAdapter implements ComicConverter {
     @Override
     public String convertToFile(Comic comic) {
         // TODO Auto-generated method stub
+        //Current plan: use JDBCComicExtractor in ComicController to get All comics, 
+        //then insert that array into here to be parsed (with maybe helper method),
+        //this method will put it all into file
         throw new UnsupportedOperationException("Unimplemented method 'convertToFile'");
     }
 
