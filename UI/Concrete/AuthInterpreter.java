@@ -79,6 +79,30 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.createCommand(fullCommand);
     }
 
+    if (command.startsWith("UA") || command.startsWith("ua")) {
+      this.lastViewed = null;
+      this.mediator.undoAll();
+      return "";
+    }
+
+    if (command.startsWith("RA") || command.startsWith("ra")) {
+      this.lastViewed = null;
+      this.mediator.redoAll();
+      return "";
+    }
+
+    if (command.startsWith("U") || command.startsWith("u")) {
+      this.lastViewed = null;
+      String message = this.mediator.undo();
+      return message;
+    }
+
+    if (command.startsWith("R") || command.startsWith("r")) {
+      this.lastViewed = null;
+      String message = this.mediator.redo();
+      return message;
+    }
+
     System.out.println("");
     System.out.println("Using super");
     System.out.println("");
@@ -105,10 +129,19 @@ public class AuthInterpreter extends DefaultInterpreter {
       }
 
       String successMessage = newCommand.execute();
+
+      if (successMessage.contains("could not"))
+        return successMessage;
+
+      // System.out.println("Command Executed Beep Boop");
+      // System.out.println(successMessage);
+
       this.mediator.addCommand(newCommand);
+
+      successMessage += "\nEnter \"U\" to undo this action";
+
       return successMessage;
     } catch (Exception err) {
-      // System.out.println(err);
       System.out.println("Create Command Err:\n" + err.getLocalizedMessage() + "\n" + err.getMessage());
       return "Command: " + input.split(" ")[0] + " could not be executed";
     }

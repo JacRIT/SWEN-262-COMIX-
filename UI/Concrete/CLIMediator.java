@@ -70,37 +70,70 @@ public class CLIMediator implements Mediator {
   }
 
   @Override
-  public void undo() {
+  public String undo() {
+    try {
 
-    PCCommand lastCommand = this.sessionCommands.moveBackward();
-    // lastCommand.unExecute();
+      if (!this.canUndo())
+        return "There is no command to undo";
+
+      PCCommand current = this.sessionCommands.getCurrent();
+      String message = current.unExecute();
+
+      if (!message.contains("could not") || !message.contains("Could not"))
+        this.sessionCommands.moveBackward();
+
+      return message;
+
+    } catch (Exception err) {
+      System.out.println("");
+      System.out.println("Undo Error:\n" + err.getMessage() + "\n" + err.getLocalizedMessage());
+      return "Could not undo command";
+    }
 
   }
 
   @Override
-  public void redo() {
+  public String redo() {
+    try {
 
-    PCCommand lastCommand = this.sessionCommands.getCurrent();
-    // lastCommand.execute();
-    this.sessionCommands.moveForward();
+      if (!this.canRedo())
+        return "There is no command to redo";
 
+      PCCommand lastUndo = this.sessionCommands.moveForward();
+      String message = lastUndo.unExecute();
+
+      if (message.contains("could not") || message.contains("Could not"))
+        this.sessionCommands.moveBackward();
+
+      return message;
+
+    } catch (Exception err) {
+      System.out.println("");
+      System.out.println("Redo Error:\n" + err.getMessage() + "\n" + err.getLocalizedMessage());
+      return "Could not redo command";
+    }
   }
 
   @Override
   public void undoAll() {
-
-    // Iterable goingBack = this.sessionCommands.backwardIterator();
-
-    // for (PCCommand command : goingBack) {
-
-    // }
+    int i = 1;
+    while (this.canUndo()) {
+      System.out.println("Undoing: " + i);
+      i++;
+      this.cli.displayMessage(this.undo());
+    }
 
   }
 
   @Override
   public void redoAll() {
-    // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method 'redoAll'");
+    int i = 1;
+    while (this.canRedo()) {
+      System.out.println("Redoing: " + i);
+      i++;
+      this.cli.displayMessage(this.redo());
+    }
+
   }
 
   @Override
@@ -108,6 +141,18 @@ public class CLIMediator implements Mediator {
 
     cli.instructions(true);
 
+  }
+
+  @Override
+  public Boolean canUndo() {
+    this.cli.displayMessage("Size: " + this.sessionCommands.size());
+    this.cli.displayMessage("Index: " + this.sessionCommands.getIndex());
+    return this.sessionCommands.size() >= 1 && (this.sessionCommands.getIndex() >= 0);
+  }
+
+  @Override
+  public Boolean canRedo() {
+    return this.sessionCommands.size() - 1 > this.sessionCommands.getIndex();
   }
 
 }
