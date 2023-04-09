@@ -55,6 +55,10 @@ public class GuestComixAPI implements ComixAPI {
     public User register(String username) throws Exception {
         return userController.create(username);
     }
+
+    public void logout() {
+        this.isAuthenticated = false;
+    }
     
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
