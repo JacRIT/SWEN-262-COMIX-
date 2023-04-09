@@ -43,7 +43,6 @@ public class ComixCommonAPI implements ComixAPI {
     /**
      * Creates and registers a new user.
      * You can now be authenticated with this new username.
-     * 
      * @param username
      * @return a User object with the id and username of the newly created user
      */
