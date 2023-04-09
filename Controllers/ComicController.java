@@ -227,16 +227,16 @@ public class ComicController {
             INSERT INTO comic_info(series, title, vol_num, issue_num, initial_value, descrip, release_date)
             VALUES (?,?,?,?,?,?,?)
             """;
-        PreparedStatementContainer psc = new PreparedStatementContainer();
-        psc.appendToSql(sql);
-        psc.appendToObjects(comic.getSeries());
-        psc.appendToObjects(comic.getTitle());
-        psc.appendToObjects(comic.getVolumeNumber());
-        psc.appendToObjects(comic.getIssueNumber());
-        psc.appendToObjects(comic.getInitialValue());
-        psc.appendToObjects(comic.getDescription());
-        psc.appendToObjects(comic.getPublicationDate());
-        jdbcInsert.executePreparedSQL(psc);
+        ArrayList<Object> obj = new ArrayList<>();
+        obj.add(comic.getSeries());
+        obj.add(comic.getTitle());
+        obj.add(comic.getVolumeNumber());
+        obj.add(comic.getIssueNumber());
+        obj.add(comic.getInitialValue());
+        obj.add(comic.getDescription());
+        obj.add(comic.getPublicationDate());
+        int comicId = jdbcInsert.executePreparedSQLGetId(sql, obj);
+        comic.setId(comicId);
 
         // still need to check if publisher, creator, and characters exist
         // add if they do not exist (select from ---_info using id)
