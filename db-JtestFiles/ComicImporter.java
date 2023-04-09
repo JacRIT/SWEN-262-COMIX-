@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import Controllers.Utils.JDBCInsert;
+import Controllers.Utils.JDBCRead;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Creator;
 import Model.JavaObjects.Publisher;
@@ -18,7 +19,7 @@ import Model.JavaObjects.Publisher;
  * 
  */
 
-public class ComicImporter {
+public class ComicImporter extends JDBCRead {
     
     private Comic   copy_target ;
     private int     collection_id ;
@@ -92,11 +93,178 @@ public class ComicImporter {
     // // }
 
     public void importComic() {
+        int comic_id ;
+        ArrayList<Integer> creator_ids = new ArrayList<Integer>() ;
+        int pub_id ;
         /*
-         * checks through comic_info, creator_info, publisher_info, and character_info for duplicate information
-         * creates a COPY INSTANCE in comic_ownership with corresponding comic_id
+         * checks through comic_info, creator_info, publisher_info for duplicate information
+         * creates a new row in comic_info with all of the new information
          */
+        
+        //-----------------------------------------------------------------------
+        // check through comic_info for the stuff in copy_target
+        //-----------------------------------------------------------------------
+        String sql = """
+                SELECT
+                    id
+                FROM
+                    comic_info
+                WHERE
+                    series = ?
+                    AND title = ?
+                    AND issue_num = ?
+                    AND descrip = ?
+                    AND release_date = ?
+                """;
+        ArrayList<Object> prepareds = new ArrayList<Object>() ;
+        
+        prepareds.add(copy_target.getSeries()) ;
+        prepareds.add(copy_target.getTitle()) ;
+        prepareds.add(copy_target.getIssueNumber()) ;
+        prepareds.add(copy_target.getDescription()) ;
+        prepareds.add(copy_target.getPublicationDate()) ;
 
+        ArrayList<Object> result = executePreparedSQL(sql, prepareds) ;
+        if ( result.size() > 0 ) {
+            return ; //comic_info is already in the database, no need to import anything
+        } else {
+            //-----------------------------------------------------------------------
+            // if the stuff in copy_target is not in comic_info, create a new row
+            //-----------------------------------------------------------------------
+            sql = "INSERT INTO comic_info(series,title,issue_num,descrip,release_date, volume_num, initial_value, release_day, release_month, release_year) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING id" ;
+
+            // compute release day month and year
+            int r_day = 0 ;
+            int r_month = 0 ;
+            int r_year = 0 ;
+            String date = copy_target.getPublicationDate() ;
+            String[] split = date.split(" ") ;
+            if (split.length == 1) {
+                r_year = Integer.parseInt( split[0] ) ;
+            } else if (split.length == 2) {
+                     if (split[0].compareTo("Jan") ==0 ) {r_month = 1;}
+                else if (split[0].compareTo("Feb") ==0 ) {r_month = 2;}
+                else if (split[0].compareTo("Mar") ==0 ) {r_month = 3;}
+                else if (split[0].compareTo("Apr") ==0 ) {r_month = 4;}
+                else if (split[0].compareTo("May") ==0 ) {r_month = 5;}
+                else if (split[0].compareTo("Jun") ==0 ) {r_month = 6;}
+                else if (split[0].compareTo("Jul") ==0 ) {r_month = 7;}
+                else if (split[0].compareTo("Aug") ==0 ) {r_month = 8;}
+                else if (split[0].compareTo("Sep") ==0 ) {r_month = 9;}
+                else if (split[0].compareTo("Oct") ==0 ) {r_month = 10;}
+                else if (split[0].compareTo("Nov") ==0 ) {r_month = 11;}
+                else if (split[0].compareTo("Dec") ==0 ) {r_month = 12;}
+                r_year = Integer.parseInt( split[1] ) ;
+            } else if (split.length == 3) {
+
+                r_day = Integer.parseInt( split[1].substring(0, split[1].length()-1) ) ;
+                     if (split[0].compareTo("Jan") ==0 ) {r_month = 1;}
+                else if (split[0].compareTo("Feb") ==0 ) {r_month = 2;}
+                else if (split[0].compareTo("Mar") ==0 ) {r_month = 3;}
+                else if (split[0].compareTo("Apr") ==0 ) {r_month = 4;}
+                else if (split[0].compareTo("May") ==0 ) {r_month = 5;}
+                else if (split[0].compareTo("Jun") ==0 ) {r_month = 6;}
+                else if (split[0].compareTo("Jul") ==0 ) {r_month = 7;}
+                else if (split[0].compareTo("Aug") ==0 ) {r_month = 8;}
+                else if (split[0].compareTo("Sep") ==0 ) {r_month = 9;}
+                else if (split[0].compareTo("Oct") ==0 ) {r_month = 10;}
+                else if (split[0].compareTo("Nov") ==0 ) {r_month = 11;}
+                else if (split[0].compareTo("Dec") ==0 ) {r_month = 12;}
+                r_year = Integer.parseInt( split[2] ) ;
+            }
+
+            prepareds.add(copy_target.getVolumeNumber());
+            prepareds.add(copy_target.getInitialValue());
+            prepareds.add(r_day);
+            prepareds.add(r_month);
+            prepareds.add(r_year);
+            
+
+            result.clear() ;
+            result = executePreparedSQL(sql, prepareds) ;
+            comic_id = (int) result.get(0) ;
+        }
+
+        //-----------------------------------------------------------------------
+        // check through creator_info for the stuff in copy_target
+        //-----------------------------------------------------------------------
+        for (Creator creator : copy_target.getCreators()) {
+            int creator_id ;
+            sql = """
+                    SELECT
+                        id
+                    FROM
+                        creator_info
+                    WHERE
+                        c_name = ?
+                """;
+            prepareds.clear() ;
+            prepareds.add(creator.getName()) ;
+
+            result.clear();
+            result = executePreparedSQL(sql, prepareds) ;
+            if (result.size() > 0) {
+                creator_ids.add( (int) result.get(0) ) ;
+            } else {
+                //-----------------------------------------------------------------------
+                // if the stuff in copy_target is not in creator_info, create a new row
+                //-----------------------------------------------------------------------
+                sql = "INSERT INTO creator_info(c_name) VALUES (?) RETURNING id";
+
+                result.clear();
+                result = executePreparedSQL(sql, prepareds) ;
+                creator_id = (int) result.get(0) ;
+                creator_ids.add ( creator_id ) ;
+                //-----------------------------------------------------------------------
+                // also create a reference between the new creator and the new comic
+                //-----------------------------------------------------------------------
+                sql  = "INSERT INTO creator_refrence(creator_fk,comic_fk) VALUES (?,?)";
+                prepareds.clear();
+                prepareds.add(creator_id) ;
+                prepareds.add(comic_id) ;
+                executePreparedSQL(sql, prepareds) ;
+            }
+        }
+
+        //-----------------------------------------------------------------------
+        // check through publisher_info for the stuff in copy_target
+        //-----------------------------------------------------------------------
+        sql = """
+                SELECT
+                    id
+                FROM
+                    publisher_info
+                WHERE
+                    p_name = ?
+            """;
+        prepareds.clear() ;
+        prepareds.add( copy_target.getPublisher().get(0).getName() ) ;
+
+        result.clear();
+        result = executePreparedSQL(sql, prepareds) ;
+
+        if (result.size() > 0) {
+            pub_id = (int) result.get(0) ;
+        } else {
+            //-----------------------------------------------------------------------
+            // if the stuff in copy_target is not in creator_info, create a new row
+            //-----------------------------------------------------------------------
+            sql = "INSERT INTO publisher_info(p_name) VALUES (?) RETURNING id";
+
+            result.clear();
+            result = executePreparedSQL(sql, prepareds) ;
+            pub_id = (int) result.get(0) ;
+            //-----------------------------------------------------------------------
+            // also create a reference between the new creator and the new comic
+            //-----------------------------------------------------------------------
+            sql  = "INSERT INTO publisher_refrence(publisher_fk,comic_fk) VALUES (?,?)";
+            prepareds.clear();
+            prepareds.add(pub_id) ;
+            prepareds.add(comic_id) ;
+            executePreparedSQL(sql, prepareds) ;
+        }
+
+    
     }
 
     // private void importComicNoChecks() {
