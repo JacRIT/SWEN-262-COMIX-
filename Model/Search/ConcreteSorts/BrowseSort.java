@@ -6,7 +6,7 @@ public class BrowseSort implements SortAlgorithm {
 
     @Override
     public String sort() {
-        return "ORDER BY publisher_info.p_name, comic_info.series, comic_info.issue_num";
+        return "ORDER BY p_name, series, issue_num";
     }
     
 }
