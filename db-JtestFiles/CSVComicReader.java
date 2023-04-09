@@ -37,7 +37,6 @@ public class CSVComicReader {
     }
 
     public Comic getNextComic() throws Exception {
-
         //grab map where key is header, value is parsed
         Map<String,String> values = reader.readMap() ;
 

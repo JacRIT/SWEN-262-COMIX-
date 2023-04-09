@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.opencsv.CSVWriter;
+
 import FileAdapters.Adaptees.CSV;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Character;
@@ -18,9 +21,15 @@ public class CSVComicAdapter implements ComicConverter {
     }
     
     @Override
-    public String convertToFile(String filename, Comic[] comics) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'convertToFile'");
+    public String convertToFile(String filename, Comic[] comics) throws Exception {
+        CSVWriter writer = adaptee.createFile(filename);
+        String[] header = {"Series", "Issue", "Full Title", "Variant Description", "Publisher", "Release Date", "Format", "AddedDate", "Creators"};
+        writer.writeNext(header);
+
+        for(Comic comic : comics){
+            //SO. What's gonna happen is that for each comic, if there is a volume comic 
+        }
+        return null;
     }
 
     @Override

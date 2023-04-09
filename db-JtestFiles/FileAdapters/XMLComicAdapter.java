@@ -68,6 +68,7 @@ public class XMLComicAdapter implements ComicConverter {
         comic.appendChild(creator);
         }
         writeToFile(doc, output);
+        output.close();
         return null;
 
     }
