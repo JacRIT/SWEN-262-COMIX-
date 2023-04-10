@@ -76,9 +76,8 @@ public class GuestComixAPI implements ComixAPI {
     }
     
     @Override
-    public String createComic(int userId, Comic comic) throws Exception {
-        comicController.create(userId, comic);
-        return comic.getTitle();
+    public Integer createComic(int userId, Comic comic) throws Exception {
+        return comicController.create(userId, comic);
     }
 
 

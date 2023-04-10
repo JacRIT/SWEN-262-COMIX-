@@ -9,14 +9,14 @@ import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 
 interface ComixAPI {
-    /**
+    /**G
      * Sets the sort strategy of the current search strategy.
      * 
      * @param strategy the strategy being used bt the user.
      */
     void setSortStrategy(SortAlgorithm sortStrategy);
 
-    /**
+    /**G
      * Sets search strategy of Comic Controller allowing it to use the proper search
      * strategy
      * to search comics.
@@ -25,7 +25,7 @@ interface ComixAPI {
      */
     void setSearchStrategy(SearchAlgorithm searchStrategy);
 
-    /**
+    /**G
      * Executes a search on all comics in database given a keyword.
      * 
      * @param keyword word being searched.
@@ -38,7 +38,7 @@ interface ComixAPI {
      */
     Comic[] searchComics(int userId, String keyword) throws Exception;
 
-    /**
+    /**G
      * Given a comic's id get the comic if it exists and return it from the database
      * 
      * @param comicId comic id to search for
@@ -46,7 +46,7 @@ interface ComixAPI {
      */
     Comic getComic(int comicId) throws Exception;
 
-    /**
+    /**G
      * 
      * @param userId Determines whether a personal collection is being searched
      *               within the database
@@ -60,8 +60,9 @@ interface ComixAPI {
      */
     Comic[] browsePersonalCollection(int userId) throws Exception;
 
-    /**
+    /**G
      * Generates the statistics for a users collection.
+     * 
      * Note :
      * Each time a comic is signed, its value is increased by 5%.
      * If a comics signature is verified by an authority then the comics value is
@@ -71,9 +72,9 @@ interface ComixAPI {
      * @return Map containing {"number of issues" : "#"
      *         "value" : "#"}
      * 
-     *         null if no personal collection available
+     *         null if user not logged in or user does not exist.
      */
-    Map<String, String> generateStatistics(User user) throws Exception;
+    Map<String, Float> generateStatistics(User user) throws Exception;
 
     /**
      * Creates a comic
@@ -86,7 +87,7 @@ interface ComixAPI {
      * @param comic  Comic being created.
      * @return Name of the Comic Created.
      */
-    String createComic(int userId, Comic comic) throws Exception;
+    Integer createComic(int userId, Comic comic) throws Exception;
 
     /**
      * Signs a comic.
