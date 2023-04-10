@@ -89,7 +89,7 @@ interface ComixAPI {
      */
     Integer createComic(int userId, Comic comic) throws Exception;
 
-    /**
+    /**G
      * Signs a comic.
      * The user marks a comic as signed meaning that it has been
      * autographed by someone, e.g. a creator, a famous person, etc.
@@ -103,7 +103,7 @@ interface ComixAPI {
      */
     Signature signComic(Signature signature, Comic comic) throws Exception;
 
-    /**
+    /**G
      * unSigns a comic.
      * 
      * @param comic

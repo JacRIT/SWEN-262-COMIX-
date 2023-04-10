@@ -114,12 +114,14 @@ public class UserComixAPI implements ComixAPI {
     @Override
     public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) throws Exception {
         if (comic.gradeComic(grade)) {
-            comicController.updateCopy(user.getId(), comic);
-            return true;
+            if (userExists(user) && copyExists(comic)) {
+                return comicController.updateCopy(user.getId(), comic);
+            }
         } else {
+            System.out.println("\n======\nUSERAPI : grade too high or low\n======\n");
             return false;
         }
-        // TODO : some checks not implemented.
+        return false;
     }
 
     @Override
