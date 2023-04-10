@@ -3,11 +3,13 @@ package UI.Concrete;
 import Api.GuestComixAPI;
 import Model.Command.PCCommand;
 import Model.Command.ConcreteCommand.AddToPC;
+import Model.Command.ConcreteCommand.AuthenticateComic;
 import Model.Command.ConcreteCommand.GradeComic;
 import Model.Command.ConcreteCommand.PCRemoveComic;
 import Model.Command.ConcreteCommand.SignComic;
 import Model.Command.ConcreteCommand.SlabComic;
 import Model.JavaObjects.Comic;
+import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
 import UI.Interfaces.CommandFactory;
 
@@ -30,6 +32,27 @@ public class PCFactory implements CommandFactory {
         int comicId = Integer.parseInt(split[1]);
         Comic comic = api.getComic(comicId);
         return new AddToPC(user, comic, api);
+      }
+
+      if (type.startsWith("AU") || type.startsWith("au")) {
+        if (split.length != 3)
+          return null;
+        int signatureId = Integer.parseInt(split[1]);
+        int comicId = Integer.parseInt(split[2]);
+        Comic comic = api.getComic(comicId);
+        Signature signature = null;
+
+        for (Signature checking : comic.getSignatures()) {
+          if (checking.getId() == signatureId)
+            signature = checking;
+        }
+
+        if (signature == null)
+          return null;
+
+        System.out.println(signature.toString());
+
+        return new AuthenticateComic(signature, user, comic, api);
       }
 
       if (type.startsWith("RE") || type.startsWith("re")) {

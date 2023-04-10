@@ -75,8 +75,41 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.createCommand(fullCommand);
     }
 
+    // Authenticate a comic signature
+    if (command.startsWith("AU") || command.startsWith("au")) {
+      String fullCommand = command.trim();
+      if (this.lastViewed != null && fullCommand.length() > 2 && fullCommand.length() <= 4) {
+        fullCommand += " " + this.lastViewed.toString();
+      }
+
+      this.lastViewed = null;
+      return this.createCommand(fullCommand);
+    }
+
     // Remove from personal collection
     if (command.startsWith("RE") || command.startsWith("re")) {
+      String fullCommand = command.trim();
+      if (this.lastViewed != null && fullCommand.length() == 2) {
+        fullCommand += " " + this.lastViewed.toString();
+      }
+
+      this.lastViewed = null;
+      return this.createCommand(fullCommand);
+    }
+
+    // Slab a comic in the personal collection
+    if (command.startsWith("SL") || command.startsWith("sl")) {
+      String fullCommand = command.trim();
+      if (this.lastViewed != null && fullCommand.length() == 2) {
+        fullCommand += " " + this.lastViewed.toString();
+      }
+
+      this.lastViewed = null;
+      return this.createCommand(fullCommand);
+    }
+
+    // Slab a comic in the personal collection
+    if (command.startsWith("SG") || command.startsWith("sg")) {
       String fullCommand = command.trim();
       if (this.lastViewed != null && fullCommand.length() == 2) {
         fullCommand += " " + this.lastViewed.toString();
@@ -89,7 +122,7 @@ public class AuthInterpreter extends DefaultInterpreter {
     // Grade comic in personal collection
     if (command.startsWith("G") || command.startsWith("g")) {
       String fullCommand = command.trim();
-      if (this.lastViewed != null && fullCommand.length() == 2) {
+      if (this.lastViewed != null && fullCommand.length() > 2 && fullCommand.length() <= 4) {
         fullCommand += " " + this.lastViewed.toString();
       }
 
@@ -132,6 +165,11 @@ public class AuthInterpreter extends DefaultInterpreter {
 
       this.lastViewed = null;
       return super.search(keyword) + flagMessage;
+    }
+
+    // Logout a user
+    if (command.startsWith("L") || command.startsWith("l")) {
+      this.logout();
     }
 
     System.out.println("");
@@ -257,12 +295,33 @@ public class AuthInterpreter extends DefaultInterpreter {
     // collection.";
     String addComicInstructions = "\nEnter \"AP\" to add to your personal collection.";
     String removeComicInstructions = "\nEnter \"RE\" to remove from your personal collection.";
+    String authenticateComicInstructions = "\nEnter \"AU <Signature Id>\" to authenticate a signature.";
     String signComicInstructions = "\nEnter \"SG\" to add your signature to the comic";
     String slabComicInstructions = "\nEnter \"SL\" to slab this comic";
     String gradeComicInstructions = "\nEnter \"G <Graded Value>\" to grade this comic on a scale of 1-10";
-    String authenticateInstructions = "\nEnter \"A\" to authenticate the signatures on the comic";
     return defaultBehavior + addComicInstructions + removeComicInstructions + signComicInstructions
+        + authenticateComicInstructions
         + slabComicInstructions
-        + gradeComicInstructions + authenticateInstructions;
+        + gradeComicInstructions;
   }
+
+  /**
+   * Log out a user, reset to the default cli and interpreter and remove the user
+   * object from mediator and their session commands
+   */
+  private String logout() {
+    try {
+      User user = this.mediator.getUser();
+      this.api.logout();
+      this.mediator.setCli(new GuestCLI());
+      this.mediator.setInterpreter(new GuestInterpreter(this.mediator));
+      this.mediator.setUser(null);
+      this.mediator.initCommands();
+      return user.getName() + " has logged out. Goodbye :)";
+    } catch (Exception err) {
+      System.out.println("Logout Err:\n" + err.getMessage() + "\n" + err.getLocalizedMessage());
+      return "Could not logout " + this.mediator.getUser().getName();
+    }
+  }
+
 }

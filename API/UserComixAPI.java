@@ -48,7 +48,7 @@ public class UserComixAPI implements ComixAPI {
                 float calculatedComicValue = comic.getValue();
                 personalCollectionValue += calculatedComicValue;
             }
-            statistics.put("Number Of Issues", (float)(Integer)comicsInPersonalCollection.length);
+            statistics.put("Number Of Issues", (float) (Integer) comicsInPersonalCollection.length);
             statistics.put("value", personalCollectionValue);
             return statistics;
         } else {
@@ -92,6 +92,8 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Signature verifyComic(Signature signature, Comic signedComic) throws Exception {
+        // Shouldnt this be update comic rather than add Signature? It should not create
+        // a new signature but update one. - CTB
         signedComic.verifyComic(signature);
         return comicController.addSignature(signedComic.getCopyId(), signature);
     }
@@ -153,17 +155,17 @@ public class UserComixAPI implements ComixAPI {
 
     /**
      * @param user user being tested
-     * @return  True    : User Exists
-     *          False   : User Does Not Exist
+     * @return True : User Exists
+     *         False : User Does Not Exist
      */
-    private Boolean userExists(User user) throws Exception{
+    private Boolean userExists(User user) throws Exception {
         return userController.get(user.getId()) != null;
     }
 
     /**
-     * @param comic copy being tested 
-     * @return  True    : Comic Exists
-     *          False   : Comic Does not exist
+     * @param comic copy being tested
+     * @return True : Comic Exists
+     *         False : Comic Does not exist
      */
     private Boolean copyExists(Comic copy) throws Exception {
         return comicController.get(copy.getCopyId()) != null;

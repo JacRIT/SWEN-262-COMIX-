@@ -10,31 +10,31 @@ public class AuthenticateComic implements PCCommand {
 
   private User user;
   private Comic comic;
+  private Signature signature;
 
   private GuestComixAPI api;
 
-  public AuthenticateComic(User user, Comic comic, GuestComixAPI api) {
+  public AuthenticateComic(Signature signature, User user, Comic comic, GuestComixAPI api) {
     this.user = user;
     this.comic = comic;
     this.api = api;
+    this.signature = signature;
   }
 
   @Override
   public String execute() throws Exception {
-    Signature signature = new Signature(this.user.getId(), this.user.getName());
-    Boolean success = this.api.verifyComic(signature, this.comic);
-    if (success)
-      return "Comic (" + this.comic.getTitle() + ") has been verified";
-    return "Comic (" + this.comic.getTitle() + ") could not be verified";
+    Signature signed = this.api.verifyComic(this.signature, this.comic);
+    if (signed == null)
+      return "Comic (" + this.comic.getTitle() + ") could not be verified";
+    return "Comic (" + this.comic.getTitle() + ") has been verified";
   }
 
   @Override
   public String unExecute() throws Exception {
-    Signature signature = new Signature(this.user.getId(), this.user.getName());
-    Boolean success = this.api.verifyComic(signature, this.comic);
-    if (success)
-      return "Comic (" + this.comic.getTitle() + ") has been unverified";
-    return "Comic (" + this.comic.getTitle() + ") could not be unverified";
+    Boolean success = this.api.unVerifyComic(this.signature, this.comic);
+    if (!success)
+      return "Comic (" + this.comic.getTitle() + ") could not be unverified";
+    return "Comic (" + this.comic.getTitle() + ") has been unverified";
 
   }
 
