@@ -139,8 +139,10 @@ interface ComixAPI {
      * @param signedComic a previously signed and verified comic to be unverified.
      * @return true : comic sucessfully unverified
      *         false : comic NOT sucessfully unverified
-     *         - comic does not exist
-     *         - comic not previously verified and signed
+     *                  - comic does not exist
+     *                  - comic not previously verified and signed
+     *                  - signature does not exist
+     *                  - user not logged in.
      */
     Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception;
 

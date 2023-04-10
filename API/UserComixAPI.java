@@ -87,7 +87,6 @@ public class UserComixAPI implements ComixAPI {
         if (signatureExists(signature, comic)) {
             comicController.removeSignature(signature);
         } else {
-            System.out.println("\n=======\nUSERAPI : THE PASSED IN SIGNATURE OR COMIC DOES NOT EXIST\n======\n");
             return false;
         }
         return false;
@@ -101,15 +100,17 @@ public class UserComixAPI implements ComixAPI {
             signature.setAuthenticated(true);
             return signature;
         }
-        System.out.println("\n=======\nUSERAPI : THE PASSED IN SIGNATURE OR COMIC DOES NOT EXIST\n======\n");
         return null;
     }
 
     @Override
     public Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception {
-        signedComic.unVerifyComic(signature);
-        comicController.removeSignature(signature);
-        return true; // TODO : no checks implemented(if signature exists).
+        if (signatureExists(signature, signedComic)) {
+            signedComic.unVerifyComic(signature);
+            comicController.removeSignature(signature);
+            return true; 
+        }
+        return false;
     }
 
     @Override
@@ -175,13 +176,31 @@ public class UserComixAPI implements ComixAPI {
      *         False : Comic Does not exist
      */
     private Boolean copyExists(Comic copy) throws Exception {
-        return comicController.get(copy.getCopyId()) != null;
+        if (comicController.get(copy.getCopyId()) != null ) {
+            return true;
+        } else {
+            System.out.println("\n=======\nUSERAPI : The passed in SIGNATURE does not exist\n======\n");
+            return false;
+        }
     }
 
+    /**
+     * 
+     * @param signature signature being tested
+     * @param comic that signature is on
+     * @return  True : Signature exists
+     *          False : signature or copy does not exist
+     * @throws Exception
+     */
     private Boolean signatureExists(Signature signature, Comic comic) throws Exception {
         if (copyExists(comic)) {
-            return comic.getSignatures().contains(signature);
-        }
+            if (comic.getSignatures().contains(signature)) {
+                return true;
+            } else {
+                System.out.println("\n=======\nUSERAPI : The passed in SIGNATURE does not exist\n======\n");
+                return false;
+            }
+        } 
         return false;
     }
 }
