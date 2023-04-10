@@ -118,7 +118,6 @@ public class UserComixAPI implements ComixAPI {
                 return comicController.updateCopy(user.getId(), comic);
             }
         } else {
-            System.out.println("\n======\nUSERAPI : grade too high or low\n======\n");
             return false;
         }
         return false;
@@ -126,23 +125,35 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Boolean ungradeComicInPersonalCollection(User user, Comic comic) throws Exception {
-        comic.unGradeComic();
-        comicController.updateCopy(user.getId(), comic);
-        return true; // TODO : no checks implemented.
+        if(userExists(user) 
+            && copyExists(comic)
+            && comic.unGradeComic()
+        ) {
+            comicController.updateCopy(user.getId(), comic);
+            return true; 
+        }
+        return false;
     }
 
     @Override
     public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
-        gradedComic.slabComic();
-        comicController.updateCopy(user.getId(), gradedComic);
-        return true; // TODO : no checks implemented.
+        if ( copyExists(gradedComic)
+            && userExists(user)
+            && gradedComic.slabComic()
+        ) {
+            comicController.updateCopy(user.getId(), gradedComic);
+            return true;
+        };
+        return false; 
     }
 
     @Override
     public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
-        gradedComic.unSlabComic();
-        comicController.updateCopy(user.getId(), gradedComic);
-        return true; // TODO : no checks implemented.
+        if (gradedComic.unSlabComic() && copyExists(gradedComic)) {
+            comicController.updateCopy(user.getId(), gradedComic);
+            return true; // TODO : no checks implemented.
+        };
+        return false;
     }
 
     @Override
