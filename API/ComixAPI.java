@@ -122,7 +122,14 @@ interface ComixAPI {
      * comic
      * by an additional 20%
      * 
+     * @param signature the signature looking to be verified.
      * @param signedComic a previously signed comic to be verified.
+     * 
+     * @return  Signature that is now verified.
+     *          Null 
+     *              - User not logged in
+     *              - Comic does not exist
+     *              - Signature does not exist
      */
     Signature verifyComic(Signature signature, Comic signedComic) throws Exception;
 

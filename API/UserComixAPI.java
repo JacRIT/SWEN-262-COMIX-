@@ -87,7 +87,7 @@ public class UserComixAPI implements ComixAPI {
         if (signatureExists(signature, comic)) {
             comicController.removeSignature(signature);
         } else {
-            System.out.println("\n=======\nUSERAPI : THE PASSED IN SIGNATURE DOES NOT EXIST\n======\n");
+            System.out.println("\n=======\nUSERAPI : THE PASSED IN SIGNATURE OR COMIC DOES NOT EXIST\n======\n");
             return false;
         }
         return false;
@@ -95,10 +95,14 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Signature verifyComic(Signature signature, Comic signedComic) throws Exception {
-        // Shouldnt this be update comic rather than add Signature? It should not create
-        // a new signature but update one. - CTB
-        signedComic.verifyComic(signature);
-        return comicController.addSignature(signedComic.getCopyId(), signature);
+        if (signatureExists(signature, signedComic)) {
+            signedComic.verifyComic(signature);
+            comicController.updateComic(signedComic);
+            signature.setAuthenticated(true);
+            return signature;
+        }
+        System.out.println("\n=======\nUSERAPI : THE PASSED IN SIGNATURE OR COMIC DOES NOT EXIST\n======\n");
+        return null;
     }
 
     @Override
