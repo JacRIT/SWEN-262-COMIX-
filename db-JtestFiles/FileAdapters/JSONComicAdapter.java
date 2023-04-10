@@ -51,8 +51,8 @@ public class JSONComicAdapter implements ComicConverter {
     }
 
     @Override
-    public Comic convertToComic(String filename) throws Exception{
-        Object readAdaptee = adaptee.readFile(filename);
+    public Comic convertToComic() throws Exception{
+        Object readAdaptee = adaptee.readFile();
         JSONArray fileContents = (JSONArray) readAdaptee; //Array vers of read file
         JSONObject adapteeObj = (JSONObject) readAdaptee; //JSON obj vers of file
         Iterator<?> iterator = fileContents.iterator();

@@ -34,9 +34,9 @@ public class CSVComicAdapter implements ComicConverter {
     }
 
     @Override
-    public Comic convertToComic(String filename) throws Exception{
+    public Comic convertToComic() throws Exception{
         //Code from CSVComicReader
-        Map<String,String> values = adaptee.readFile(filename).readMap();
+        Map<String,String> values = adaptee.readFile().readMap();
 
         if (values == null) {return null ;} // if CSVReader reaches the end of the file, it returns null
 
@@ -112,5 +112,26 @@ public class CSVComicAdapter implements ComicConverter {
 
         return new Comic(1, 1, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, signatures, value, grade, isSlabbed) ;
 
+    }
+
+    public static void main(String[] args) {
+
+        try {
+            CSV csv = new CSV("./comics.csv");
+            CSVComicAdapter x = new CSVComicAdapter(csv);
+            Comic test = x.convertToComic() ;
+
+            while (test != null) {
+
+                System.out.println(test);
+                System.out.println();
+                test = x.convertToComic() ;
+
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -8,7 +8,13 @@ import java.io.FileWriter;
  * reading and creating files
  */
 public class JSON {
-    public Object readFile(String filename) throws Exception{
+    private String filename;
+
+    public JSON(String filename){
+        this.filename = filename;
+    }
+
+    public Object readFile() throws Exception{
         JSONParser jsonParser = new JSONParser();
         FileReader reader = new FileReader(filename);
         Object obj = jsonParser.parse(reader);
@@ -16,8 +22,8 @@ public class JSON {
 
     }
 
-    public FileWriter createFile(String filename) throws Exception{
-        FileWriter file = new FileWriter(filename);
-        return file;
+    public FileWriter createFile(String file) throws Exception{
+        FileWriter createdFile = new FileWriter(file);
+        return createdFile;
     }
 }

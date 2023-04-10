@@ -89,8 +89,8 @@ public class XMLComicAdapter implements ComicConverter {
     }
 
     @Override
-    public Comic convertToComic(String filename) throws Exception{
-        Document doc = adaptee.readFile(filename);
+    public Comic convertToComic() throws Exception{
+        Document doc = adaptee.readFile();
         doc.getDocumentElement().normalize();
         NodeList list = doc.getElementsByTagName("comic");
         if(nodeIndex == list.getLength()){return null;}

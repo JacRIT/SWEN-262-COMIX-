@@ -10,7 +10,7 @@ public interface ComicConverter {
      * IMPORTING EDIT: will have a "toggle", if importing into a personal collection
      * THEN it will run an addToCollection() call for each comic in the Array
      */
-    public Comic convertToComic(String filename) throws Exception;
+    public Comic convertToComic() throws Exception;
 
     /**
      * This method converts the comic object into the format that is needed,

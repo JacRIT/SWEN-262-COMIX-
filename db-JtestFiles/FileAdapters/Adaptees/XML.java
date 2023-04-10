@@ -9,7 +9,13 @@ import org.w3c.dom.Document;
  * reading and creating files
  */
 public class XML {
-    public Document readFile(String filename) throws Exception{
+
+    private String filename;
+
+    public XML(String filename){
+        this.filename = filename;
+    }
+    public Document readFile() throws Exception{
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(new File(filename));
