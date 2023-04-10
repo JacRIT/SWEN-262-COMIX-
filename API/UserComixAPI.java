@@ -84,9 +84,13 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Boolean unSignComic(Signature signature, Comic comic) throws Exception {
-        comic.removeSignature(signature);
-        comicController.removeSignature(signature);
-        return false; // TODO : no checks implemented (if signature exists)
+        if (signatureExists(signature, comic)) {
+            comicController.removeSignature(signature);
+        } else {
+            System.out.println("\n=======\nUSERAPI : THE PASSED IN SIGNATURE DOES NOT EXIST\n======\n");
+            return false;
+        }
+        return false;
     }
 
     @Override
@@ -168,5 +172,12 @@ public class UserComixAPI implements ComixAPI {
      */
     private Boolean copyExists(Comic copy) throws Exception {
         return comicController.get(copy.getCopyId()) != null;
+    }
+
+    private Boolean signatureExists(Signature signature, Comic comic) throws Exception {
+        if (copyExists(comic)) {
+            return comic.getSignatures().contains(signature);
+        }
+        return false;
     }
 }

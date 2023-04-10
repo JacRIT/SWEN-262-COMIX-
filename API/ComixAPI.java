@@ -76,7 +76,7 @@ interface ComixAPI {
      */
     Map<String, Float> generateStatistics(User user) throws Exception;
 
-    /**
+    /**G
      * Creates a comic
      * 
      * @param userId Determines whether a comic is being created in a personal
@@ -85,7 +85,7 @@ interface ComixAPI {
      *               if userId > 1 then it will search the personal collection of
      *               the user with that id.
      * @param comic  Comic being created.
-     * @return Name of the Comic Created.
+     * @return Copy Id of the comic created.
      */
     Integer createComic(int userId, Comic comic) throws Exception;
 
@@ -98,9 +98,8 @@ interface ComixAPI {
      * 
      * @param comic comic being signed
      * @param user  user signing comic
-     * @return true : Comic is signed sucessfully
-     *         false : Comic is not successfully signed
-     *         - comic does not exist in database.
+     * @return  Signature of the comic signed.
+     *          Null : User Not logged in.
      */
     Signature signComic(Signature signature, Comic comic) throws Exception;
 
@@ -108,9 +107,11 @@ interface ComixAPI {
      * unSigns a comic.
      * 
      * @param comic
-     * @return true : Comic is unSigned sucessfully
-     *         false : Comic is not successfully unsigned
-     *         - comic does not exist in database.
+     * @return true     : Comic is unSigned sucessfully
+     *         false    : Comic is not successfully unsigned
+     *                  - User Not logged in
+     *                  - Comic does not exist
+     *                  - Signature does not exist
      */
     Boolean unSignComic(Signature signature, Comic comic) throws Exception;
 
