@@ -51,10 +51,8 @@ public class UserComixAPI implements ComixAPI {
             statistics.put("Number Of Issues", (float) (Integer) comicsInPersonalCollection.length);
             statistics.put("value", personalCollectionValue);
             return statistics;
-        } else {
-            System.out.println("\n======\n USER DOES NOT EXIST \n======\n");
-            return null;
-        }
+        } 
+        return null;
     }
 
     @Override
@@ -167,7 +165,12 @@ public class UserComixAPI implements ComixAPI {
      *         False : User Does Not Exist
      */
     private Boolean userExists(User user) throws Exception {
-        return userController.get(user.getId()) != null;
+        if (userController.get(user.getId()) != null) {
+            return true;
+        } else {
+            System.out.println("\n======\n USER DOES NOT EXIST \n======\n");
+            return false;
+        }
     }
 
     /**
