@@ -115,7 +115,7 @@ interface ComixAPI {
      */
     Boolean unSignComic(Signature signature, Comic comic) throws Exception;
 
-    /**
+    /**G
      * Verifies a signed comic.
      * A signed comic may also be marked as "authenticated" meaning that the
      * signature has been verified by an authority. This increases the value of the
@@ -133,10 +133,10 @@ interface ComixAPI {
      */
     Signature verifyComic(Signature signature, Comic signedComic) throws Exception;
 
-    /**
+    /**G
      * unVerifies a signed comic.
-     * 
      * @param signedComic a previously signed and verified comic to be unverified.
+     * @param signature signature to be unverified on signed comic.
      * @return true : comic sucessfully unverified
      *         false : comic NOT sucessfully unverified
      *                  - comic does not exist
