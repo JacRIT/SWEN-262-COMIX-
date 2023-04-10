@@ -20,8 +20,7 @@ public class CLIMediator implements Mediator {
   public CLIMediator() {
     this.cli = new GuestCLI();
     this.reader = new GuestInterpreter(this);
-    this.sessionCommands = new ModifiedQueue<PCCommand>();
-    this.sessionCommands.addToQueue(new EmptyCommand());
+    this.initCommands();
   }
 
   @Override
@@ -122,7 +121,10 @@ public class CLIMediator implements Mediator {
     while (this.canUndo()) {
       System.out.println("Undoing: " + i);
       i++;
-      this.cli.displayMessage(this.undo());
+      String message = this.undo();
+      if (message.contains("There is no"))
+        break;
+      this.cli.displayMessage(message);
     }
 
   }
@@ -133,7 +135,10 @@ public class CLIMediator implements Mediator {
     while (this.canRedo()) {
       System.out.println("Redoing: " + i);
       i++;
-      this.cli.displayMessage(this.redo());
+      String message = this.redo();
+      if (message.contains("There is no"))
+        break;
+      this.cli.displayMessage(message);
     }
 
   }
@@ -155,6 +160,12 @@ public class CLIMediator implements Mediator {
   @Override
   public Boolean canRedo() {
     return this.sessionCommands.size() - 1 > this.sessionCommands.getIndex();
+  }
+
+  @Override
+  public void initCommands() {
+    this.sessionCommands = new ModifiedQueue<PCCommand>();
+    this.sessionCommands.addToQueue(new EmptyCommand());
   }
 
 }

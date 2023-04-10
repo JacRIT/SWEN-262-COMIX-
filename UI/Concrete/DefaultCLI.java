@@ -39,7 +39,7 @@ public abstract class DefaultCLI implements CLI {
     this.log("Enter a command below then press enter to continue to the next steps.");
     this.log("I - Instructions to use the comix application");
 
-    this.log("V <Comic Id> - View a single comics contents", false);
+    this.log("V <Copy Id> - View a single comics contents", false);
     this.log("\tOptional Flags:", false);
     this.log("\t--d - Display the entire contents of a comic rather than a brief summary");
 

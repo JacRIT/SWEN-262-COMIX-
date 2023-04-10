@@ -55,6 +55,11 @@ public interface Mediator {
   public void instructions();
 
   /**
+   * Initialize the classes handling of commands
+   */
+  public void initCommands();
+
+  /**
    * Decides if the user can undo a command
    */
   public Boolean canUndo();
