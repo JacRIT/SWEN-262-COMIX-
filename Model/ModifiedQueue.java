@@ -1,16 +1,22 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class ModifiedQueue<T> {
+import UI.Concrete.QBackwardIterator;
+import UI.Concrete.QForwardIteator;
+
+public class ModifiedQueue<T> implements Iterable<T> {
 
   private List<T> list;
   private int index;
+  private Boolean iteratorDirection;
 
   public ModifiedQueue() {
     this.list = new ArrayList<T>();
     this.index = 0;
+    this.iteratorDirection = true;
   }
 
   public void addToQueue(T object) {
@@ -50,12 +56,34 @@ public class ModifiedQueue<T> {
     return this.index;
   }
 
+  public void setIteratorDirection(Boolean direction) {
+    this.iteratorDirection = direction;
+  }
+
   public T moveBackward() {
     if (this.index < 0)
       return null;
 
     this.index -= 1;
     return this.getCurrent();
+  }
+
+  private QBackwardIterator<T> iterateBack() {
+    return new QBackwardIterator<T>(this);
+  }
+
+  private QForwardIteator<T> iterateFoward() {
+    return new QForwardIteator<T>(this);
+  }
+
+  @Override
+  public Iterator<T> iterator() {
+
+    if (this.iteratorDirection)
+      return this.iterateBack();
+
+    return this.iterateFoward();
+
   }
 
 }

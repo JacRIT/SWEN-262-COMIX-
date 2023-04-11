@@ -8,6 +8,7 @@ import Model.Command.ConcreteCommand.GradeComic;
 import Model.Command.ConcreteCommand.PCRemoveComic;
 import Model.Command.ConcreteCommand.SignComic;
 import Model.Command.ConcreteCommand.SlabComic;
+import Model.Command.ConcreteCommand.UnSignComic;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
@@ -69,6 +70,27 @@ public class PCFactory implements CommandFactory {
         int comicId = Integer.parseInt(split[1]);
         Comic comic = api.getComic(comicId);
         return new SignComic(user, comic, api);
+      }
+
+      if (type.startsWith("RS") || type.startsWith("rs")) {
+        if (split.length != 3)
+          return null;
+        int signatureId = Integer.parseInt(split[1]);
+        int comicId = Integer.parseInt(split[2]);
+        Comic comic = api.getComic(comicId);
+        Signature signature = null;
+
+        for (Signature checking : comic.getSignatures()) {
+          if (checking.getId() == signatureId)
+            signature = checking;
+        }
+
+        if (signature == null)
+          return null;
+
+        System.out.println(signature.toString());
+
+        return new UnSignComic(signature, user, comic, api);
       }
 
       if (type.startsWith("SL") || type.startsWith("sl")) {

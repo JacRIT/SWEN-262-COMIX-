@@ -8,14 +8,14 @@ import Model.JavaObjects.User;
 
 public class AuthenticateComic implements PCCommand {
 
-  private User user;
+  // private User user;
   private Comic comic;
   private Signature signature;
 
   private GuestComixAPI api;
 
   public AuthenticateComic(Signature signature, User user, Comic comic, GuestComixAPI api) {
-    this.user = user;
+    // this.user = user;
     this.comic = comic;
     this.api = api;
     this.signature = signature;

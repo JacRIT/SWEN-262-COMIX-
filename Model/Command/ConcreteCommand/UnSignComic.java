@@ -6,18 +6,17 @@ import Model.JavaObjects.Comic;
 import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
 
-public class SignComic implements PCCommand {
-
+public class UnSignComic implements PCCommand {
   private User user;
   private Comic comic;
   private Signature signature;
   private GuestComixAPI api;
 
-  public SignComic(User user, Comic comic, GuestComixAPI api) {
+  public UnSignComic(Signature signature, User user, Comic comic, GuestComixAPI api) {
     this.user = user;
     this.comic = comic;
     this.api = api;
-    this.signature = null;
+    this.signature = signature;
   }
 
   /**
@@ -26,9 +25,8 @@ public class SignComic implements PCCommand {
    * @throws Exception
    */
   @Override
-  public String execute() throws Exception {
-    Signature base = new Signature(this.user.getId(), this.user.getName());
-    Signature signed = this.api.signComic(base, comic);
+  public String unExecute() throws Exception {
+    Signature signed = this.api.signComic(this.signature, comic);
 
     if (signed == null)
       return "Comic (" + this.comic.getTitle() + ") could not be signed by " + this.user.getName();
@@ -44,7 +42,7 @@ public class SignComic implements PCCommand {
    * @throws Exception
    */
   @Override
-  public String unExecute() throws Exception {
+  public String execute() throws Exception {
     if (this.signature == null)
       return "Comic (" + comic.getTitle() + ") must first be signed";
 

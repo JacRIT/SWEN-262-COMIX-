@@ -117,30 +117,60 @@ public class CLIMediator implements Mediator {
 
   @Override
   public void undoAll() {
-    int i = 1;
-    while (this.canUndo()) {
-      System.out.println("Undoing: " + i);
-      i++;
-      String message = this.undo();
-      if (message.contains("There is no"))
-        break;
-      this.cli.displayMessage(message);
-    }
+    // int i = 1;
+    // while (this.canUndo()) {
+    // System.out.println("Undoing: " + i);
+    // i++;
+    // String message = this.undo();
+    // if (message.contains("There is no"))
+    // break;
+    // this.cli.displayMessage(message);
+    // }
 
+    this.sessionCommands.setIteratorDirection(true);
+
+    for (PCCommand command : this.sessionCommands) {
+      String commandName = command.getClass().toGenericString();
+
+      try {
+        String message = command.unExecute();
+        if (message.contains("There is no"))
+          break;
+        this.cli.displayMessage(message);
+      } catch (Exception err) {
+        this.cli.displayMessage(commandName + " could not be ran...");
+      }
+
+    }
   }
 
   @Override
   public void redoAll() {
-    int i = 1;
-    while (this.canRedo()) {
-      System.out.println("Redoing: " + i);
-      i++;
-      String message = this.redo();
-      if (message.contains("There is no"))
-        break;
-      this.cli.displayMessage(message);
-    }
+    // int i = 1;
+    // while (this.canRedo()) {
+    // System.out.println("Redoing: " + i);
+    // i++;
+    // String message = this.redo();
+    // if (message.contains("There is no"))
+    // break;
+    // this.cli.displayMessage(message);
+    // }
 
+    this.sessionCommands.setIteratorDirection(false);
+
+    for (PCCommand command : this.sessionCommands) {
+      String commandName = command.getClass().toGenericString();
+
+      try {
+        String message = command.execute();
+        if (message.contains("There is no"))
+          break;
+        this.cli.displayMessage(message);
+      } catch (Exception err) {
+        this.cli.displayMessage(commandName + " could not be ran...");
+      }
+
+    }
   }
 
   @Override

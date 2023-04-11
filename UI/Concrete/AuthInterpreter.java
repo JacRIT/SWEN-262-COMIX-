@@ -119,6 +119,17 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.createCommand(fullCommand);
     }
 
+    // Remove a comic signature
+    if (command.startsWith("RS") || command.startsWith("rs")) {
+      String fullCommand = command.trim();
+      if (this.lastViewed != null && fullCommand.length() > 2 && fullCommand.length() <= 4) {
+        fullCommand += " " + this.lastViewed.toString();
+      }
+
+      this.lastViewed = null;
+      return this.createCommand(fullCommand);
+    }
+
     // Grade comic in personal collection
     if (command.startsWith("G") || command.startsWith("g")) {
       String fullCommand = command.trim();
@@ -170,6 +181,11 @@ public class AuthInterpreter extends DefaultInterpreter {
     // Logout a user
     if (command.startsWith("L") || command.startsWith("l")) {
       this.logout();
+    }
+
+    if (command.equals("Create") || command.equals("create")) {
+      this.switchToComic();
+      return "Welcome to the Comic Creator\nEnter \"I\" to view instructions and current status of your Comic";
     }
 
     System.out.println("");
@@ -238,6 +254,8 @@ public class AuthInterpreter extends DefaultInterpreter {
         successMessage += "\n\n" + comic.toString();
       }
 
+      successMessage += "\nTotal Results: " + comics.length + "\n";
+
       return successMessage;
 
     } catch (Exception err) {
@@ -276,7 +294,7 @@ public class AuthInterpreter extends DefaultInterpreter {
         success += "\n\n" + comic.toString();
       }
 
-      success += "Total Results: " + comics.length + "\n";
+      success += "\nTotal Results: " + comics.length + "\n";
 
       return success;
 
@@ -324,4 +342,8 @@ public class AuthInterpreter extends DefaultInterpreter {
     }
   }
 
+  private void switchToComic() {
+    this.mediator.setCli(new ComicCLI(this.mediator));
+    this.mediator.setInterpreter(new ComicInterpreter(this.mediator, this.api));
+  }
 }

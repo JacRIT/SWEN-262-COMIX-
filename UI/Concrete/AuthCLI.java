@@ -38,6 +38,8 @@ public class AuthCLI extends DefaultCLI {
     if (this.mediator.canRedo())
       super.log("RA - Redo all undone changes");
 
+    super.log("Create - Create a new comic for the library");
+
     this.log("L - Logout of your account");
 
     if (includeLast)

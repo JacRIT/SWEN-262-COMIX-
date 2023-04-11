@@ -21,6 +21,7 @@ public class AddToPC implements PCCommand {
   @Override
   public String execute() throws Exception {
 
+    // This should return the new comic with the correct copy id not a boolean
     Boolean success = this.api.addComicToPersonalCollection(this.user,
         this.comic);
 
