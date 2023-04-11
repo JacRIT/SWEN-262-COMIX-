@@ -146,7 +146,7 @@ interface ComixAPI {
      */
     Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception;
 
-    /**
+    /**G
      * Marks a comic as "graded" on a scale of 1 to 10. The value of a graded comic
      * is adjusted according to the following formula:
      * - 1 = value * 0.10
@@ -159,12 +159,12 @@ interface ComixAPI {
      * @return true : comic sucessfully graded
      *         false : comic not sucessfully graded
      *         - comic does not exist
-     *         - comic not in personal collection
+     *         - comic not in personal collection / user 
      *         - grade is not inbetween 1-10
      */
     Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) throws Exception;
 
-    /**
+    /**G
      * @param user  The user ungrading the comic.
      * @param comic The comic being ungraded
      * @return true : comic sucessfully ungraded
@@ -203,7 +203,7 @@ interface ComixAPI {
      */
     Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception;
 
-    /**
+    /**G
      * Adds a comic to a users personal collection.
      * 
      * @param comic The comic to be added to the personal collection.
@@ -212,18 +212,22 @@ interface ComixAPI {
      *         false : comic not sucessfully added to personal collection
      *         - comic does not exist.
      *         - no personal collection found.
+     *         - user does not exist
+     *         - user not logged in.
      */
     Boolean addComicToPersonalCollection(User user, Comic comic) throws Exception;
 
-    /**
+    /**G
      * Removes a comic from personal colleciton.
      * 
      * @param comic The comic to be removed from the personal collection
      * @return true : comic sucessfully added to personal collection
      *         false : comic not sucessfully added to personal collection
      *         - comic does not exist.
+     *         - user does not exist
      *         - comic does not exist in personal collection.
      *         - no personal collection found.
+     *         - user not logged in.
      */
     Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception;
 

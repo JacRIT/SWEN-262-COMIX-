@@ -155,14 +155,20 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Boolean addComicToPersonalCollection(User user, Comic comic) throws Exception {
-        this.comicController.addToCollection(user.getId(), comic);
-        return true; // TODO : no checks implemented.
+        if (userExists(user) && copyExists(comic)) {
+            this.comicController.addToCollection(user.getId(), comic);
+            return true; 
+        }
+        return false;
     }
 
     @Override
     public Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception {
-        this.comicController.removeFromCollection(user.getId(), comic);
-        return true; // TODO : no checks implemented.
+        if (userExists(user) && copyExists(comic)) {
+            this.comicController.removeFromCollection(user.getId(), comic);
+            return true; 
+        }
+        return false;
     }
 
     public Comic getComic(int comicId) throws Exception {
