@@ -293,22 +293,45 @@ public class Comic {
     }
 
     public Boolean gradeComic(int grade) {
-        if (grade < 0 || grade > 10)
+        if (grade < 0 || grade > 10) {
+            this.grade = grade;
+            return true;
+        }
+        System.out.println("\n======\nCOMIC : you are trying to grade a comic with an incorrect grade. Grade from 1-10.\n======\n");
+        return false;
+    }
+
+    /**
+     * Ungrades a comic
+     * @return  true : comic ungraded
+     *          false: comic not ungraded
+     */
+    public Boolean unGradeComic() {
+        if (this.grade != 0) {
+            this.grade = 0;
+            return true;
+        } else {
+            System.out.println("\n======\nCOMIC : you are trying to ungrade an ungraded comic\n======\n");
             return false;
-        this.grade = grade;
-        return true;
+        }
     }
 
-    public void unGradeComic() {
-        this.grade = 0;
+    public Boolean slabComic() {
+        if (this.grade != 0 && this.isSlabbed == false) {
+            this.isSlabbed = true;
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void slabComic() {
-        this.isSlabbed = true;
-    }
-
-    public void unSlabComic() {
-        this.isSlabbed = false;
+    public Boolean unSlabComic() {
+        if (isSlabbed) {
+            this.isSlabbed = false;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
