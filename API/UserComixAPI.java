@@ -113,12 +113,10 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) throws Exception {
-        if (comic.gradeComic(grade)) {
-            if (userExists(user) && copyExists(comic)) {
-                return comicController.updateCopy(user.getId(), comic);
-            }
-        } else {
-            return false;
+        if (userExists(user) 
+        && copyExists(comic)
+        && comic.gradeComic(grade)) {
+            return comicController.updateCopy(user.getId(), comic);
         }
         return false;
     }
@@ -126,33 +124,32 @@ public class UserComixAPI implements ComixAPI {
     @Override
     public Boolean ungradeComicInPersonalCollection(User user, Comic comic) throws Exception {
         if(userExists(user) 
-            && copyExists(comic)
-            && comic.unGradeComic()
-        ) {
-            comicController.updateCopy(user.getId(), comic);
-            return true; 
+        && copyExists(comic)
+        && comic.unGradeComic()) {
+            return comicController.updateCopy(user.getId(), comic); 
         }
         return false;
     }
 
     @Override
     public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
-        if ( copyExists(gradedComic)
-            && userExists(user)
-            && gradedComic.slabComic()
-        ) {
-            comicController.updateCopy(user.getId(), gradedComic);
-            return true;
+        if (copyExists(gradedComic)
+        && userExists(user)
+        && gradedComic.slabComic()
+        ) { 
+            return comicController.updateCopy(user.getId(), gradedComic);
         };
         return false; 
     }
 
     @Override
     public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
-        if (gradedComic.unSlabComic() && copyExists(gradedComic)) {
-            comicController.updateCopy(user.getId(), gradedComic);
-            return true; // TODO : no checks implemented.
-        };
+        if (copyExists(gradedComic)
+        && userExists(user)
+        && gradedComic.unSlabComic()
+        ) { 
+            return comicController.updateCopy(user.getId(), gradedComic);
+        }
         return false;
     }
 
