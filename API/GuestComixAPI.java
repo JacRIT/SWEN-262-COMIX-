@@ -173,11 +173,11 @@ public class GuestComixAPI implements ComixAPI {
 	}
     
 	@Override
-	public Boolean addComicToPersonalCollection(User user, Comic comic) throws Exception {
+	public Integer addComicToPersonalCollection(User user, Comic comic) throws Exception {
         if (isAuthenticated) {
             return userComixAPI.addComicToPersonalCollection(user, comic);
         } else {
-            return false;
+            return null;
         }
 	}
     

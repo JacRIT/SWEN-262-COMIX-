@@ -208,14 +208,14 @@ interface ComixAPI {
      * 
      * @param comic The comic to be added to the personal collection.
      * @param user  The user adding the comic to their collection.
-     * @return true : comic sucessfully added to personal collection
-     *         false : comic not sucessfully added to personal collection
+     * @return int : comic sucessfully added to personal collection 
+     * @return false : comic not sucessfully added to personal collection
      *         - comic does not exist.
      *         - no personal collection found.
      *         - user does not exist
      *         - user not logged in.
      */
-    Boolean addComicToPersonalCollection(User user, Comic comic) throws Exception;
+    Integer addComicToPersonalCollection(User user, Comic comic) throws Exception;
 
     /**G
      * Removes a comic from personal colleciton.
