@@ -108,7 +108,18 @@ public class AuthInterpreter extends DefaultInterpreter {
       return this.createCommand(fullCommand);
     }
 
-    // Slab a comic in the personal collection
+    // Unslab a comic in the personal collection
+    if (command.startsWith("USL") || command.startsWith("usl")) {
+      String fullCommand = command.trim();
+      if (this.lastViewed != null && fullCommand.length() == 3) {
+        fullCommand += " " + this.lastViewed.toString();
+      }
+
+      this.lastViewed = null;
+      return this.createCommand(fullCommand);
+    }
+
+    // Sign a comic in the personal collection
     if (command.startsWith("SG") || command.startsWith("sg")) {
       String fullCommand = command.trim();
       if (this.lastViewed != null && fullCommand.length() == 2) {
@@ -218,7 +229,7 @@ public class AuthInterpreter extends DefaultInterpreter {
       if (successMessage.contains("could not"))
         return successMessage;
 
-      // System.out.println("Command Executed Beep Boop");
+      System.out.println("Command Executed Beep Boop");
       // System.out.println(successMessage);
 
       this.mediator.addCommand(newCommand);
@@ -309,18 +320,25 @@ public class AuthInterpreter extends DefaultInterpreter {
     if (defaultBehavior.startsWith("Internal error"))
       return defaultBehavior;
     this.lastViewed = comicId;
-    // String addComicInstructions = "\nEnter \"AP\" to add to your personal
-    // collection.";
+
     String addComicInstructions = "\nEnter \"AP\" to add to your personal collection.";
     String removeComicInstructions = "\nEnter \"RE\" to remove from your personal collection.";
     String authenticateComicInstructions = "\nEnter \"AU <Signature Id>\" to authenticate a signature.";
     String signComicInstructions = "\nEnter \"SG\" to add your signature to the comic";
+    String unSignComicInstructions = "\nEnter \"RS <Signature Id>\" to remove a signature to the comic";
     String slabComicInstructions = "\nEnter \"SL\" to slab this comic";
+    String unSlabComicInstructions = "\nEnter \"USL\" to unslab this comic";
     String gradeComicInstructions = "\nEnter \"G <Graded Value>\" to grade this comic on a scale of 1-10";
-    return defaultBehavior + addComicInstructions + removeComicInstructions + signComicInstructions
+
+    return defaultBehavior
+        + addComicInstructions
+        + removeComicInstructions
         + authenticateComicInstructions
+        + gradeComicInstructions
+        + signComicInstructions
+        + unSignComicInstructions
         + slabComicInstructions
-        + gradeComicInstructions;
+        + unSlabComicInstructions;
   }
 
   /**
