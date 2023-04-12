@@ -59,10 +59,10 @@ public class ComicController {
      * @return an array of Comics matching the search request, sorted
      */
     public Comic[] search(int userId, String searchTerm) throws Exception {
-        PreparedStatementContainer psc = this.searchStrategy.search(userId, searchTerm);
-        ArrayList<Object> copy_ids = this.jdbcRead.executePreparedSQL(psc.getSql(), psc.getObjects());
-        int i = 0;
-        Comic[] comics = new Comic[copy_ids.size()];
+        int[] copy_ids = this.searchStrategy.executeSearch(userId, searchTerm) ;
+        Comic[] comics = new Comic[copy_ids.length];
+        int i = 0 ;
+
         for (Object o : copy_ids) {
             int copy_id = (int) o;
             Comic c = get(copy_id);
