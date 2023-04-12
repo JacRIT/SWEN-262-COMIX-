@@ -25,12 +25,26 @@ public class CSVComicAdapter implements ComicConverter {
         CSVWriter writer = adaptee.createFile(filename);
         String[] header = {"Series", "Issue", "Full Title", "Variant Description", "Publisher", "Release Date", "Format", "AddedDate", "Creators"};
         writer.writeNext(header);
-
         for(Comic comic : comics){
-            //SO. What's gonna happen is that for each comic add a Vol. to the series title
-            //and publisher, creators, uses the helper method
+            if(comic == null){continue;}
+            String[] data = {"","","","","","","","",""};
+            data[0] = comic.getSeries() + ", Vol. " + String.valueOf(comic.getVolumeNumber());
+            data[1] = comic.getIssueNumber();
+            data[2] = comic.getTitle();
+            data[3] = comic.getDescription();
+            data[4] = formatString(comic.getPublisher());
+            data[5] = comic.getPublicationDate();
+            //Format and AddedDate are skipped since unnecesary 
+            data[8] = formatString(comic.getCreators());
+            writer.writeNext(data);
         }
+        writer.close();
         return null;
+    }
+
+    private <T> String formatString(ArrayList<T> unformattedArray){
+        String unformattedString = unformattedArray.toString();
+        return unformattedString.replace("[", "").replace("]", "").replace(", ", " | ");
     }
 
     @Override
@@ -117,19 +131,22 @@ public class CSVComicAdapter implements ComicConverter {
     public static void main(String[] args) {
 
         try {
+            ArrayList<Comic> comicsToExport = new ArrayList<Comic>();
             CSV csv = new CSV("./comicsInput.csv");
             CSVComicAdapter x = new CSVComicAdapter(csv);
             Comic test = x.convertToComic() ;
-
+            comicsToExport.add(test);
+            System.out.println("Now importing...");
             while (test != null) {
 
                 System.out.println(test);
                 System.out.println();
                 test = x.convertToComic() ;
-
+                comicsToExport.add(test);
             }
-
-
+            System.out.println("Now exporting...");
+            x.convertToFile("comicsExport.csv", comicsToExport.toArray(new Comic[0]));
+            System.out.println("*Ding!* Check your files!");
         } catch (Exception e) {
             e.printStackTrace();
         }

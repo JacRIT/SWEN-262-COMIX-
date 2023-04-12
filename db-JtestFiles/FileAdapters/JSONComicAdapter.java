@@ -5,7 +5,6 @@ import Model.JavaObjects.Character;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 
@@ -56,14 +55,9 @@ public class JSONComicAdapter implements ComicConverter {
     @Override
     public Comic convertToComic() throws Exception{
         Object readAdaptee = adaptee.readFile();
-        //JSONObject adapteeObj = (JSONObject) readAdaptee;
         JSONArray fileContents = (JSONArray) readAdaptee; //Array vers of read file //JSON obj vers of file
-        //Iterator<?> iterator = fileContents.iterator();
-        //if (iterator.hasNext() == false) {return null;} //iterator will return null if there's no next val, uses JSON Array
         if(arrayIndex == (fileContents.size())){return null;}
         return makeComic((JSONObject) fileContents.get(arrayIndex));
-         //instantiate all the values corresponding to the database, same for all adapters
-        
     }
 
     private Comic makeComic(JSONObject comic){
