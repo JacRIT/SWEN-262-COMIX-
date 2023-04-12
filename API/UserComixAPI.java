@@ -104,8 +104,9 @@ public class UserComixAPI implements ComixAPI {
     @Override
     public Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception {
         if (signatureExists(signature, signedComic)) {
-            signedComic.unVerifyComic(signature);
             comicController.removeSignature(signature);
+            signedComic.unVerifyComic(signature);
+            comicController.addSignature(signedComic.getCopyId(), signature);
             return true; 
         }
         return false;
