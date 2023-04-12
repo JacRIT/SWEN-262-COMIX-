@@ -26,6 +26,7 @@ public class AuthenticateComic implements PCCommand {
     Signature signed = this.api.verifyComic(this.signature, this.comic);
     if (signed == null)
       return "Comic (" + this.comic.getTitle() + ") could not be verified";
+    this.signature = signed;
     return "Comic (" + this.comic.getTitle() + ") has been verified";
   }
 
