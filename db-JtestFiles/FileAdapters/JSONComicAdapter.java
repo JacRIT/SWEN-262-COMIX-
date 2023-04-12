@@ -52,11 +52,11 @@ public class JSONComicAdapter implements ComicConverter {
 
     @Override
     public Comic convertToComic() throws Exception{
-        Object readAdaptee = adaptee.readFile();
-        JSONArray fileContents = (JSONArray) readAdaptee; //Array vers of read file
-        JSONObject adapteeObj = (JSONObject) readAdaptee; //JSON obj vers of file
-        Iterator<?> iterator = fileContents.iterator();
-        if (iterator.hasNext() == false) {return null;} //iterator will return null if there's no next val, uses JSON Array
+        JSONObject readAdaptee = adaptee.readFile();
+        JSONObject adapteeObj = (JSONObject) readAdaptee;
+        //JSONArray fileContents = (JSONArray) readAdaptee; //Array vers of read file //JSON obj vers of file
+        //Iterator<?> iterator = fileContents.iterator();
+        //if (iterator.hasNext() == false) {return null;} //iterator will return null if there's no next val, uses JSON Array
 
          //instantiate all the values corresponding to the database, same for all adapters
         String      series              = (String) adapteeObj.get("series") ;
@@ -110,4 +110,24 @@ public class JSONComicAdapter implements ComicConverter {
 
     }
     
+    public static void main(String[] args) {
+
+        try {
+            JSON json = new JSON("./comicsInput.json");
+            JSONComicAdapter x = new JSONComicAdapter(json);
+            Comic test = x.convertToComic() ;
+
+            while (test != null) {
+
+                System.out.println(test);
+                System.out.println();
+                test = x.convertToComic() ;
+
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

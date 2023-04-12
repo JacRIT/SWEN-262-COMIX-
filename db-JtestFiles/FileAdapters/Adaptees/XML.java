@@ -11,14 +11,15 @@ import org.w3c.dom.Document;
 public class XML {
 
     private String filename;
+    private Document doc;
 
-    public XML(String filename){
+    public XML(String filename) throws Exception{
         this.filename = filename;
-    }
-    public Document readFile() throws Exception{
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(new File(filename));
+        this.doc = db.parse(new File(filename));
+    }
+    public Document readFile() throws Exception{
         return doc;
     }
 

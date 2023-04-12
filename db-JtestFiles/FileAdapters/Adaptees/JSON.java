@@ -1,5 +1,7 @@
 package FileAdapters.Adaptees;
 import java.io.FileReader;
+
+import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 import java.io.FileWriter;
 
@@ -9,16 +11,17 @@ import java.io.FileWriter;
  */
 public class JSON {
     private String filename;
+    private JSONObject parser;
 
-    public JSON(String filename){
+    public JSON(String filename) throws Exception{
         this.filename = filename;
-    }
-
-    public Object readFile() throws Exception{
         JSONParser jsonParser = new JSONParser();
         FileReader reader = new FileReader(filename);
-        Object obj = jsonParser.parse(reader);
-        return obj;
+        this.parser = (JSONObject) jsonParser.parse(reader);
+    }
+
+    public JSONObject readFile() throws Exception{
+        return this.parser;
 
     }
 
