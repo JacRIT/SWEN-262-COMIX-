@@ -29,11 +29,11 @@ public class UnSignComic implements PCCommand {
     Signature signed = this.api.signComic(this.signature, comic);
 
     if (signed == null)
-      return "Comic (" + this.comic.getTitle() + ") could not be signed by " + this.user.getName();
+      return "Comic (" + this.comic.getTitle() + ") could not be signed by " + this.signature.getName();
 
     this.signature = signed;
 
-    return "Comic (" + this.comic.getTitle() + ") has been signed by " + this.user.getName();
+    return "Comic (" + this.comic.getTitle() + ") has been signed by " + this.signature.getName();
   }
 
   /**
@@ -49,9 +49,10 @@ public class UnSignComic implements PCCommand {
     Boolean unsigned = this.api.unSignComic(this.signature, comic);
 
     if (!unsigned)
-      return this.user.getName() + " signature could not be removed from Comic (" + this.comic.getTitle() + ")";
+      return "Signature (" + this.signature.getId() + ") could not be removed from Comic (" + this.comic.getTitle()
+          + ")";
 
-    return this.user.getName() + " signature has been removed from Comic (" + this.comic.getTitle() + ")";
+    return "Signature (" + this.signature.getId() + ") has been removed from Comic (" + this.comic.getTitle() + ")";
   }
 
 }

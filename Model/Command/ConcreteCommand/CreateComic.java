@@ -20,9 +20,10 @@ public class CreateComic implements PCCommand {
   @Override
   public String execute() throws Exception {
 
-    String comicTitle = this.api.createComic(this.user.getId(), this.comic);
+    // Comic object should be returned rather than just the copy id
+    int copyId = this.api.createComic(this.user.getId(), this.comic);
 
-    return "Comic (" + comicTitle + ") created";
+    return "Comic (" + this.comic.getTitle() + ") created";
   }
 
   @Override

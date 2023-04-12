@@ -1,7 +1,12 @@
 package UI.Concrete;
 
 import Api.GuestComixAPI;
+import Model.Command.PCCommand;
+import Model.Command.ConcreteCommand.CreateComic;
+import Model.JavaObjects.Character;
 import Model.JavaObjects.Comic;
+import Model.JavaObjects.Creator;
+import Model.JavaObjects.Signature;
 import UI.Interfaces.Mediator;
 
 public class ComicInterpreter extends AuthInterpreter {
@@ -15,6 +20,7 @@ public class ComicInterpreter extends AuthInterpreter {
   public ComicInterpreter(Mediator mediator, GuestComixAPI api, Comic comic) {
     super(mediator, api);
     this.comic = comic;
+    this.comic.setValue(0);
   }
 
   @Override
@@ -46,7 +52,7 @@ public class ComicInterpreter extends AuthInterpreter {
         + "\"\nEnter \"I\" to view instructions and current status of your Comic";
 
     if (this.validComic())
-      successMessage += "\nEnter \"Create\" when you're ready to add comic into the database";
+      successMessage += "\nEnter \"Submit\" when you're ready to add comic into the database";
 
     if (command.equals("Title") || command.equals("title")) {
       if (value == null)
@@ -107,32 +113,39 @@ public class ComicInterpreter extends AuthInterpreter {
       return successMessage;
     }
 
-    // Comic needs to be updated to allow adding/removing singular fields to array
+    if (command.startsWith("Add") || command.startsWith("add")) {
+      String[] addSplit = command.split(" ");
 
-    // if (command.equals("Publisher") || command.equals("publisher")) {
-    // if (value == null)
-    // return missingMessage;
+      if (addSplit.length <= 1)
+        return "Missing key for \"Add\" command";
 
-    // comic.addPublisher(value);
-    // return successMessage;
-    // }
+      if (value == null)
+        return "Missing value for \"Add\" command";
 
-    // if (command.equals("Creators") || command.equals("creators")) {
-    // if (value == null)
-    // return missingMessage;
+      String key = addSplit[1];
 
-    // comic.addCreator(value);
-    // return successMessage;
-    // }
+      successMessage = this.addToComicCommand(key, value);
 
-    // if (command.equals("PrinciplCharacters") ||
-    // command.equals("principlCharacters")) {
-    // if (value == null)
-    // return missingMessage;
+      return successMessage;
 
-    // comic.addPrinciplCharacter(value);
-    // return successMessage;
-    // }
+    }
+
+    if (command.startsWith("Remove") || command.startsWith("remove")) {
+      String[] removeSplit = command.split(" ");
+
+      if (removeSplit.length <= 1)
+        return "Missing key for \"Remove\" command";
+
+      if (value == null)
+        return "Missing value for \"Remove\" command";
+
+      String key = removeSplit[1];
+
+      successMessage = this.removeFromComicCommand(key, value);
+
+      return successMessage;
+
+    }
 
     // All Numbers
 
@@ -178,6 +191,23 @@ public class ComicInterpreter extends AuthInterpreter {
       return noNumberFound;
     }
 
+    try {
+      if (command.equals("Submit") || command.equals("submit")) {
+        if (!this.validComic())
+          return this.missingFields();
+
+        PCCommand pcCommand = new CreateComic(this.mediator.getUser(), this.comic, this.api);
+
+        successMessage = pcCommand.execute();
+        this.mediator.addCommand(pcCommand);
+        this.switchToAuth();
+        return successMessage;
+      }
+    } catch (Exception err) {
+      System.out.println("Error:\n" + err.getMessage() + "\n" + err.getLocalizedMessage());
+      return "Comic could not be created";
+    }
+
     return "Unrecognized Command: " + command + "\nPlease Try Again";
   }
 
@@ -185,12 +215,54 @@ public class ComicInterpreter extends AuthInterpreter {
     String instructions = "Current Comic:\n" + this.comic.toStringDetailed()
         + "\nEnter \"I\" to view instructions and current status of your Comic"
         + "\nEnter a \"<key>=<value>\" to set a field in the comic"
+        + "\nEnter a \"Add <key>=<value>\" to add a field into the\n\tcreators/principlCharacters/signatures collections on your comic"
+        + "\nEnter a \"Remove <key>=<value>\" to remove a field from the\n\tcreators/principlCharacters/signatures collections on your comic"
         + "\nEnter a \"Back\" to abandon creation";
 
     if (this.validComic())
-      instructions += "\nEnter \"Create\" when you're ready to add comic into the database";
+      instructions += "\nEnter \"Submit\" when you're ready to add comic into the database";
 
     return instructions;
+  }
+
+  private String addToComicCommand(String key, String value) {
+    String ending = "\"\nEnter \"I\" to view instructions and current status of your Comic";
+    if (key.equals("Creators") || key.equals("creators")) {
+      this.comic.addCreator(new Creator(0, value));
+      return value + " added to comic's " + key + ending;
+    }
+
+    if (key.equals("PrinciplCharacters") || key.equals("principlCharacters")) {
+      this.comic.addPrinciplCharacter(new Character(0, value));
+      return value + " added to comic's " + key + ending;
+    }
+
+    if (key.equals("Signatures") || key.equals("signatures")) {
+      this.comic.addSignature(new Signature(0, value));
+      return value + " added to comic's " + key + ending;
+    }
+
+    return "Unrecognized Key: " + key + "\nPlease Try Again";
+  }
+
+  private String removeFromComicCommand(String key, String value) {
+    String ending = "\"\nEnter \"I\" to view instructions and current status of your Comic";
+    if (key.equals("Creators") || key.equals("creators")) {
+      this.comic.removeCreator(new Creator(0, value));
+      return value + " removed from comic's " + key + ending;
+    }
+
+    if (key.equals("PrinciplCharacters") || key.equals("principlCharacters")) {
+      this.comic.removePrinciplCharacter(new Character(0, value));
+      return value + " removed from comic's " + key + ending;
+    }
+
+    if (key.equals("Signatures") || key.equals("signatures")) {
+      this.comic.removeSignature(new Signature(0, value));
+      return value + " removed from comic's " + key + ending;
+    }
+
+    return "Unrecognized Key: " + key + "\nPlease Try Again";
   }
 
   private void switchToAuth() {
@@ -220,4 +292,26 @@ public class ComicInterpreter extends AuthInterpreter {
     return true;
   }
 
+  private String missingFields() {
+    String message = "To create a comic the following fields must not be empty:";
+    if (comic.getTitle().length() == 0)
+      message += "\ntitle,";
+
+    if (comic.getDescription().length() == 0)
+      message += "\ndescription,";
+
+    if (comic.getPublicationDate().length() == 0)
+      message += "\npublicationDate,";
+
+    if (comic.getIssueNumber().length() == 0)
+      message += "\nissueNumber,";
+
+    if (comic.getInitialValue() == 0)
+      message += "\ninitialValue,";
+
+    if (comic.getVolumeNumber() == 0)
+      message += "\nvolumeNumber,";
+
+    return message.substring(0, message.length() - 1);
+  }
 }

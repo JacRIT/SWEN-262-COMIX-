@@ -9,6 +9,7 @@ import Model.Command.ConcreteCommand.PCRemoveComic;
 import Model.Command.ConcreteCommand.SignComic;
 import Model.Command.ConcreteCommand.SlabComic;
 import Model.Command.ConcreteCommand.UnSignComic;
+import Model.Command.ConcreteCommand.UnslabComic;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
@@ -27,6 +28,7 @@ public class PCFactory implements CommandFactory {
       System.out.println("Command Factory: " + type);
       System.out.println();
 
+      // Add to personal collection
       if (type.startsWith("AP") || type.startsWith("ap")) {
         if (split.length != 2)
           return null;
@@ -35,6 +37,7 @@ public class PCFactory implements CommandFactory {
         return new AddToPC(user, comic, api);
       }
 
+      // Authenticate a signature
       if (type.startsWith("AU") || type.startsWith("au")) {
         if (split.length != 3)
           return null;
@@ -56,6 +59,7 @@ public class PCFactory implements CommandFactory {
         return new AuthenticateComic(signature, user, comic, api);
       }
 
+      // Remove from personal collection
       if (type.startsWith("RE") || type.startsWith("re")) {
         if (split.length != 2)
           return null;
@@ -64,6 +68,7 @@ public class PCFactory implements CommandFactory {
         return new PCRemoveComic(user, comic, api);
       }
 
+      // Add signature to comic
       if (type.startsWith("SG") || type.startsWith("sg")) {
         if (split.length != 2)
           return null;
@@ -72,6 +77,7 @@ public class PCFactory implements CommandFactory {
         return new SignComic(user, comic, api);
       }
 
+      // Remove signature from comic
       if (type.startsWith("RS") || type.startsWith("rs")) {
         if (split.length != 3)
           return null;
@@ -93,6 +99,7 @@ public class PCFactory implements CommandFactory {
         return new UnSignComic(signature, user, comic, api);
       }
 
+      // Slab a comic
       if (type.startsWith("SL") || type.startsWith("sl")) {
         if (split.length != 2)
           return null;
@@ -101,6 +108,16 @@ public class PCFactory implements CommandFactory {
         return new SlabComic(user, comic, api);
       }
 
+      // Unslab a comic
+      if (type.startsWith("USL") || type.startsWith("usl")) {
+        if (split.length != 2)
+          return null;
+        int comicId = Integer.parseInt(split[1]);
+        Comic comic = api.getComic(comicId);
+        return new UnslabComic(user, comic, api);
+      }
+
+      // Grade a comic
       if (type.startsWith("G") || type.startsWith("g")) {
         if (split.length != 3)
           return null;
