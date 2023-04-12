@@ -205,6 +205,7 @@ public class ComicInterpreter extends AuthInterpreter {
       }
     } catch (Exception err) {
       System.out.println("Error:\n" + err.getMessage() + "\n" + err.getLocalizedMessage());
+      err.printStackTrace();
       return "Comic could not be created";
     }
 
