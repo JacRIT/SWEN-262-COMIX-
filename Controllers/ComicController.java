@@ -296,7 +296,7 @@ public class ComicController {
     public int create(int userId, Comic comic) throws Exception {
         // adding it to comic_info (comic)
         String sql = """
-            INSERT INTO comic_info(series, title, volume_num, issue_num, initial_value, descrip, release_date)
+            INSERT INTO comic_info(series, title, volume_num, issue_num, initial_value, descrip, release_date, release_day, release_month, release_year)
             VALUES (?,?,?,?,?,?,?)
             """;
         ArrayList<Object> obj = new ArrayList<>();
@@ -307,6 +307,9 @@ public class ComicController {
         obj.add(comic.getInitialValue());
         obj.add(comic.getDescription());
         obj.add(comic.getPublicationDate());
+        obj.add(comic.getReleaseDay());
+        obj.add(comic.getReleaseMonth());
+        obj.add(comic.getReleaseYear());
         int comicId = jdbcInsert.executePreparedSQLGetId(sql, obj);
         comic.setId(comicId);
 
