@@ -65,9 +65,9 @@ public class UserController {
         String sql = "SELECT id, username FROM user_info WHERE id = ?;";
         ArrayList<Object> var = new ArrayList<>();
         var.add(id);
-        ArrayList<Object> result = jdbcRead.executePreparedSQL(sql, var); // should be [id, username]
+        ArrayList<ArrayList<Object>> result = jdbcRead.readListofLists(sql, var, 2); // should be [id, username]
         if (result.size() == 1)
-            return new User((int) result.get(0), (String) result.get(1));
+            return new User((int) result.get(0).get(0), (String) result.get(0).get(1));
         else
             return null;
     }

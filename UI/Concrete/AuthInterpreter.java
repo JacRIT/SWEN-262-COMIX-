@@ -78,7 +78,7 @@ public class AuthInterpreter extends DefaultInterpreter {
     // Authenticate a comic signature
     if (command.startsWith("AU") || command.startsWith("au")) {
       String fullCommand = command.trim();
-      if (this.lastViewed != null && fullCommand.length() > 2 && fullCommand.length() <= 4) {
+      if (this.lastViewed != null && fullCommand.length() > 2 && fullCommand.length() <= 6) {
         fullCommand += " " + this.lastViewed.toString();
       }
 
@@ -133,7 +133,7 @@ public class AuthInterpreter extends DefaultInterpreter {
     // Remove a comic signature
     if (command.startsWith("RS") || command.startsWith("rs")) {
       String fullCommand = command.trim();
-      if (this.lastViewed != null && fullCommand.length() > 2 && fullCommand.length() <= 4) {
+      if (this.lastViewed != null && fullCommand.length() > 2 && fullCommand.length() <= 6) {
         fullCommand += " " + this.lastViewed.toString();
       }
 
@@ -239,6 +239,8 @@ public class AuthInterpreter extends DefaultInterpreter {
       return successMessage;
     } catch (Exception err) {
       System.out.println("Create Command Err:\n" + err.getLocalizedMessage() + "\n" + err.getMessage());
+      err.printStackTrace();
+
       return "Command: " + input.split(" ")[0] + " could not be executed";
     }
   }

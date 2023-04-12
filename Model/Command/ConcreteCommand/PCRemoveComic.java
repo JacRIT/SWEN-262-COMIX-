@@ -33,13 +33,14 @@ public class PCRemoveComic implements PCCommand {
 
   @Override
   public String unExecute() throws Exception {
-    Boolean success = this.api.addComicToPersonalCollection(this.user,
+    Integer copyId = this.api.addComicToPersonalCollection(this.user,
         this.comic);
 
-    if (success)
-      return "Comic \"" + this.comic.getTitle() + "\" successfully added to " + this.user.getName() + "'s collection";
+    if (copyId == null)
+      return "Comic \"" + this.comic.getTitle() + "\" could not be added to " + this.user.getName() + "'s collection";
 
-    return "Comic \"" + this.comic.getTitle() + "\" could not be added to " + this.user.getName() + "'s collection";
+    this.comic.setCopyId(copyId);
+    return "Comic \"" + this.comic.getTitle() + "\" successfully added to " + this.user.getName() + "'s collection";
 
   }
 

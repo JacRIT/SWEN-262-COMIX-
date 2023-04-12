@@ -311,7 +311,7 @@ public class Comic {
     }
 
     public Boolean gradeComic(int grade) {
-        if (grade < 0 || grade > 10) {
+        if (grade > 0 || grade < 10) {
             this.grade = grade;
             return true;
         }
