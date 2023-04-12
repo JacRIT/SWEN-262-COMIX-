@@ -32,6 +32,7 @@ public class XMLComicAdapter implements ComicConverter {
         Document doc = adaptee.createFile();
         Element rootElement = doc.createElement("Comics");
         for(Comic comicObj : comics){ //For each comic in the array, creates an XML element 
+        if(comicObj == null){continue;}
         doc.appendChild(rootElement);
         Element comic = doc.createElement("comic");
         rootElement.appendChild(comic);

@@ -21,7 +21,8 @@ public class JSONComicAdapter implements ComicConverter {
         this.arrayIndex = 0;
 
     }
-
+    @SuppressWarnings("unchecked")
+    //used bc JSONSimple has weird issue with trying to be a hashmap
     @Override
     public String convertToFile(String filename, Comic[] comics) throws Exception {
         //Current plan: use JDBCComicExtractor in ComicController to get All comics, 
@@ -30,18 +31,23 @@ public class JSONComicAdapter implements ComicConverter {
         FileWriter file = adaptee.createFile(filename);
         for(Comic comic : comics){
             //each comic is translated to a JSON object
-            HashMap<Object, Object> comicDetailMap = new HashMap<Object, Object>();
-            comicDetailMap.put("series", comic.getSeries());
-            comicDetailMap.put("title", comic.getTitle());
-            comicDetailMap.put("volume_number", comic.getVolumeNumber());
-            comicDetailMap.put("issue_number", comic.getIssueNumber());
-            comicDetailMap.put("description", comic.getDescription());
-            comicDetailMap.put("release_date", comic.getPublicationDate());
+            if(comic == null){continue;}
+            JSONObject comicDetail = new JSONObject();
+            comicDetail.put("series", comic.getSeries());
+            comicDetail.put("title", comic.getTitle());
+            comicDetail.put("volume_number", comic.getVolumeNumber());
+            comicDetail.put("issue_number", comic.getIssueNumber());
+            comicDetail.put("description", comic.getDescription());
+            comicDetail.put("release_date", comic.getPublicationDate());
             //need to convert Publishers into | concat
-            comicDetailMap.put("publisher", formatString(comic.getPublisher()));
-            comicDetailMap.put("creators", formatString(comic.getCreators()));
-            JSONObject comicJson = new JSONObject(comicDetailMap);
-            file.write(comicJson.toJSONString());
+            comicDetail.put("publisher", formatString(comic.getPublisher()));
+            comicDetail.put("creators", formatString(comic.getCreators()));
+            JSONObject comicObj = new JSONObject();
+            comicObj.put("comic", comicDetail);
+            JSONArray comicList = new JSONArray();
+            comicList.add(comicObj);
+            file.write(comicList.toJSONString());
+
         }
         file.flush();
         return null;
@@ -66,10 +72,10 @@ public class JSONComicAdapter implements ComicConverter {
         String      series              = (String) adapteeObj.get("series") ;
         String      title               = (String) adapteeObj.get("title");
         int         volume_number       = 1 ;
-        String      issue_number        = (String) adapteeObj.get("Issue") ;
+        String      issue_number        = String.valueOf(adapteeObj.get("issue_number")) ;
         float       initial_value       = 9.99f ; 
-        String      description         = (String) adapteeObj.get("Variant Description") ;
-        String      release_date        = (String) adapteeObj.get("Release Date") ;
+        String      description         = (String) adapteeObj.get("description") ;
+        String      release_date        = (String) adapteeObj.get("release_date") ;
 
         float       value               = 0 ; 
         int         grade               = 0 ;
@@ -117,19 +123,23 @@ public class JSONComicAdapter implements ComicConverter {
     public static void main(String[] args) {
 
         try {
+            ArrayList<Comic> comicsToExport = new ArrayList<Comic>();
             JSON json = new JSON("./comicsInput.json");
             JSONComicAdapter x = new JSONComicAdapter(json);
             Comic test = x.convertToComic() ;
-
+            comicsToExport.add(test);
+            System.out.println("Now importing...");
             while (test != null) {
 
                 System.out.println(test);
                 System.out.println();
                 test = x.convertToComic() ;
+                comicsToExport.add(test);
 
             }
-
-
+            System.out.println("Now exporting...");
+            x.convertToFile("comicsExport.json", comicsToExport.toArray(new Comic[0]));
+            System.out.println("*Ding!* Check your files!");
         } catch (Exception e) {
             e.printStackTrace();
         }
