@@ -274,10 +274,16 @@ public class ComicInterpreter extends AuthInterpreter {
     if (comic.getTitle().length() == 0)
       return false;
 
+    if (comic.getSeries().length() == 0)
+      return false;
+
     if (comic.getDescription().length() == 0)
       return false;
 
     if (comic.getPublicationDate().length() == 0)
+      return false;
+
+    if (comic.getPublicationDate().split("/").length != 3)
       return false;
 
     if (comic.getIssueNumber().length() == 0)
@@ -302,6 +308,9 @@ public class ComicInterpreter extends AuthInterpreter {
 
     if (comic.getPublicationDate().length() == 0)
       message += "\npublicationDate,";
+
+    if (comic.getPublicationDate().split("/").length != 3)
+      message += "\npublicationDate should be in format xx/xx/xxxx,";
 
     if (comic.getIssueNumber().length() == 0)
       message += "\nissueNumber,";
