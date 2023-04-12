@@ -137,14 +137,14 @@ interface ComixAPI {
      * unVerifies a signed comic.
      * @param signedComic a previously signed and verified comic to be unverified.
      * @param signature signature to be unverified on signed comic.
-     * @return true : comic sucessfully unverified
-     *         false : comic NOT sucessfully unverified
+     * @return Signature that is now verified.
+     *         Null : comic NOT sucessfully unverified
      *                  - comic does not exist
      *                  - comic not previously verified and signed
      *                  - signature does not exist
      *                  - user not logged in.
      */
-    Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception;
+    Signature unVerifyComic(Signature signature, Comic signedComic) throws Exception;
 
     /**G
      * Marks a comic as "graded" on a scale of 1 to 10. The value of a graded comic

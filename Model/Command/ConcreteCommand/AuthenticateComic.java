@@ -31,9 +31,10 @@ public class AuthenticateComic implements PCCommand {
 
   @Override
   public String unExecute() throws Exception {
-    Boolean success = this.api.unVerifyComic(this.signature, this.comic);
-    if (!success)
+    Signature s = this.api.unVerifyComic(this.signature, this.comic);
+    if (s == null)
       return "Comic (" + this.comic.getTitle() + ") could not be unverified";
+    this.signature = s;
     return "Comic (" + this.comic.getTitle() + ") has been unverified";
 
   }

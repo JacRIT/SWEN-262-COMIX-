@@ -115,7 +115,10 @@ public class ComicController {
                     issue_num = ?,
                     initial_value = ?,
                     descrip = ?,
-                    release_date = ?
+                    release_date = ?,
+                    release_day = ?,
+                    release_month = ?,
+                    release_year = ?
                 WHERE id = ?
                 """;
         PreparedStatementContainer psc = new PreparedStatementContainer();
@@ -127,6 +130,9 @@ public class ComicController {
         psc.appendToObjects(updatedComic.getInitialValue());
         psc.appendToObjects(updatedComic.getDescription());
         psc.appendToObjects(updatedComic.getPublicationDate());
+        psc.appendToObjects(updatedComic.getReleaseDay());
+        psc.appendToObjects(updatedComic.getReleaseMonth());
+        psc.appendToObjects(updatedComic.getReleaseYear());
         psc.appendToObjects(updatedComic.getId());
         jdbcInsert.executePreparedSQL(psc);
         return true;

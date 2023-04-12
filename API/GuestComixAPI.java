@@ -128,11 +128,11 @@ public class GuestComixAPI implements ComixAPI {
         }
     }
     @Override
-    public Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception{
+    public Signature unVerifyComic(Signature signature, Comic signedComic) throws Exception{
         if (isAuthenticated) {
             return userComixAPI.unVerifyComic(signature, signedComic);
         } else {
-            return false;
+            return null;
         }
     }
     

@@ -95,21 +95,19 @@ public class UserComixAPI implements ComixAPI {
         if (signatureExists(signature, signedComic)) {
             comicController.removeSignature(signature);
             signedComic.verifyComic(signature);
-            comicController.addSignature(signedComic.getCopyId(), signature);
-            return signature;
+            return comicController.addSignature(signedComic.getCopyId(), signature);
         }
         return null;
     }
 
     @Override
-    public Boolean unVerifyComic(Signature signature, Comic signedComic) throws Exception {
+    public Signature unVerifyComic(Signature signature, Comic signedComic) throws Exception {
         if (signatureExists(signature, signedComic)) {
             comicController.removeSignature(signature);
             signedComic.unVerifyComic(signature);
-            comicController.addSignature(signedComic.getCopyId(), signature);
-            return true; 
+            return comicController.addSignature(signedComic.getCopyId(), signature);
         }
-        return false;
+        return null;
     }
 
     @Override
