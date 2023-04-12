@@ -31,9 +31,9 @@ public class XMLComicAdapter implements ComicConverter {
         FileOutputStream output = new FileOutputStream(filename);
         Document doc = adaptee.createFile();
         Element rootElement = doc.createElement("Comics");
+        doc.appendChild(rootElement);
         for(Comic comicObj : comics){ //For each comic in the array, creates an XML element 
         if(comicObj == null){continue;}
-        doc.appendChild(rootElement);
         Element comic = doc.createElement("comic");
         rootElement.appendChild(comic);
 
@@ -158,19 +158,23 @@ public class XMLComicAdapter implements ComicConverter {
     
     public static void main(String[] args) {
     try {
-        XML xml = new XML("./comicsInput.xml");
-        XMLComicAdapter x = new XMLComicAdapter(xml);
-        Comic test = x.convertToComic() ;
+        ArrayList<Comic> comicsToExport = new ArrayList<Comic>();
+            XML xml = new XML("./comicsInput.xml");
+            XMLComicAdapter x = new XMLComicAdapter(xml);
+            Comic test = x.convertToComic() ;
+            comicsToExport.add(test);
+            System.out.println("Now importing...");
+            while (test != null) {
 
-        while (test != null) {
+                System.out.println(test);
+                System.out.println();
+                test = x.convertToComic() ;
+                comicsToExport.add(test);
 
-            System.out.println(test);
-            System.out.println();
-            test = x.convertToComic() ;
-
-        }
-
-
+            }
+            System.out.println("Now exporting...");
+            x.convertToFile("comicsExport.xml", comicsToExport.toArray(new Comic[0]));
+            System.out.println("*Ding!* Check your files!");
     } catch (Exception e) {
         e.printStackTrace();
     }
