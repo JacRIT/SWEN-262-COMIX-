@@ -12,6 +12,9 @@ public class Comic {
     private int volumeNumber;
     private String issueNumber;
     private String publicationDate;
+    private int releaseDay;
+    private int releaseMonth;
+    private int releaseYear;
     private ArrayList<Creator> creators;
     private ArrayList<Character> principlCharacters;
     private String description;
@@ -39,6 +42,9 @@ public class Comic {
         this.volumeNumber = volumeNumber;
         this.issueNumber = issueNumber;
         this.publicationDate = publicationDate;
+        this.releaseDay = 0;
+        this.releaseMonth = 0;
+        this.releaseYear = 0;
         this.creators = creators;
         this.principlCharacters = principlCharacters;
         this.description = description;
@@ -177,6 +183,30 @@ public class Comic {
 
     public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
+    }
+
+    public int getReleaseDay() {
+        return this.releaseDay;
+    }
+
+    public void setReleaseDay(int day) {
+        this.releaseDay = day;
+    }
+
+    public int getReleaseMonth() {
+        return this.releaseMonth;
+    }
+
+    public void setReleaseMonth(int month) {
+        this.releaseMonth = month;
+    }
+
+    public int getReleaseYear() {
+        return this.releaseYear;
+    }
+
+    public void setReleaseYear(int year) {
+        this.releaseYear = year;
     }
 
     public ArrayList<Creator> getCreators() {
