@@ -22,7 +22,8 @@ public class Comic {
     private boolean isSlabbed;
 
     public Comic() {
-        this(0, 0, new ArrayList<>(), "", "", 0, "", "", new ArrayList<>(), new ArrayList<>(), "", 0, new ArrayList<>(), 0, 0, false);
+        this(0, 0, new ArrayList<>(), "", "", 0, "", "", new ArrayList<>(), new ArrayList<>(), "", 0, new ArrayList<>(),
+                0, 0, false);
     }
 
     public Comic(int id, int copyId, ArrayList<Publisher> publisher, String series, String title, int volumeNumber,
@@ -186,8 +187,24 @@ public class Comic {
         this.creators = creators;
     }
 
+    public void addCreator(Creator creator) {
+        this.creators.add(creator);
+    }
+
+    public Boolean removeCreator(Creator creator) {
+        return this.creators.remove(creator);
+    }
+
     public ArrayList<Character> getPrinciplCharacters() {
         return principlCharacters;
+    }
+
+    public void addPrinciplCharacter(Character character) {
+        this.principlCharacters.add(character);
+    }
+
+    public Boolean removePrinciplCharacter(Character character) {
+        return this.principlCharacters.remove(character);
     }
 
     public void setPrinciplCharacters(ArrayList<Character> principlCharacters) {
@@ -244,10 +261,11 @@ public class Comic {
 
     private void calculateValue() {
         this.value = this.initialValue;
-        //Order is Important!
+        // Order is Important!
         updateValueBasedOnGrade();
         updateComicBasedOnSignatures();
-        if(isSlabbed) this.value *= 2;
+        if (isSlabbed)
+            this.value *= 2;
 
     }
 
@@ -257,8 +275,9 @@ public class Comic {
         } else if (this.grade <= 10) {
             this.value *= Math.log10(value);
         } else {
-            System.out.println("\n======\nComics Value is not inbetween 1 and 10.\n======\n");;
-        }  
+            System.out.println("\n======\nComics Value is not inbetween 1 and 10.\n======\n");
+            ;
+        }
     }
 
     public void updateComicBasedOnSignatures() {
@@ -270,7 +289,6 @@ public class Comic {
             }
         }
     }
-
 
     public void setValue(float value) {
         this.value = value;
@@ -297,14 +315,16 @@ public class Comic {
             this.grade = grade;
             return true;
         }
-        System.out.println("\n======\nCOMIC : you are trying to grade a comic with an incorrect grade. Grade from 1-10.\n======\n");
+        System.out.println(
+                "\n======\nCOMIC : you are trying to grade a comic with an incorrect grade. Grade from 1-10.\n======\n");
         return false;
     }
 
     /**
      * Ungrades a comic
-     * @return  true : comic ungraded
-     *          false: comic not ungraded
+     * 
+     * @return true : comic ungraded
+     *         false: comic not ungraded
      */
     public Boolean unGradeComic() {
         if (this.grade != 0) {
