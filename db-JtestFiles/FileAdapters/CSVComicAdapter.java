@@ -117,7 +117,7 @@ public class CSVComicAdapter implements ComicConverter {
     public static void main(String[] args) {
 
         try {
-            CSV csv = new CSV("./comics.csv");
+            CSV csv = new CSV("./comicsInput.csv");
             CSVComicAdapter x = new CSVComicAdapter(csv);
             Comic test = x.convertToComic() ;
 

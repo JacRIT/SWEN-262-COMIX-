@@ -1,5 +1,6 @@
 [
-    {
+    {    
+        "comic": {
         "series": "'Mazing Man",
         "title": "Y'know, After A Long Hard Day...",
         "volume_number": 1,
@@ -8,8 +9,10 @@
         "release_date": "Jan 1986",
         "publisher": "DC Comics",
         "creators": "Bob Rozakis | Stephen DeStefano | Karl Kesel"
+        }
     },
     {
+        "comic": {
         "series": "Fables",
         "title": "Legends in Exile",
         "volume_number": 1,
@@ -18,5 +21,6 @@
         "release_date": "April 25, 2003",
         "publisher": "DC Comics",
         "creators": "Bill Willingham"
+        }
     }
 ]

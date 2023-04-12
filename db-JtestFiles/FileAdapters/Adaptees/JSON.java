@@ -11,16 +11,16 @@ import java.io.FileWriter;
  */
 public class JSON {
     private String filename;
-    private JSONObject parser;
+    private Object parser;
 
     public JSON(String filename) throws Exception{
         this.filename = filename;
         JSONParser jsonParser = new JSONParser();
         FileReader reader = new FileReader(filename);
-        this.parser = (JSONObject) jsonParser.parse(reader);
+        this.parser = jsonParser.parse(reader);
     }
 
-    public JSONObject readFile() throws Exception{
+    public Object readFile() throws Exception{
         return this.parser;
 
     }

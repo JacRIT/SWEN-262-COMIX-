@@ -20,10 +20,11 @@ import FileAdapters.Adaptees.XML;
 
 public class XMLComicAdapter implements ComicConverter {
     private XML adaptee;
-    private int nodeIndex = 0;
+    private int nodeIndex;
 
     public XMLComicAdapter(XML adapteeXml){
         this.adaptee = adapteeXml;
+        this.nodeIndex = 0;
     }
     @Override
     public String convertToFile(String filename, Comic[] comics) throws Exception{

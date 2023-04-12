@@ -15,9 +15,12 @@ import java.io.FileWriter;
 
 public class JSONComicAdapter implements ComicConverter {
     private JSON adaptee;
+    private int arrayIndex;
 
     public JSONComicAdapter(JSON adapteeJson){
         this.adaptee = adapteeJson;
+        this.arrayIndex = 0;
+
     }
 
     @Override
@@ -52,13 +55,20 @@ public class JSONComicAdapter implements ComicConverter {
 
     @Override
     public Comic convertToComic() throws Exception{
-        JSONObject readAdaptee = adaptee.readFile();
-        JSONObject adapteeObj = (JSONObject) readAdaptee;
-        //JSONArray fileContents = (JSONArray) readAdaptee; //Array vers of read file //JSON obj vers of file
+        Object readAdaptee = adaptee.readFile();
+        //JSONObject adapteeObj = (JSONObject) readAdaptee;
+        JSONArray fileContents = (JSONArray) readAdaptee; //Array vers of read file //JSON obj vers of file
         //Iterator<?> iterator = fileContents.iterator();
         //if (iterator.hasNext() == false) {return null;} //iterator will return null if there's no next val, uses JSON Array
-
+        if(arrayIndex == (fileContents.size())){return null;}
+        return makeComic((JSONObject) fileContents.get(arrayIndex));
          //instantiate all the values corresponding to the database, same for all adapters
+        
+    }
+
+    private Comic makeComic(JSONObject comic){
+        JSONObject adapteeObj = (JSONObject) comic.get("comic");
+
         String      series              = (String) adapteeObj.get("series") ;
         String      title               = (String) adapteeObj.get("title");
         int         volume_number       = 1 ;
@@ -81,7 +91,7 @@ public class JSONComicAdapter implements ComicConverter {
 
 
         //compute publishers
-        String json_pub = (String) adapteeObj.get("Publisher") ;
+        String json_pub = (String) adapteeObj.get("publisher") ;
         String[] pubs = json_pub.split(" [|] ") ;
 
         for (String pub : pubs) {
@@ -92,7 +102,7 @@ public class JSONComicAdapter implements ComicConverter {
         }
 
         //compute creators
-        String json_cre = (String) adapteeObj.get("Creators") ;
+        String json_cre = (String) adapteeObj.get("creators") ;
         String[] cres = json_cre.split("( [|] )") ;
 
         for (String cre : cres) {
@@ -105,7 +115,7 @@ public class JSONComicAdapter implements ComicConverter {
         //---------------------------------------------------------
         // CREATE COMIC OBJECT FROM VALUES
         //---------------------------------------------------------
-
+        arrayIndex++;
         return new Comic(1, 1, publishers, series, title, volume_number, issue_number, release_date, creators, characters, description, initial_value, signatures, value, grade, isSlabbed) ;
 
     }
