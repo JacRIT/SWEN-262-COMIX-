@@ -183,22 +183,39 @@ public class ComicController {
         
     }
 
-    public void exportCollection(int userId, String filename){
+    public void exportCollection(int userId, String filename) throws Exception{
         //takes a collection and then exports, doesn't matter who is calling
+        Comic[] collectionComics = getAllCollectionComics(userId);
+        ComicConverter x = null;
+        if(filename.endsWith(".xml")){
+            XML xml = new XML(filename);
+            x = new XMLComicAdapter(xml);
 
+        }else if(filename.endsWith(".csv")){
+            CSV csv = new CSV(filename);
+            x = new CSVComicAdapter(csv);
 
-    }
-
-    private Comic[] getAllCollectionComics(int userId){
-        JDBCComicExtractor comicExtractor = new JDBCComicExtractor() ;
-
-        Comic[] comics = comicExtractor.getComic("SELECT copy_fk FROM collection_refrence INNER JOIN user_info ON user_info.collection_fk = collection_refrence.collection_fk WHERE user_info.id = (?)");
-        for (Comic c: comics) {
-            System.out.println(c);
+        }else if(filename.endsWith(".json")){
+            JSON json = new JSON(filename);
+            x = new JSONComicAdapter(json);
         }
+        x.convertToFile(filename, collectionComics);
     }
 
+    private Comic[] getAllCollectionComics(int userId) throws Exception{
+        JDBCComicExtractor comicExtractor = new JDBCComicExtractor() ;
+        String sql = """
+                SELECT copy_fk FROM collection_reference
+                INNER JOIN user_info ON user_info.collection_fk = collection_refrence.collection_fk
+                WHERE user_info.id = ?
+                """;
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(userId);
+        Comic[] comics = comicExtractor.getComic(psc);
+        return comics;
     }
+
 
     /**
      * UNFINISHED - signatures not accounted for
