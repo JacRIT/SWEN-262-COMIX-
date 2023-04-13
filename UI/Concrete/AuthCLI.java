@@ -20,7 +20,7 @@ public class AuthCLI extends DefaultCLI {
         "\t--sortBy=<value> - Sort results by:\n\t\t\"title\", \"publication\", \"issue\", \"volume\"\n\t\tDefaults to title",
         false);
     super.log(
-        "\t--searchBy=<value> - Search comics by:\n\t\t\"partial-search\", \"exact-search\", \"exact-number\", \"value\"\n\t\tDefaults to partial-search");
+        "\t--searchBy=<value> - search comics by\n\t\t\"partial-search\", \"exact-search\", \"exact-number\", \"value\", \"run-search\", \"gap-search\"");
 
     super.log("AP <copy id> - Add a comic into your personal collection");
 

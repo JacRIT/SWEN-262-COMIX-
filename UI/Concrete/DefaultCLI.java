@@ -45,9 +45,11 @@ public abstract class DefaultCLI implements CLI {
 
     this.log("S <Search Term> - Search through all Comics", false);
     this.log("\tOptional Flags:", false);
-    this.log("\t--sortBy=<value> - sort results by\n\t\t\"title\", \"publication\", \"issue\", \"volume\"", false);
     this.log(
-        "\t--searchBy=<value> - search comics by\n\t\t\"partial-search\", \"exact-search\", \"exact-number\", \"value\"");
+        "\t--sortBy=<value> - sort results by\n\t\t\"title\", \"publication\", \"issue\", \"volume\"",
+        false);
+    this.log(
+        "\t--searchBy=<value> - search comics by\n\t\t\"partial-search\", \"exact-search\", \"exact-number\", \"value\", \"run-search\", \"gap-search\"");
 
     if (includeLast)
       this.log("Exit - Exit Comix");
