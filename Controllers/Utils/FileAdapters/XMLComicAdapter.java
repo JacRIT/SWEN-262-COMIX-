@@ -1,4 +1,4 @@
-package FileAdapters;
+package Controllers.Utils.FileAdapters;
 
 import Model.JavaObjects.*;
 import Model.JavaObjects.Character;
@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import FileAdapters.Adaptees.XML;
+import Controllers.Utils.FileAdapters.Adaptees.XML;
 
 public class XMLComicAdapter implements ComicConverter {
     private XML adaptee;

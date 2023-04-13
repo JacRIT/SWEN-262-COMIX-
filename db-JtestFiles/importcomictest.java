@@ -1,6 +1,7 @@
-import FileAdapters.CSVComicAdapter;
+import Controllers.Utils.ComicImporter;
+import Controllers.Utils.FileAdapters.CSVComicAdapter;
+import Controllers.Utils.FileAdapters.Adaptees.CSV;
 import Model.JavaObjects.Comic;
-import FileAdapters.Adaptees.CSV;
 
 public class importcomictest {
     public static void main(String[] args) throws Exception { // running this will import a new comic into the database!

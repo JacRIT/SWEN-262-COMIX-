@@ -1,4 +1,4 @@
-package FileAdapters;
+package Controllers.Utils.FileAdapters;
 
 import Model.JavaObjects.*;
 import Model.JavaObjects.Character;
@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.simple.JSONArray;
-
-import FileAdapters.Adaptees.JSON;
 import org.json.simple.JSONObject;
+
+import Controllers.Utils.FileAdapters.Adaptees.JSON;
+
 import java.io.FileWriter;
 
 public class JSONComicAdapter implements ComicConverter {

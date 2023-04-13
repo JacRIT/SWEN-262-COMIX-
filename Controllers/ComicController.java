@@ -2,10 +2,12 @@ package Controllers;
 import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 import Model.JavaObjects.*;
-
 import Controllers.Utils.JDBCInsert;
 import Controllers.Utils.JDBCRead;
 import Controllers.Utils.PreparedStatementContainer;
+import Controllers.Utils.FileAdapters.*;
+import Controllers.Utils.FileAdapters.Adaptees.*;
+import Controllers.Utils.ComicImporter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,6 +153,51 @@ public class ComicController {
         String sql = "DELETE * FROM collection_refrence WHERE collection_fk = " + Integer.toString(userId)
         + "AND copy_fk = " + comicId;
         jdbcInsert.executeSQL(sql);
+    }
+
+    public void importCollection(int userId, String filename, Boolean isPersonal) throws Exception{
+        //run an addToCollection() call for each comic in the Array IF PERSONAL=True
+        ComicConverter x = null;
+        ComicImporter importer = new ComicImporter();
+        if(filename.endsWith(".xml")){
+            XML xml = new XML(filename);
+            x = new XMLComicAdapter(xml);
+
+        }else if(filename.endsWith(".csv")){
+            CSV csv = new CSV(filename);
+            x = new CSVComicAdapter(csv);
+
+        }else if(filename.endsWith(".json")){
+            JSON json = new JSON(filename);
+            x = new JSONComicAdapter(json);
+        }
+        Comic target = x.convertToComic() ;
+        if(isPersonal == true){ addToCollection(userId, target);}
+
+        while (target != null) {
+            importer.changeTarget(target);
+            importer.importComic();
+            target = x.convertToComic() ;
+            if(isPersonal == true){ addToCollection(userId, target);}
+        }
+        
+    }
+
+    public void exportCollection(int userId, String filename){
+        //takes a collection and then exports, doesn't matter who is calling
+
+
+    }
+
+    private Comic[] getAllCollectionComics(int userId){
+        JDBCComicExtractor comicExtractor = new JDBCComicExtractor() ;
+
+        Comic[] comics = comicExtractor.getComic("SELECT copy_fk FROM collection_refrence INNER JOIN user_info ON user_info.collection_fk = collection_refrence.collection_fk WHERE user_info.id = (?)");
+        for (Comic c: comics) {
+            System.out.println(c);
+        }
+    }
+
     }
 
     /**

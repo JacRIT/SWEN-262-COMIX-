@@ -1,4 +1,4 @@
-package FileAdapters;
+package Controllers.Utils.FileAdapters;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import com.opencsv.CSVWriter;
 
-import FileAdapters.Adaptees.CSV;
+import Controllers.Utils.FileAdapters.Adaptees.CSV;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Character;
 import Model.JavaObjects.Creator;

@@ -1,3 +1,4 @@
+package Controllers.Utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -5,8 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Controllers.Utils.JDBCInsert;
-import Controllers.Utils.JDBCRead;
+import CSVComicReader;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Creator;
 import Model.JavaObjects.Publisher;
@@ -489,7 +489,7 @@ public class ComicImporter extends JDBCRead {
 
 
     public static void main(String[] args) {
-
+        /** 
         Scanner reader = new Scanner(System.in);
         System.out.println("Type \"I know what I'm doing, and I'm prepared for the consequences of my actions\" to proceed: ");
         String pass = reader.nextLine() ;
@@ -504,8 +504,8 @@ public class ComicImporter extends JDBCRead {
             JDBCInsert createuser = new JDBCInsert() ;
             createuser.executeSQL("INSERT INTO user_info(first_name,last_name,username) VALUES ('D','B','Database'); INSERT INTO collection_info(nickname) VALUES ('Database Comics'); INSERT INTO collection_ownership(collection_fk, user_fk) VALUES (1,1);") ;
             System.out.println("Database collection setup completed...");
-
-            CSVComicReader read = new CSVComicReader("./comics.csv") ;
+            //CHANGED CODE: OLD IMPLEMENTATION FOR BEFORE ADAPTER
+            //CSVComicReader read = new CSVComicReader("./comics.csv") ;
             ComicImporter importer = new ComicImporter() ;
             importer.comics_in.add(null) ;
             importer.pubs_in.add(null) ;
@@ -563,6 +563,7 @@ public class ComicImporter extends JDBCRead {
             System.out.println(e);
             e.printStackTrace();
         }
+        */
 
     }
 }

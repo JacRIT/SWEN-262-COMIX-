@@ -1,4 +1,4 @@
-package FileAdapters;
+package Controllers.Utils.FileAdapters;
 import Model.JavaObjects.*;
 
 public interface ComicConverter {
