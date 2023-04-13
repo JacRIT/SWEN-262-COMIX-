@@ -1,6 +1,7 @@
 package UI.Concrete;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import Api.GuestComixAPI;
 import Model.Command.PCCommand;
@@ -250,7 +251,7 @@ public class AuthInterpreter extends DefaultInterpreter {
    */
   private String browsePC() {
     try {
-
+      Map<String, Float> stats = this.api.generateStatistics(this.mediator.getUser());
       System.out.println();
       System.out.println("Loading Personal Collection...");
       System.out.println();
@@ -268,6 +269,8 @@ public class AuthInterpreter extends DefaultInterpreter {
       }
 
       successMessage += "\nTotal Results: " + comics.length + "\n";
+
+      successMessage += stats.toString() + "\n";
 
       return successMessage;
 
@@ -294,6 +297,7 @@ public class AuthInterpreter extends DefaultInterpreter {
   protected String search(String keyword) {
     try {
       User user = this.mediator.getUser();
+      // Map<String, Float> stats = this.api.generateStatistics(user);
       Comic[] comics = this.api.searchComics(user.getId(), keyword);
 
       System.out.println("");
@@ -308,6 +312,7 @@ public class AuthInterpreter extends DefaultInterpreter {
       }
 
       success += "\nTotal Results: " + comics.length + "\n";
+      // success += stats.toString() + "\n";
 
       return success;
 
