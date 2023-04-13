@@ -78,14 +78,6 @@ public class ComicInterpreter extends AuthInterpreter {
       return successMessage;
     }
 
-    if (command.equals("PublicationDate") || command.equals("publicationDate")) {
-      if (value == null)
-        return missingMessage;
-
-      comic.setPublicationDate(value);
-      return successMessage;
-    }
-
     if (command.equals("Description") || command.equals("description")) {
       if (value == null)
         return missingMessage;
@@ -187,6 +179,33 @@ public class ComicInterpreter extends AuthInterpreter {
         return successMessage;
       }
 
+      if (command.equals("PublicationDate") || command.equals("publicationDate")) {
+        if (value == null)
+          return missingMessage;
+
+        String[] dateSplit = value.split("/");
+
+        if (dateSplit.length != 3 || dateSplit[2].length() != 4)
+          return "Invalid input: " + value + "\nPublicationDate must be provided in the following format: mm/dd/yyyy";
+
+        int month = Integer.parseInt(dateSplit[0]);
+        int day = Integer.parseInt(dateSplit[1]);
+        int year = Integer.parseInt(dateSplit[2]);
+
+        if (month > 12 || month < 0)
+          return "Invalid input: " + value + "\nPublicationDate must be provided in the following format: mm/dd/yyyy";
+        if (day > 31 || day < 0)
+          return "Invalid input: " + value + "\nPublicationDate must be provided in the following format: mm/dd/yyyy";
+        if (year < 0)
+          return "Invalid input: " + value + "\nPublicationDate must be provided in the following format: mm/dd/yyyy";
+
+        comic.setReleaseMonth(month);
+        comic.setReleaseDay(day);
+        comic.setReleaseYear(year);
+
+        return successMessage;
+      }
+
     } catch (Exception err) {
       return noNumberFound;
     }
@@ -220,8 +239,12 @@ public class ComicInterpreter extends AuthInterpreter {
         + "\nEnter a \"Remove <key>=<value>\" to remove a field from the\n\tcreators/principlCharacters/signatures collections on your comic"
         + "\nEnter a \"Back\" to abandon creation";
 
+    String invalidFields = "\n\n" + this.missingFields();
+
     if (this.validComic())
-      instructions += "\nEnter \"Submit\" when you're ready to add comic into the database";
+      instructions += "\n\nEnter \"Submit\" when you're ready to add comic into the database";
+    else
+      instructions += invalidFields;
 
     return instructions;
   }
@@ -272,28 +295,25 @@ public class ComicInterpreter extends AuthInterpreter {
   }
 
   private Boolean validComic() {
+
+    /**
+     * Title
+     * Series
+     * Issue Number
+     * PublicationDate xx/xx/xxxx before submit tear apart and set release
+     * day/month/year
+     */
+
     if (comic.getTitle().length() == 0)
       return false;
 
     if (comic.getSeries().length() == 0)
       return false;
 
-    if (comic.getDescription().length() == 0)
-      return false;
-
-    if (comic.getPublicationDate().length() == 0)
-      return false;
-
-    if (comic.getPublicationDate().split("/").length != 3)
-      return false;
-
     if (comic.getIssueNumber().length() == 0)
       return false;
 
-    if (comic.getInitialValue() == 0)
-      return false;
-
-    if (comic.getVolumeNumber() == 0)
+    if (comic.getReleaseDay() == 0 || comic.getReleaseMonth() == 0 || comic.getReleaseYear() == 0)
       return false;
 
     return true;
@@ -301,26 +321,18 @@ public class ComicInterpreter extends AuthInterpreter {
 
   private String missingFields() {
     String message = "To create a comic the following fields must not be empty:";
+
     if (comic.getTitle().length() == 0)
       message += "\ntitle,";
 
-    if (comic.getDescription().length() == 0)
-      message += "\ndescription,";
-
-    if (comic.getPublicationDate().length() == 0)
-      message += "\npublicationDate,";
-
-    if (comic.getPublicationDate().split("/").length != 3)
-      message += "\npublicationDate should be in format xx/xx/xxxx,";
+    if (comic.getSeries().length() == 0)
+      message += "\nseries,";
 
     if (comic.getIssueNumber().length() == 0)
       message += "\nissueNumber,";
 
-    if (comic.getInitialValue() == 0)
-      message += "\ninitialValue,";
-
-    if (comic.getVolumeNumber() == 0)
-      message += "\nvolumeNumber,";
+    if (comic.getReleaseDay() == 0 || comic.getReleaseMonth() == 0 || comic.getReleaseYear() == 0)
+      message += "\npublicationDate: mm/dd/yyyy,";
 
     return message.substring(0, message.length() - 1);
   }

@@ -101,6 +101,11 @@ public class Comic {
     }
 
     public String toStringDetailed() {
+        String publicationDateString = "\n\tpublicationDate=    " + publicationDate;
+        if (this.publicationDate.length() == 0) {
+            publicationDateString = "\n\tpublicationDate=    " + this.releaseMonth + "/" + this.releaseMonth + "/"
+                    + this.releaseYear;
+        }
         return "Comic [\n\tid=                 " + id
                 + "\n\tcopyId=             " + copyId
                 + "\n\ttitle=              " + title
@@ -108,7 +113,7 @@ public class Comic {
                 + "\n\tseries=             " + series
                 + "\n\tvolumeNumber=       " + volumeNumber
                 + "\n\tissueNumber=        " + issueNumber
-                + "\n\tpublicationDate=    " + publicationDate
+                + publicationDateString
                 + "\n\tcreators=           " + creators
                 + "\n\tprinciplCharacters= " + principlCharacters
                 + "\n\tdescription=        " + description
