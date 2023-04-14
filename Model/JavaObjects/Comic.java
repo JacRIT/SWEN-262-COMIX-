@@ -307,6 +307,8 @@ public class Comic {
     private void updateValueBasedOnGrade() {
         if (this.grade == 1) {
             this.value *= .1;
+        } else if ( this.grade == 0) {
+            return ; // in case of ungraded comic, value does not change
         } else if (this.grade <= 10) {
             this.value *= Math.log10(value);
         } else {
