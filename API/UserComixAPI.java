@@ -220,4 +220,12 @@ public class UserComixAPI implements ComixAPI {
         } 
         return false;
     }
+
+    public void importComics(int userId, String filename, Boolean ispersonal) throws Exception{
+        comicController.importCollection(userId, filename, ispersonal);
+    }
+
+    public void exportComics(int userId, String filename) throws Exception{
+        comicController.exportCollection(userId, filename);
+    }
 }

@@ -1,44 +1,56 @@
-import java.io.FileReader;
+package Controllers.Utils.FileAdapters;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.opencsv.CSVReaderHeaderAware;
+import com.opencsv.CSVWriter;
 
-import Model.JavaObjects.Character;
+import Controllers.Utils.FileAdapters.Adaptees.CSV;
 import Model.JavaObjects.Comic;
+import Model.JavaObjects.Character;
 import Model.JavaObjects.Creator;
 import Model.JavaObjects.Publisher;
 import Model.JavaObjects.Signature;
 
+public class CSVComicAdapter implements ComicConverter {
+    private CSV adaptee;
 
-/*
- * This class is meant to take a CSV file, with headers that include the following:
- *  1. Series
- *  2. Full Title
- *  3. Issue
- *  4. Description
- *  5. Publication Date
- * 
- *  The getNextComic() function returns one comic 
- *  while reading through the CSV file one line at a time
- * 
- *  At the end of the file is a main method which decribes proper use of the class.
- *  It generates each comic from the CSV file and prints them to terminal.
- * 
- */
-public class CSVComicReader {
-
-    private final CSVReaderHeaderAware reader ;
-
-    public CSVComicReader(String filename) throws Exception {
-        reader = new CSVReaderHeaderAware( new FileReader(filename) ) ;
+    public CSVComicAdapter(CSV adaptee){
+        this.adaptee = adaptee;
+    }
+    
+    @Override
+    public String convertToFile(String filename, Comic[] comics) throws Exception {
+        CSVWriter writer = adaptee.createFile(filename);
+        String[] header = {"Series", "Issue", "Full Title", "Variant Description", "Publisher", "Release Date", "Format", "AddedDate", "Creators"};
+        writer.writeNext(header);
+        for(Comic comic : comics){
+            if(comic == null){continue;}
+            String[] data = {"","","","","","","","",""};
+            data[0] = comic.getSeries() + ", Vol. " + String.valueOf(comic.getVolumeNumber());
+            data[1] = comic.getIssueNumber();
+            data[2] = comic.getTitle();
+            data[3] = comic.getDescription();
+            data[4] = formatString(comic.getPublisher());
+            data[5] = comic.getPublicationDate();
+            //Format and AddedDate are skipped since unnecesary 
+            data[8] = formatString(comic.getCreators());
+            writer.writeNext(data);
+        }
+        writer.close();
+        return null;
     }
 
-    public Comic getNextComic() throws Exception {
-        //grab map where key is header, value is parsed
-        Map<String,String> values = reader.readMap() ;
+    private <T> String formatString(ArrayList<T> unformattedArray){
+        String unformattedString = unformattedArray.toString();
+        return unformattedString.replace("[", "").replace("]", "").replace(", ", " | ");
+    }
+
+    @Override
+    public Comic convertToComic() throws Exception{
+        //Code from CSVComicReader
+        Map<String,String> values = adaptee.readFile().readMap();
 
         if (values == null) {return null ;} // if CSVReader reaches the end of the file, it returns null
 
@@ -119,19 +131,22 @@ public class CSVComicReader {
     public static void main(String[] args) {
 
         try {
-            
-            CSVComicReader x = new CSVComicReader("./comics.csv") ;
-            Comic test = x.getNextComic() ;
-
+            ArrayList<Comic> comicsToExport = new ArrayList<Comic>();
+            CSV csv = new CSV("./comicsInput.csv");
+            CSVComicAdapter x = new CSVComicAdapter(csv);
+            Comic test = x.convertToComic() ;
+            comicsToExport.add(test);
+            System.out.println("Now importing...");
             while (test != null) {
 
                 System.out.println(test);
                 System.out.println();
-                test = x.getNextComic() ;
-
+                test = x.convertToComic() ;
+                comicsToExport.add(test);
             }
-
-
+            System.out.println("Now exporting...");
+            x.convertToFile("comicsExport.csv", comicsToExport.toArray(new Comic[0]));
+            System.out.println("*Ding!* Check your files!");
         } catch (Exception e) {
             e.printStackTrace();
         }

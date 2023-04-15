@@ -2,10 +2,18 @@ package Controllers;
 
 import java.util.ArrayList;
 
+import Controllers.Utils.ComicImporter;
 import Controllers.Utils.JDBCComicExtractor;
 import Controllers.Utils.JDBCInsert;
 import Controllers.Utils.JDBCRead;
 import Controllers.Utils.PreparedStatementContainer;
+import Controllers.Utils.FileAdapters.CSVComicAdapter;
+import Controllers.Utils.FileAdapters.ComicConverter;
+import Controllers.Utils.FileAdapters.JSONComicAdapter;
+import Controllers.Utils.FileAdapters.XMLComicAdapter;
+import Controllers.Utils.FileAdapters.Adaptees.CSV;
+import Controllers.Utils.FileAdapters.Adaptees.JSON;
+import Controllers.Utils.FileAdapters.Adaptees.XML;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Creator;
 import Model.JavaObjects.Publisher;
@@ -59,9 +67,9 @@ public class ComicController {
      * @return an array of Comics matching the search request, sorted
      */
     public Comic[] search(int userId, String searchTerm) throws Exception {
-        int[] copy_ids = this.searchStrategy.executeSearch(userId, searchTerm) ;
+        int[] copy_ids = this.searchStrategy.executeSearch(userId, searchTerm);
         Comic[] comics = new Comic[copy_ids.length];
-        int i = 0 ;
+        int i = 0;
 
         for (Object o : copy_ids) {
             int copy_id = (int) o;
@@ -89,16 +97,18 @@ public class ComicController {
      * Any information in fields specific to a copy will be ignored.
      * Only manually created comics can be edited.
      * 
-     * @param updatedComic the new comic replacing the old data, must have correct comic id
-     * @return true if the comic was updated, false if the comic was not manually created and not updated
+     * @param updatedComic the new comic replacing the old data, must have correct
+     *                     comic id
+     * @return true if the comic was updated, false if the comic was not manually
+     *         created and not updated
      * @throws Exception
      */
     public boolean updateComic(Comic updatedComic) throws Exception {
         // check to make sure comic is not in the database-> if it is, return false
         String sql = """
-            SELECT comic_ownership.id FROM comic_ownership 
-            INNER JOIN collection_refrence ON collection_refrence.copy_fk = comic_ownership.id
-            WHERE comic_ownership.comic_fk = ? AND collection_refrence.collection_fk = ?""";
+                SELECT comic_ownership.id FROM comic_ownership
+                INNER JOIN collection_refrence ON collection_refrence.copy_fk = comic_ownership.id
+                WHERE comic_ownership.comic_fk = ? AND collection_refrence.collection_fk = ?""";
         ArrayList<Object> obj = new ArrayList<>();
         obj.add(updatedComic.getId());
         obj.add(getCollectionIdFromUser(1));
@@ -107,9 +117,9 @@ public class ComicController {
             return false;
         // otherwise, update comic_info fields
         sql = """
-                UPDATE comic_info 
-                SET 
-                    series = ?, 
+                UPDATE comic_info
+                SET
+                    series = ?,
                     title = ?,
                     volume_num = ?,
                     issue_num = ?,
@@ -186,8 +196,9 @@ public class ComicController {
 
     /**
      * Adds a signature to a copy of a comic.
+     * 
      * @param copyId the id of the copy the signature is being added to
-     * @param s the Signature being added to the copy
+     * @param s      the Signature being added to the copy
      * @return the Signature that was added with the updated id
      * @throws Exception
      */
@@ -220,6 +231,7 @@ public class ComicController {
 
     /**
      * Removes the given signature from the database and its copy.
+     * 
      * @param s the Signature being removed (id must be correct)
      * @throws Exception
      */
@@ -251,9 +263,9 @@ public class ComicController {
     public boolean delete(int userId, Comic comic) throws Exception {
         // checks if the comic is in the database
         String sql = """
-            SELECT comic_ownership.id FROM comic_ownership 
-            INNER JOIN collection_refrence ON collection_refrence.copy_fk = comic_ownership.id
-            WHERE comic_ownership.comic_fk = ? AND collection_refrence.collection_fk = ?""";
+                SELECT comic_ownership.id FROM comic_ownership
+                INNER JOIN collection_refrence ON collection_refrence.copy_fk = comic_ownership.id
+                WHERE comic_ownership.comic_fk = ? AND collection_refrence.collection_fk = ?""";
         ArrayList<Object> obj = new ArrayList<>();
         obj.add(comic.getId());
         obj.add(getCollectionIdFromUser(1));
@@ -286,6 +298,71 @@ public class ComicController {
         return true;
     }
 
+    public void importCollection(int userId, String filename, Boolean isPersonal) throws Exception {
+        // run an addToCollection() call for each comic in the Array IF PERSONAL=True
+        ComicConverter x = null;
+        ComicImporter importer = new ComicImporter();
+        if (filename.endsWith(".xml")) {
+            XML xml = new XML(filename);
+            x = new XMLComicAdapter(xml);
+
+        } else if (filename.endsWith(".csv")) {
+            CSV csv = new CSV(filename);
+            x = new CSVComicAdapter(csv);
+
+        } else if (filename.endsWith(".json")) {
+            JSON json = new JSON(filename);
+            x = new JSONComicAdapter(json);
+        }
+        Comic target = x.convertToComic();
+        if (isPersonal == true) {
+            addToCollection(userId, target);
+        }
+
+        while (target != null) {
+            importer.changeTarget(target);
+            importer.importComic();
+            target = x.convertToComic();
+            if (isPersonal == true) {
+                addToCollection(userId, target);
+            }
+        }
+
+    }
+
+    public void exportCollection(int userId, String filename) throws Exception {
+        // takes a collection and then exports, doesn't matter who is calling
+        Comic[] collectionComics = getAllCollectionComics(userId);
+        ComicConverter x = null;
+        if (filename.endsWith(".xml")) {
+            XML xml = new XML(filename);
+            x = new XMLComicAdapter(xml);
+
+        } else if (filename.endsWith(".csv")) {
+            CSV csv = new CSV(filename);
+            x = new CSVComicAdapter(csv);
+
+        } else if (filename.endsWith(".json")) {
+            JSON json = new JSON(filename);
+            x = new JSONComicAdapter(json);
+        }
+        x.convertToFile(filename, collectionComics);
+    }
+
+    private Comic[] getAllCollectionComics(int userId) throws Exception {
+        JDBCComicExtractor comicExtractor = new JDBCComicExtractor();
+        String sql = """
+                SELECT copy_fk FROM collection_reference
+                INNER JOIN user_info ON user_info.collection_fk = collection_refrence.collection_fk
+                WHERE user_info.id = ?
+                """;
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(userId);
+        Comic[] comics = comicExtractor.getComic(psc);
+        return comics;
+    }
+
     /**
      * Creates a comic and adds it to the user's personal collection.
      * 
@@ -296,9 +373,9 @@ public class ComicController {
     public int create(int userId, Comic comic) throws Exception {
         // adding it to comic_info (comic)
         String sql = """
-            INSERT INTO comic_info(series, title, volume_num, issue_num, initial_value, descrip, release_date, release_day, release_month, release_year)
-            VALUES (?,?,?,?,?,?,?,?,?,?)
-            """;
+                INSERT INTO comic_info(series, title, volume_num, issue_num, initial_value, descrip, release_date, release_day, release_month, release_year)
+                VALUES (?,?,?,?,?,?,?,?,?,?)
+                """;
         ArrayList<Object> obj = new ArrayList<>();
         obj.add(comic.getSeries());
         obj.add(comic.getTitle());
@@ -372,7 +449,7 @@ public class ComicController {
             psc.appendToObjects(comic.getId());
             jdbcInsert.executePreparedSQL(psc);
         }
-        
+
         // creates a new copy (comic_ownership) and adds it to collection_refrence
         return addToCollection(userId, comic);
     }
@@ -381,8 +458,9 @@ public class ComicController {
      * Adds a comic copy to a collection.
      * 
      * @param userId the userId of the collection the comic will be in
-     * @param comic  the comic to be added (assumed that the copy has not been created, copy id not used)
-     * @return the new copy's id 
+     * @param comic  the comic to be added (assumed that the copy has not been
+     *               created, copy id not used)
+     * @return the new copy's id
      */
     public int addToCollection(int userId, Comic comic) throws Exception {
         // create a new copy of a comic (comic_ownership)
@@ -464,7 +542,6 @@ public class ComicController {
         // System.out.println(cc.updateComic(comic));
         // comic = cc.get(14299);
         // System.out.println(comic.toStringDetailed());
-
 
     }
 }
