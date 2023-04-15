@@ -39,6 +39,12 @@ public abstract class DefaultCLI implements CLI {
     this.log("Enter a command below then press enter to continue to the next steps.");
     this.log("I - Instructions to use the comix application");
 
+    this.log("Import <FilePath> - Import the specified file with comic data into the database", false);
+    this.log("\tFile Path must end in either .json, .xml, or .csv");
+
+    this.log("Export <FileName> - Export the database into a file with the specified fileName", false);
+    this.log("\tFile Name must end in either .json, .xml, or .csv");
+
     this.log("V <Copy Id> - View a single comics contents", false);
     this.log("\tOptional Flags:", false);
     this.log("\t--d - Display the entire contents of a comic rather than a brief summary");

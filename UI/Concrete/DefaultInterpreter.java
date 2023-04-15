@@ -46,6 +46,26 @@ public abstract class DefaultInterpreter implements Interpreter {
       }).toArray(String[]::new);
     }
 
+    if (command.startsWith("Import") || command.startsWith("import")) {
+      String[] commandSplit = command.split(" ");
+      if (commandSplit.length != 2)
+        return "To import a file a filename must be specified";
+
+      String fileName = commandSplit[1];
+
+      return this.importFile(fileName);
+    }
+
+    if (command.startsWith("Export") || command.startsWith("export")) {
+      String[] commandSplit = command.split(" ");
+      if (commandSplit.length != 2)
+        return "To import a file a filename must be specified";
+
+      String fileName = commandSplit[1];
+
+      return this.exportFile(fileName);
+    }
+
     if (command.startsWith("I") || command.startsWith("i")) {
       this.mediator.instructions();
       return "";
@@ -248,4 +268,13 @@ public abstract class DefaultInterpreter implements Interpreter {
     return flags;
   }
 
+  private String importFile(String fileName) {
+
+    return fileName + " successfully Imported";
+  }
+
+  private String exportFile(String fileName) {
+
+    return fileName + " successfully Exported";
+  }
 }
