@@ -6,6 +6,7 @@ import Controllers.Utils.ComicImporter;
 import Controllers.Utils.JDBCComicExtractor;
 import Controllers.Utils.JDBCInsert;
 import Controllers.Utils.JDBCRead;
+import Controllers.Utils.JDBCUpdate;
 import Controllers.Utils.PreparedStatementContainer;
 import Controllers.Utils.FileAdapters.CSVComicAdapter;
 import Controllers.Utils.FileAdapters.ComicConverter;
@@ -455,6 +456,25 @@ public class ComicController {
     }
 
     /**
+     * Changes all signatures that were linked to an old copy id to be linked to the new copy id.
+     * Used when a copy's id has changed due to commands being undone/redone.
+     * @param oldCopyId the previous copy id
+     * @param newCopyId the new copy id
+     */
+    public void updateSignaturesForNewCopyId(int oldCopyId, int newCopyId) throws Exception {
+        String sql = """
+                UPDATE signature_refrence
+                SET copy_fk = ?
+                WHERE copy_fk = ?;
+                """;
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(newCopyId);
+        psc.appendToObjects(oldCopyId);
+        jdbcInsert.executePreparedSQL(psc);
+    }
+
+    /**
      * Adds a comic copy to a collection.
      * 
      * @param userId the userId of the collection the comic will be in
@@ -515,33 +535,5 @@ public class ComicController {
         obj.add(userId);
         ArrayList<Object> results = jdbcRead.executePreparedSQL(sql, obj);
         return (int) results.get(0);
-    }
-
-    public static void main(String[] args) throws Exception {
-        ComicController cc = new ComicController();
-        ArrayList<Publisher> publishers = new ArrayList<>();
-        publishers.add(new Publisher(0, "Marvel Comics"));
-        publishers.add(new Publisher(0, "new publisher"));
-        ArrayList<Creator> creators = new ArrayList<>();
-        creators.add(new Creator(0, "Stan Lee"));
-        creators.add(new Creator(0, "new creator"));
-
-        Comic comic = new Comic();
-        comic.setTitle("create testing");
-        comic.setPublisher(publishers);
-        comic.setCreators(creators);
-
-        // System.out.println(cc.create(2, comic));
-
-        // cc.delete(2, comic);
-
-        // Comic comic = cc.get(14241);
-        // Comic comic = cc.get(14299);
-        // System.out.println(comic.toStringDetailed());
-        // comic.setDescription("this is an edited description");
-        // System.out.println(cc.updateComic(comic));
-        // comic = cc.get(14299);
-        // System.out.println(comic.toStringDetailed());
-
     }
 }

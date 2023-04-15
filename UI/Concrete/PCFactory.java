@@ -13,9 +13,16 @@ import Model.Command.ConcreteCommand.UnslabComic;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
+import UI.CopyIdMaintenance.CopyIdControl;
 import UI.Interfaces.CommandFactory;
 
 public class PCFactory implements CommandFactory {
+
+    private CopyIdControl cic;
+
+    public PCFactory() {
+      this.cic = new CopyIdControl();
+    }
 
   @Override
   public PCCommand createCommand(String type, User user, GuestComixAPI api) throws Exception {
@@ -34,7 +41,7 @@ public class PCFactory implements CommandFactory {
           return null;
         int comicId = Integer.parseInt(split[1]);
         Comic comic = api.getComic(comicId);
-        return new AddToPC(user, comic, api);
+        return new AddToPC(user, comic, api, this.cic);
       }
 
       // Authenticate a signature
