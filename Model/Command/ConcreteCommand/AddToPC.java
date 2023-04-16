@@ -37,12 +37,16 @@ public class AddToPC implements PCCommand {
     // if this is the first time execute has run
     if (record == null) {
       this.record = this.cic.addRecord(copyId);
-    } else {
-      this.record.setCurrentId(copyId);
-      // call updateSignaturesForNewCopyId() in ComicController through API
-    }
-    // update the comic's copy id
+      // update the comic's copy id
     this.record.updateComic(comic);
+    } else {
+      api.updateSignatureRefrences(comic.getCopyId(), copyId);
+      this.record.setCurrentId(copyId);
+      // update the comic's copy id
+      this.record.updateComic(comic);
+      // set grade and slabbing back to where they were
+      api.gradeComicInPersonalCollection(user, comic, comic.getGrade());
+    }
 
     return "Comic \"" + this.comic.getTitle() + "\" successfully added to " + this.user.getName() + "'s collection";
 

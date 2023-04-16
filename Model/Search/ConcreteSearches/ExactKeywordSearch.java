@@ -96,7 +96,7 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                 LEFT JOIN
                                     publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                                 WHERE
-                                    creator_info.c_name LIKE (?)
+                                    LOWER(creator_info.c_name) LIKE LOWER(?)
                             ) UNION (
                                 SELECT
                                     comic_ownership.id,
@@ -121,7 +121,7 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                 LEFT JOIN
                                     publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                                 WHERE
-                                    character_info.character_name LIKE (?)
+                                    LOWER(character_info.character_name) LIKE LOWER(?)
                             ) UNION (
                                 SELECT
                                     comic_ownership.id,
@@ -142,7 +142,7 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                 LEFT JOIN
                                     publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                                 WHERE
-                                    publisher_info.p_name LIKE (?)
+                                    LOWER(publisher_info.p_name) LIKE LOWER(?)
                             ) UNION (
                                 SELECT
                                     comic_ownership.id,
@@ -162,9 +162,9 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
                                 LEFT JOIN
                                     publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
-                                WHERE comic_info.series LIKE (?) 
-                                    OR comic_info.title LIKE (?) 
-                                    OR comic_info.descrip LIKE (?)
+                                WHERE LOWER(comic_info.series) LIKE LOWER(?) 
+                                    OR LOWER(comic_info.title) LIKE LOWER(?) 
+                                    OR LOWER(comic_info.descrip) LIKE LOWER(?)
                             )
                         )
                     ) 

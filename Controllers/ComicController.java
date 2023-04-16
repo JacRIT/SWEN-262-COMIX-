@@ -6,7 +6,6 @@ import Controllers.Utils.ComicImporter;
 import Controllers.Utils.JDBCComicExtractor;
 import Controllers.Utils.JDBCInsert;
 import Controllers.Utils.JDBCRead;
-import Controllers.Utils.JDBCUpdate;
 import Controllers.Utils.PreparedStatementContainer;
 import Controllers.Utils.FileAdapters.CSVComicAdapter;
 import Controllers.Utils.FileAdapters.ComicConverter;

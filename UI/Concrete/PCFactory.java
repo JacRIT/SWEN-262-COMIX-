@@ -63,7 +63,7 @@ public class PCFactory implements CommandFactory {
 
         System.out.println(signature.toString());
 
-        return new AuthenticateComic(signature, user, comic, api);
+        return new AuthenticateComic(signature, user, comic, api, cic);
       }
 
       // Remove from personal collection
@@ -72,7 +72,7 @@ public class PCFactory implements CommandFactory {
           return null;
         int comicId = Integer.parseInt(split[1]);
         Comic comic = api.getComic(comicId);
-        return new PCRemoveComic(user, comic, api);
+        return new PCRemoveComic(user, comic, api, cic);
       }
 
       // Add signature to comic
@@ -81,7 +81,7 @@ public class PCFactory implements CommandFactory {
           return null;
         int comicId = Integer.parseInt(split[1]);
         Comic comic = api.getComic(comicId);
-        return new SignComic(user, comic, api);
+        return new SignComic(user, comic, api, cic);
       }
 
       // Remove signature from comic
@@ -103,7 +103,7 @@ public class PCFactory implements CommandFactory {
 
         System.out.println(signature.toString());
 
-        return new UnSignComic(signature, user, comic, api);
+        return new UnSignComic(signature, user, comic, api, cic);
       }
 
       // Slab a comic
@@ -112,7 +112,7 @@ public class PCFactory implements CommandFactory {
           return null;
         int comicId = Integer.parseInt(split[1]);
         Comic comic = api.getComic(comicId);
-        return new SlabComic(user, comic, api);
+        return new SlabComic(user, comic, api, cic);
       }
 
       // Unslab a comic
@@ -121,7 +121,7 @@ public class PCFactory implements CommandFactory {
           return null;
         int comicId = Integer.parseInt(split[1]);
         Comic comic = api.getComic(comicId);
-        return new UnslabComic(user, comic, api);
+        return new UnslabComic(user, comic, api, cic);
       }
 
       // Grade a comic
@@ -131,7 +131,7 @@ public class PCFactory implements CommandFactory {
         int grade = Integer.parseInt(split[1]);
         int comicId = Integer.parseInt(split[2]);
         Comic comic = api.getComic(comicId);
-        return new GradeComic(grade, user, comic, api);
+        return new GradeComic(grade, user, comic, api, cic);
       }
 
       return null;

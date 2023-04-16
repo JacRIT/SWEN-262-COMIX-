@@ -4,22 +4,28 @@ import Api.GuestComixAPI;
 import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.User;
+import UI.CopyIdMaintenance.CopyIdControl;
+import UI.CopyIdMaintenance.CopyIdRecord;
 
 public class PCRemoveComic implements PCCommand {
 
   private User user;
   private Comic comic;
+  private CopyIdRecord record;
 
   private GuestComixAPI api;
 
-  public PCRemoveComic(User user, Comic comic, GuestComixAPI api) {
+  public PCRemoveComic(User user, Comic comic, GuestComixAPI api, CopyIdControl cic) {
     this.user = user;
     this.comic = comic;
     this.api = api;
+    this.record = cic.findOrAdd(comic.getCopyId());
   }
 
   @Override
   public String execute() throws Exception {
+    this.record.updateComic(comic);
+
     Boolean success = this.api.removeComicFromPersonalCollection(this.user,
         this.comic);
 
@@ -38,8 +44,15 @@ public class PCRemoveComic implements PCCommand {
 
     if (copyId == null)
       return "Comic \"" + this.comic.getTitle() + "\" could not be added to " + this.user.getName() + "'s collection";
+    
+    api.updateSignatureRefrences(comic.getCopyId(), copyId);
+    this.record.setCurrentId(copyId);
+    // update the comic's copy id
+    this.record.updateComic(comic);
 
-    this.comic.setCopyId(copyId);
+    // set grade and slabbing back to where they were
+    api.gradeComicInPersonalCollection(user, comic, comic.getGrade());
+
     return "Comic \"" + this.comic.getTitle() + "\" successfully added to " + this.user.getName() + "'s collection";
 
   }
