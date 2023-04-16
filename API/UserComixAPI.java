@@ -214,7 +214,7 @@ public class UserComixAPI implements ComixAPI {
             if (comic.getSignatures().contains(signature)) {
                 return true;
             } else {
-                System.out.println("\n=======\nUSERAPI : The passed in SIGNATURE does not exist\n======\n");
+                // System.out.println("\n=======\nUSERAPI : The passed in SIGNATURE does not exist\n======\n");
                 return false;
             }
         } 
