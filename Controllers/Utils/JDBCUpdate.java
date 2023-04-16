@@ -9,8 +9,6 @@ import java.sql.SQLException;
 public class JDBCUpdate extends JDBC {
 
     public int executePreparedSQL(PreparedStatementContainer statementDetails) {
-        System.out.println("Creating Connection...");
-
         
         try (
             Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -18,16 +16,12 @@ public class JDBCUpdate extends JDBC {
         ) {
 
             int x = 1 ;
-            System.out.println("Preparing Statement...");
             for (Object obj :statementDetails.getObjects()) {
                 stmt.setObject(x, obj);
                 x++ ;
-                System.out.println("Preparing Statement..." + obj);
             }
-            System.out.println("Executing Command...");
 
             stmt.executeUpdate();
-            System.out.println("Command Executed!");
             return 1;
 
         } catch (SQLException e) {

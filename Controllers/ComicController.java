@@ -6,6 +6,7 @@ import Controllers.Utils.ComicImporter;
 import Controllers.Utils.JDBCComicExtractor;
 import Controllers.Utils.JDBCInsert;
 import Controllers.Utils.JDBCRead;
+import Controllers.Utils.JDBCUpdate;
 import Controllers.Utils.PreparedStatementContainer;
 import Controllers.Utils.FileAdapters.CSVComicAdapter;
 import Controllers.Utils.FileAdapters.ComicConverter;
@@ -452,6 +453,25 @@ public class ComicController {
 
         // creates a new copy (comic_ownership) and adds it to collection_refrence
         return addToCollection(userId, comic);
+    }
+
+    /**
+     * Changes all signatures that were linked to an old copy id to be linked to the new copy id.
+     * Used when a copy's id has changed due to commands being undone/redone.
+     * @param oldCopyId the previous copy id
+     * @param newCopyId the new copy id
+     */
+    public void updateSignaturesForNewCopyId(int oldCopyId, int newCopyId) throws Exception {
+        String sql = """
+                UPDATE signature_refrence
+                SET copy_fk = ?
+                WHERE copy_fk = ?;
+                """;
+        PreparedStatementContainer psc = new PreparedStatementContainer();
+        psc.appendToSql(sql);
+        psc.appendToObjects(newCopyId);
+        psc.appendToObjects(oldCopyId);
+        jdbcInsert.executePreparedSQL(psc);
     }
 
     /**
