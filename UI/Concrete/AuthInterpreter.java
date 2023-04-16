@@ -220,7 +220,7 @@ public class AuthInterpreter extends DefaultInterpreter {
 
     // Logout a user
     if (command.startsWith("L") || command.startsWith("l")) {
-      this.logout();
+      return this.logout();
     }
 
     if (command.equals("Create") || command.equals("create")) {
