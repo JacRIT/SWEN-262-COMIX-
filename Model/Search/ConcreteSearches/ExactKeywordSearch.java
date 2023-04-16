@@ -66,10 +66,10 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_ownership ON collection_refrence.copy_fk = comic_ownership.id
                                 INNER JOIN 
                                     comic_info ON comic_info.id = comic_ownership.comic_fk
-                                INNER JOIN
+                                LEFT JOIN
                                     publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
-                                INNER JOIN
-                                    publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
+                                LEFT JOIN
+                                    publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
 
                         ) INTERSECT (
                             ( --get all copy_ids where
@@ -91,10 +91,10 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_ownership ON comic_info.id = comic_ownership.comic_fk
                                 INNER JOIN
                                     creator_info ON creator_info.id = creator_refrence.creator_fk
-                                INNER JOIN
+                                LEFT JOIN
                                     publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
-                                INNER JOIN
-                                    publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
+                                LEFT JOIN
+                                    publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                                 WHERE
                                     creator_info.c_name LIKE (?)
                             ) UNION (
@@ -116,10 +116,10 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_ownership ON comic_info.id = comic_ownership.comic_fk
                                 INNER JOIN
                                     character_info ON character_refrence.character_fk = character_info.id
-                                INNER JOIN
+                                LEFT JOIN
                                     publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
-                                INNER JOIN
-                                    publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
+                                LEFT JOIN
+                                    publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                                 WHERE
                                     character_info.character_name LIKE (?)
                             ) UNION (
@@ -139,8 +139,8 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_info ON comic_info.id = publisher_refrence.comic_fk
                                 INNER JOIN
                                     comic_ownership ON comic_info.id = comic_ownership.comic_fk
-                                INNER JOIN
-                                    publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
+                                LEFT JOIN
+                                    publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                                 WHERE
                                     publisher_info.p_name LIKE (?)
                             ) UNION (
@@ -158,10 +158,10 @@ public class ExactKeywordSearch extends SearchAlgorithm {
                                     comic_info
                                 INNER JOIN 
                                     comic_ownership ON comic_ownership.comic_fk = comic_info.id
-                                INNER JOIN
+                                LEFT JOIN
                                     publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
-                                INNER JOIN
-                                    publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
+                                LEFT JOIN
+                                    publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                                 WHERE comic_info.series LIKE (?) 
                                     OR comic_info.title LIKE (?) 
                                     OR comic_info.descrip LIKE (?)
