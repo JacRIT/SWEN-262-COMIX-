@@ -1,5 +1,6 @@
 package UI.CopyIdMaintenance;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import Model.JavaObjects.Comic;
@@ -19,6 +20,7 @@ public class CopyIdRecord {
      */
     public CopyIdRecord(int id) {
         this.currentId = id;
+        this.oldIds = new HashSet<>();
     }
 
     /**
