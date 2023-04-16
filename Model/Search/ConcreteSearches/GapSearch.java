@@ -105,7 +105,7 @@ public class GapSearch extends SearchAlgorithm {
                                     publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
                                 INNER JOIN
                                     publisher_info ON publisher_info.id = publisher_refrence.publisher_fk
-                                WHERE comic_info.series LIKE (?)
+                                WHERE LOWER(comic_info.series) LIKE LOWER(?)
                             )
                         )
                     ) 
