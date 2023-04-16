@@ -10,11 +10,9 @@ import org.w3c.dom.Document;
  */
 public class XML {
 
-    private String filename;
     private Document doc;
 
     public XML(String filename) throws Exception{
-        this.filename = filename;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         this.doc = db.parse(new File(filename));

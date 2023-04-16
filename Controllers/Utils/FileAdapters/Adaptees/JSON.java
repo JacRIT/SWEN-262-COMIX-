@@ -10,11 +10,9 @@ import java.io.FileWriter;
  * reading and creating files
  */
 public class JSON {
-    private String filename;
     private Object parser;
 
     public JSON(String filename) throws Exception{
-        this.filename = filename;
         JSONParser jsonParser = new JSONParser();
         FileReader reader = new FileReader(filename);
         this.parser = jsonParser.parse(reader);
