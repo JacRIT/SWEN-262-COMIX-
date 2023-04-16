@@ -317,11 +317,11 @@ public class ComicController {
         Comic target = x.convertToComic();
 
         while (target != null) {
-            if (isPersonal == true) {
-                addToCollection(userId, target);
-            }
             importer.changeTarget(target);
             importer.importComic();
+            if (isPersonal == true) {
+                create(userId, target);
+            }
             target = x.convertToComic();
         }
 

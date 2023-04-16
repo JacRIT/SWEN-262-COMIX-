@@ -13,6 +13,7 @@ public class importcomictest {
             System.out.println(target.toString());
             ci.changeTarget(target);
             ci.importComic();
+            System.out.println(target.toString());
             target = cr.convertToComic() ;
         }
     }
