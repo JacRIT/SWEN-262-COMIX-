@@ -72,7 +72,7 @@ public class PCFactory implements CommandFactory {
           return null;
         int comicId = Integer.parseInt(split[1]);
         Comic comic = api.getComic(comicId);
-        return new PCRemoveComic(user, comic, api);
+        return new PCRemoveComic(user, comic, api, cic);
       }
 
       // Add signature to comic
