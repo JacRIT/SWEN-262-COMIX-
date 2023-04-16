@@ -312,7 +312,7 @@ public class Comic {
         } else if (this.grade <= 10) {
             this.value *= Math.log10(grade);
         } else {
-            System.out.println("\n======\nComics Value is not inbetween 1 and 10.\n======\n");
+            // System.out.println("\n======\nComics Value is not inbetween 1 and 10.\n======\n");
             ;
         }
     }
@@ -353,7 +353,8 @@ public class Comic {
             return true;
         }
         System.out.println(
-                "\n======\nCOMIC : you are trying to grade a comic with an incorrect grade. Grade from 1-10.\n======\n");
+                // "\n======\nCOMIC : you are trying to grade a comic with an incorrect grade. Grade from 1-10.\n======\n"
+        );
         return false;
     }
 
@@ -368,7 +369,7 @@ public class Comic {
             this.grade = 0;
             return true;
         } else {
-            System.out.println("\n======\nCOMIC : you are trying to ungrade an ungraded comic\n======\n");
+            // System.out.println("\n======\nCOMIC : you are trying to ungrade an ungraded comic\n======\n");
             return false;
         }
     }
