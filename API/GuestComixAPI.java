@@ -73,7 +73,11 @@ public class GuestComixAPI implements ComixAPI {
 
     @Override
     public Comic[] searchComics(int userId, String keyword) throws Exception {
-        return comicController.search(1, keyword);
+        if (isAuthenticated) {
+            return userComixAPI.searchComics(userId, keyword);
+        } else {
+            return comicController.search(1, keyword);
+        }
     }
 
     @Override
