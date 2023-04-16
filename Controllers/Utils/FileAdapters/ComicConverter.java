@@ -17,5 +17,5 @@ public interface ComicConverter {
      * once in the format, the adaptee will read it into a file
      * @throws Exception
      */
-    public String convertToFile(String filename, Comic[] comics) throws Exception;
+    public void convertToFile(String filename, Comic[] comics) throws Exception;
 }
