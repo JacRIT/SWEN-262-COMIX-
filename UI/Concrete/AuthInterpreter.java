@@ -34,6 +34,34 @@ public class AuthInterpreter extends DefaultInterpreter {
       }).toArray(String[]::new);
     }
 
+    if (command.startsWith("Import") || command.startsWith("import")) {
+      String[] commandSplit = command.split(" ");
+      if (commandSplit.length != 2)
+        return "To import a file a filename must be specified";
+
+      String fileName = commandSplit[1];
+      Boolean isPersonal = false;
+
+      for (String flag : flags) {
+        if (flag.equals("p"))
+          isPersonal = true;
+        else
+          return "Unkown flag found in command: --" + flag;
+      }
+
+      return this.importFile(fileName, isPersonal);
+    }
+
+    if (command.startsWith("Export") || command.startsWith("export")) {
+      String[] commandSplit = command.split(" ");
+      if (commandSplit.length != 2)
+        return "To import a file a filename must be specified";
+
+      String fileName = commandSplit[1];
+
+      return this.exportFile(fileName);
+    }
+
     // View a specific comic
     if (command.startsWith("V") || command.startsWith("v")) {
       Boolean detailed = this.isComicDetailed(flags);
@@ -371,4 +399,29 @@ public class AuthInterpreter extends DefaultInterpreter {
     this.mediator.setCli(new ComicCLI(this.mediator));
     this.mediator.setInterpreter(new ComicInterpreter(this.mediator, this.api));
   }
+
+  private String importFile(String fileName, Boolean isPersonal) {
+
+    try {
+      this.api.importComics(this.mediator.getUser().getId(), fileName, isPersonal);
+      return fileName + " successfully Imported";
+    } catch (Exception err) {
+      System.out.println("Import Error: \n" + err.getMessage() + "\n" + err.getLocalizedMessage() + "\n");
+      return fileName + " could not be Imported";
+    }
+  }
+
+  private String exportFile(String fileName) {
+
+    try {
+      this.api.exportComics(this.mediator.getUser().getId(), fileName);
+      return fileName + " successfully Exported";
+
+    } catch (Exception err) {
+      System.out.println("Export Error: \n" + err.getMessage() + "\n" + err.getLocalizedMessage() + "\n");
+      return fileName + " could not be Exported";
+    }
+
+  }
+
 }

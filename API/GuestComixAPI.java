@@ -48,6 +48,7 @@ public class GuestComixAPI implements ComixAPI {
     /**
      * Creates and registers a new user.
      * You can now be authenticated with this new username.
+     * 
      * @param username
      * @return a User object with the id and username of the newly created user
      * @throws Exception
@@ -59,7 +60,7 @@ public class GuestComixAPI implements ComixAPI {
     public void logout() {
         this.isAuthenticated = false;
     }
-    
+
     @Override
     public void setSortStrategy(SortAlgorithm sortStrategy) {
         this.comicController.setSort(sortStrategy);
@@ -74,22 +75,20 @@ public class GuestComixAPI implements ComixAPI {
     public Comic[] searchComics(int userId, String keyword) throws Exception {
         return comicController.search(1, keyword);
     }
-    
+
     @Override
     public Integer createComic(int userId, Comic comic) throws Exception {
         return comicController.create(userId, comic);
     }
 
-
     @Override
-    public Map<String, Float> generateStatistics(User user) throws Exception{
+    public Map<String, Float> generateStatistics(User user) throws Exception {
         if (isAuthenticated) {
             return userComixAPI.generateStatistics(user);
         } else {
             return null;
         }
     }
-
 
     @Override
     public Comic[] browsePersonalCollection(int userId) throws Exception {
@@ -100,18 +99,17 @@ public class GuestComixAPI implements ComixAPI {
         }
     }
 
-    
-    
     @Override
     public Signature signComic(Signature signature, Comic comic) throws Exception {
-        if(isAuthenticated) {
+        if (isAuthenticated) {
             return userComixAPI.signComic(signature, comic);
         } else {
             return null;
         }
     }
+
     @Override
-    public Boolean unSignComic(Signature signature, Comic comic) throws Exception{
+    public Boolean unSignComic(Signature signature, Comic comic) throws Exception {
         if (isAuthenticated) {
             return userComixAPI.unSignComic(signature, comic);
         } else {
@@ -127,71 +125,80 @@ public class GuestComixAPI implements ComixAPI {
             return null;
         }
     }
+
     @Override
-    public Signature unVerifyComic(Signature signature, Comic signedComic) throws Exception{
+    public Signature unVerifyComic(Signature signature, Comic signedComic) throws Exception {
         if (isAuthenticated) {
             return userComixAPI.unVerifyComic(signature, signedComic);
         } else {
             return null;
         }
     }
-    
-	@Override
-	public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) throws Exception {
+
+    @Override
+    public Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) throws Exception {
         if (isAuthenticated) {
             return userComixAPI.gradeComicInPersonalCollection(user, comic, grade);
         } else {
             return false;
         }
-	}
-    
-	@Override
-	public Boolean ungradeComicInPersonalCollection(User user, Comic comic) throws Exception{
+    }
+
+    @Override
+    public Boolean ungradeComicInPersonalCollection(User user, Comic comic) throws Exception {
         if (isAuthenticated) {
             return userComixAPI.ungradeComicInPersonalCollection(user, comic);
         } else {
             return false;
         }
-	}
-    
-	@Override
-	public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception{
+    }
+
+    @Override
+    public Boolean slabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
         if (isAuthenticated) {
             return userComixAPI.slabGradedComicInPersonalCollection(user, gradedComic);
         } else {
             return false;
         }
-	}
+    }
 
-	@Override
-	public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
+    @Override
+    public Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception {
         if (isAuthenticated) {
             return userComixAPI.unslabGradedComicInPersonalCollection(user, gradedComic);
         } else {
             return false;
         }
-	}
-    
-	@Override
-	public Integer addComicToPersonalCollection(User user, Comic comic) throws Exception {
+    }
+
+    @Override
+    public Integer addComicToPersonalCollection(User user, Comic comic) throws Exception {
         if (isAuthenticated) {
             return userComixAPI.addComicToPersonalCollection(user, comic);
         } else {
             return null;
         }
-	}
-    
-	@Override
-	public Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception {
-		if (isAuthenticated) {
+    }
+
+    @Override
+    public Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception {
+        if (isAuthenticated) {
             return userComixAPI.removeComicFromPersonalCollection(user, comic);
         } else {
             return false;
         }
-	}
+    }
 
     public Comic getComic(int comicId) throws Exception {
         return this.comicController.get(comicId);
+    }
+
+    public void importComics(int userId, String filename, Boolean ispersonal) throws Exception {
+        return;
+    }
+
+    public void exportComics(int userId, String filename) throws Exception {
+        return;
     }
 
 }

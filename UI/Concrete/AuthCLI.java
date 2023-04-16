@@ -26,6 +26,14 @@ public class AuthCLI extends DefaultCLI {
 
     super.log("BP - Browse all the comics in your personal collection");
 
+    super.log("Import <FilePath> - Import the specified file with comic data into the database", false);
+    super.log("\tFile Path must end in either .json, .xml, or .csv", false);
+    super.log("\t--p - Add imported comics directly to your personal collection");
+
+    super.log("Export <FileName> - Export the database into a file with the specified fileName", false);
+    super.log("\tFile Name must end in either .json, .xml, or .csv");
+
+
     if (this.mediator.canUndo())
       super.log("U - Undo most recent change");
 
