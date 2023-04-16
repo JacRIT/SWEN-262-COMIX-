@@ -163,11 +163,9 @@ public class UserComixAPI implements ComixAPI {
     @Override
     public Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception {
         if (userExists(user) && copyExists(comic)) {
-            System.out.println("removeComicFromPersonalCollection in UserComixAPI works");
             this.comicController.removeFromCollection(user.getId(), comic);
             return true; 
         }
-        System.out.println("Problem in removeComicFromPersonalCollection in UserComixAPI");
         return false;
     }
 
@@ -229,5 +227,10 @@ public class UserComixAPI implements ComixAPI {
 
     public void exportComics(int userId, String filename) throws Exception{
         comicController.exportCollection(userId, filename);
+    }
+
+    @Override
+    public void updateSignatureRefrences(int oldCopyId, int newCopyId) throws Exception {
+        comicController.updateSignaturesForNewCopyId(oldCopyId, newCopyId);
     }
 }

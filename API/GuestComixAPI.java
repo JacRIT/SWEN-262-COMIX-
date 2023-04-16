@@ -213,4 +213,13 @@ public class GuestComixAPI implements ComixAPI {
         }
     }
 
+    @Override
+    public void updateSignatureRefrences(int oldCopyId, int newCopyId) throws Exception {
+        if (isAuthenticated) {
+            userComixAPI.updateSignatureRefrences(oldCopyId, newCopyId);
+        } else {
+            return;
+        }
+    }
+
 }

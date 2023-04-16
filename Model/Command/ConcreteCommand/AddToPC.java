@@ -38,8 +38,8 @@ public class AddToPC implements PCCommand {
     if (record == null) {
       this.record = this.cic.addRecord(copyId);
     } else {
+      api.updateSignatureRefrences(comic.getCopyId(), copyId);
       this.record.setCurrentId(copyId);
-      // call updateSignaturesForNewCopyId() in ComicController through API
     }
     // update the comic's copy id
     this.record.updateComic(comic);

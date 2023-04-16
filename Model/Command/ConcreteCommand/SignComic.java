@@ -5,6 +5,8 @@ import Model.Command.PCCommand;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Signature;
 import Model.JavaObjects.User;
+import UI.CopyIdMaintenance.CopyIdControl;
+import UI.CopyIdMaintenance.CopyIdRecord;
 
 public class SignComic implements PCCommand {
 
@@ -12,12 +14,14 @@ public class SignComic implements PCCommand {
   private Comic comic;
   private Signature signature;
   private GuestComixAPI api;
+  private CopyIdRecord record;
 
-  public SignComic(User user, Comic comic, GuestComixAPI api) {
+  public SignComic(User user, Comic comic, GuestComixAPI api, CopyIdControl cic) {
     this.user = user;
     this.comic = comic;
     this.api = api;
     this.signature = null;
+    this.record = cic.findOrAdd(comic.getCopyId());
   }
 
   /**
@@ -27,6 +31,7 @@ public class SignComic implements PCCommand {
    */
   @Override
   public String execute() throws Exception {
+    this.record.updateComic(comic);
     Signature base = new Signature(this.user.getId(), this.user.getName());
     Signature signed = this.api.signComic(base, comic);
 
@@ -45,6 +50,7 @@ public class SignComic implements PCCommand {
    */
   @Override
   public String unExecute() throws Exception {
+    this.record.updateComic(comic);
     if (this.signature == null)
       return "Comic (" + comic.getTitle() + ") must first be signed";
 
