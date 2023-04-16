@@ -49,6 +49,10 @@ public class PCRemoveComic implements PCCommand {
     this.record.setCurrentId(copyId);
     // update the comic's copy id
     this.record.updateComic(comic);
+
+    // set grade and slabbing back to where they were
+    api.gradeComicInPersonalCollection(user, comic, comic.getGrade());
+
     return "Comic \"" + this.comic.getTitle() + "\" successfully added to " + this.user.getName() + "'s collection";
 
   }
