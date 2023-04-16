@@ -316,17 +316,14 @@ public class ComicController {
             x = new JSONComicAdapter(json);
         }
         Comic target = x.convertToComic();
-        if (isPersonal == true) {
-            addToCollection(userId, target);
-        }
 
         while (target != null) {
-            importer.changeTarget(target);
-            importer.importComic();
-            target = x.convertToComic();
             if (isPersonal == true) {
                 addToCollection(userId, target);
             }
+            importer.changeTarget(target);
+            importer.importComic();
+            target = x.convertToComic();
         }
 
     }
@@ -336,15 +333,15 @@ public class ComicController {
         Comic[] collectionComics = getAllCollectionComics(userId);
         ComicConverter x = null;
         if (filename.endsWith(".xml")) {
-            XML xml = new XML(filename);
+            XML xml = new XML("./comicsInput.xml");
             x = new XMLComicAdapter(xml);
 
         } else if (filename.endsWith(".csv")) {
-            CSV csv = new CSV(filename);
+            CSV csv = new CSV("./comicsInput.csv");
             x = new CSVComicAdapter(csv);
 
         } else if (filename.endsWith(".json")) {
-            JSON json = new JSON(filename);
+            JSON json = new JSON("./comicsInput.json");
             x = new JSONComicAdapter(json);
         }
         x.convertToFile(filename, collectionComics);
@@ -353,7 +350,7 @@ public class ComicController {
     private Comic[] getAllCollectionComics(int userId) throws Exception {
         JDBCComicExtractor comicExtractor = new JDBCComicExtractor();
         String sql = """
-                SELECT copy_fk FROM collection_reference
+                SELECT copy_fk FROM collection_refrence
                 INNER JOIN user_info ON user_info.collection_fk = collection_refrence.collection_fk
                 WHERE user_info.id = ?
                 """;

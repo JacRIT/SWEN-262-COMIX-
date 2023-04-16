@@ -10,6 +10,7 @@ public class importcomictest {
         CSVComicAdapter cr = new CSVComicAdapter(csv);
         Comic target = cr.convertToComic() ;
         while (target != null) {
+            System.out.println(target.toString());
             ci.changeTarget(target);
             ci.importComic();
             target = cr.convertToComic() ;
