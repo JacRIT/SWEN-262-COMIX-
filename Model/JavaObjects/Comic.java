@@ -51,9 +51,9 @@ public class Comic {
         this.initialValue = initialValue;
         this.signatures = signatures;
         this.value = value;
-        this.calculateValue();
         this.grade = grade;
         this.isSlabbed = isSlabbed;
+        this.calculateValue();
     }
 
     @Override
@@ -310,7 +310,7 @@ public class Comic {
         } else if ( this.grade == 0) {
             return ; // in case of ungraded comic, value does not change
         } else if (this.grade <= 10) {
-            this.value *= Math.log10(value);
+            this.value *= Math.log10(grade);
         } else {
             System.out.println("\n======\nComics Value is not inbetween 1 and 10.\n======\n");
             ;
@@ -320,9 +320,9 @@ public class Comic {
     public void updateComicBasedOnSignatures() {
         for (Signature signature : signatures) {
             if (signature.isAuthenticated()) {
-                this.value *= 1.05;
-            } else {
                 this.value *= 1.20;
+            } else {
+                this.value *= 1.05;
             }
         }
     }
@@ -348,7 +348,7 @@ public class Comic {
     }
 
     public Boolean gradeComic(int grade) {
-        if (grade > 0 || grade < 10) {
+        if (grade > 0 && grade < 10) {
             this.grade = grade;
             return true;
         }
