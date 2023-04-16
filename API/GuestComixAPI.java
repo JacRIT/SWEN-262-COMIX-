@@ -198,11 +198,19 @@ public class GuestComixAPI implements ComixAPI {
     }
 
     public void importComics(int userId, String filename, Boolean ispersonal) throws Exception {
-        return;
+        if (isAuthenticated) {
+            userComixAPI.importComics(userId, filename, ispersonal);
+        } else {
+            return;
+        }
     }
 
     public void exportComics(int userId, String filename) throws Exception {
-        return;
+        if (isAuthenticated) {
+            userComixAPI.exportComics(userId, filename);
+        } else {
+            return;
+        }
     }
 
 }
