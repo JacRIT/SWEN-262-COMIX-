@@ -9,14 +9,16 @@ import Model.Search.SearchAlgorithm;
 import Model.Search.SortAlgorithm;
 
 interface ComixAPI {
-    /**G
+    /**
+     * G
      * Sets the sort strategy of the current search strategy.
      * 
      * @param strategy the strategy being used bt the user.
      */
     void setSortStrategy(SortAlgorithm sortStrategy);
 
-    /**G
+    /**
+     * G
      * Sets search strategy of Comic Controller allowing it to use the proper search
      * strategy
      * to search comics.
@@ -25,7 +27,8 @@ interface ComixAPI {
      */
     void setSearchStrategy(SearchAlgorithm searchStrategy);
 
-    /**G
+    /**
+     * G
      * Executes a search on all comics in database given a keyword.
      * 
      * @param keyword word being searched.
@@ -38,7 +41,8 @@ interface ComixAPI {
      */
     Comic[] searchComics(int userId, String keyword) throws Exception;
 
-    /**G
+    /**
+     * G
      * Given a comic's id get the comic if it exists and return it from the database
      * 
      * @param comicId comic id to search for
@@ -46,7 +50,8 @@ interface ComixAPI {
      */
     Comic getComic(int comicId) throws Exception;
 
-    /**G
+    /**
+     * G
      * 
      * @param userId Determines whether a personal collection is being searched
      *               within the database
@@ -60,7 +65,8 @@ interface ComixAPI {
      */
     Comic[] browsePersonalCollection(int userId) throws Exception;
 
-    /**G
+    /**
+     * G
      * Generates the statistics for a users collection.
      * 
      * Note :
@@ -76,7 +82,8 @@ interface ComixAPI {
      */
     Map<String, Float> generateStatistics(User user) throws Exception;
 
-    /**G
+    /**
+     * G
      * Creates a comic
      * 
      * @param userId Determines whether a comic is being created in a personal
@@ -89,7 +96,8 @@ interface ComixAPI {
      */
     Integer createComic(int userId, Comic comic) throws Exception;
 
-    /**G
+    /**
+     * G
      * Signs a comic.
      * The user marks a comic as signed meaning that it has been
      * autographed by someone, e.g. a creator, a famous person, etc.
@@ -98,55 +106,60 @@ interface ComixAPI {
      * 
      * @param comic comic being signed
      * @param user  user signing comic
-     * @return  Signature of the comic signed.
-     *          Null : User Not logged in.
+     * @return Signature of the comic signed.
+     *         Null : User Not logged in.
      */
     Signature signComic(Signature signature, Comic comic) throws Exception;
 
-    /**G
+    /**
+     * G
      * unSigns a comic.
      * 
      * @param comic
-     * @return true     : Comic is unSigned sucessfully
-     *         false    : Comic is not successfully unsigned
-     *                  - User Not logged in
-     *                  - Comic does not exist
-     *                  - Signature does not exist
+     * @return true : Comic is unSigned sucessfully
+     *         false : Comic is not successfully unsigned
+     *         - User Not logged in
+     *         - Comic does not exist
+     *         - Signature does not exist
      */
     Boolean unSignComic(Signature signature, Comic comic) throws Exception;
 
-    /**G
+    /**
+     * G
      * Verifies a signed comic.
      * A signed comic may also be marked as "authenticated" meaning that the
      * signature has been verified by an authority. This increases the value of the
      * comic
      * by an additional 20%
      * 
-     * @param signature the signature looking to be verified.
+     * @param signature   the signature looking to be verified.
      * @param signedComic a previously signed comic to be verified.
      * 
-     * @return  Signature that is now verified.
-     *          Null 
-     *              - User not logged in
-     *              - Comic does not exist
-     *              - Signature does not exist
+     * @return Signature that is now verified.
+     *         Null
+     *         - User not logged in
+     *         - Comic does not exist
+     *         - Signature does not exist
      */
     Signature verifyComic(Signature signature, Comic signedComic) throws Exception;
 
-    /**G
+    /**
+     * G
      * unVerifies a signed comic.
+     * 
      * @param signedComic a previously signed and verified comic to be unverified.
-     * @param signature signature to be unverified on signed comic.
+     * @param signature   signature to be unverified on signed comic.
      * @return Signature that is now verified.
      *         Null : comic NOT sucessfully unverified
-     *                  - comic does not exist
-     *                  - comic not previously verified and signed
-     *                  - signature does not exist
-     *                  - user not logged in.
+     *         - comic does not exist
+     *         - comic not previously verified and signed
+     *         - signature does not exist
+     *         - user not logged in.
      */
     Signature unVerifyComic(Signature signature, Comic signedComic) throws Exception;
 
-    /**G
+    /**
+     * G
      * Marks a comic as "graded" on a scale of 1 to 10. The value of a graded comic
      * is adjusted according to the following formula:
      * - 1 = value * 0.10
@@ -159,12 +172,14 @@ interface ComixAPI {
      * @return true : comic sucessfully graded
      *         false : comic not sucessfully graded
      *         - comic does not exist
-     *         - comic not in personal collection / user 
+     *         - comic not in personal collection / user
      *         - grade is not inbetween 1-10
      */
     Boolean gradeComicInPersonalCollection(User user, Comic comic, int grade) throws Exception;
 
-    /**G
+    /**
+     * G
+     * 
      * @param user  The user ungrading the comic.
      * @param comic The comic being ungraded
      * @return true : comic sucessfully ungraded
@@ -203,12 +218,13 @@ interface ComixAPI {
      */
     Boolean unslabGradedComicInPersonalCollection(User user, Comic gradedComic) throws Exception;
 
-    /**G
+    /**
+     * G
      * Adds a comic to a users personal collection.
      * 
      * @param comic The comic to be added to the personal collection.
      * @param user  The user adding the comic to their collection.
-     * @return int : comic sucessfully added to personal collection 
+     * @return int : comic sucessfully added to personal collection
      * @return false : comic not sucessfully added to personal collection
      *         - comic does not exist.
      *         - no personal collection found.
@@ -217,7 +233,8 @@ interface ComixAPI {
      */
     Integer addComicToPersonalCollection(User user, Comic comic) throws Exception;
 
-    /**G
+    /**
+     * G
      * Removes a comic from personal colleciton.
      * 
      * @param comic The comic to be removed from the personal collection
@@ -231,4 +248,7 @@ interface ComixAPI {
      */
     Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception;
 
+    public void importComics(int userId, String filename, Boolean ispersonal) throws Exception;
+
+    public void exportComics(int userId, String filename) throws Exception;
 }

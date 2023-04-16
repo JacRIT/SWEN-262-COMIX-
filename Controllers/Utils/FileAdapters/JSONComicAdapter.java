@@ -25,7 +25,7 @@ public class JSONComicAdapter implements ComicConverter {
     @SuppressWarnings("unchecked")
     //used bc JSONSimple has weird issue with trying to be a hashmap
     @Override
-    public String convertToFile(String filename, Comic[] comics) throws Exception {
+    public void convertToFile(String filename, Comic[] comics) throws Exception {
         //Current plan: use JDBCComicExtractor in ComicController to get All comics, 
         //then insert that array into here to be parsed (with maybe helper method),
         //this method will put it all into file
@@ -51,7 +51,6 @@ public class JSONComicAdapter implements ComicConverter {
 
         }
         file.flush();
-        return null;
     }
 
     private <T> String formatString(ArrayList<T> unformattedArray){

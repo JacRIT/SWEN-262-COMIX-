@@ -154,7 +154,7 @@ public class UserComixAPI implements ComixAPI {
 
     @Override
     public Integer addComicToPersonalCollection(User user, Comic comic) throws Exception {
-        if (userExists(user) && copyExists(comic)) {
+        if (userExists(user)) {
             return this.comicController.addToCollection(user.getId(), comic);
         }
         return null;

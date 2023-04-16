@@ -27,7 +27,7 @@ public class XMLComicAdapter implements ComicConverter {
         this.nodeIndex = 0;
     }
     @Override
-    public String convertToFile(String filename, Comic[] comics) throws Exception{
+    public void convertToFile(String filename, Comic[] comics) throws Exception{
         FileOutputStream output = new FileOutputStream(filename);
         Document doc = adaptee.createFile();
         Element rootElement = doc.createElement("Comics");
@@ -71,7 +71,6 @@ public class XMLComicAdapter implements ComicConverter {
         }
         writeToFile(doc, output);
         output.close();
-        return null;
 
     }
 

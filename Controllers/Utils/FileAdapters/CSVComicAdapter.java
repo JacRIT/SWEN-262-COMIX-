@@ -21,7 +21,7 @@ public class CSVComicAdapter implements ComicConverter {
     }
     
     @Override
-    public String convertToFile(String filename, Comic[] comics) throws Exception {
+    public void convertToFile(String filename, Comic[] comics) throws Exception {
         CSVWriter writer = adaptee.createFile(filename);
         String[] header = {"Series", "Issue", "Full Title", "Variant Description", "Publisher", "Release Date", "Format", "AddedDate", "Creators"};
         writer.writeNext(header);
@@ -39,7 +39,6 @@ public class CSVComicAdapter implements ComicConverter {
             writer.writeNext(data);
         }
         writer.close();
-        return null;
     }
 
     private <T> String formatString(ArrayList<T> unformattedArray){

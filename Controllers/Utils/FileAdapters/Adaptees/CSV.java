@@ -16,11 +16,9 @@ public class CSV{
      * @return CSVReaderHeaderAware, the reader
      * @throws Exception
      */
-    private String filename;
     private CSVReaderHeaderAware CSVReader;
 
     public CSV(String filename) throws Exception{
-        this.filename = filename;
         this.CSVReader = new CSVReaderHeaderAware(new FileReader(filename));
     }
 

@@ -536,4 +536,5 @@ public class ComicController {
         ArrayList<Object> results = jdbcRead.executePreparedSQL(sql, obj);
         return (int) results.get(0);
     }
+
 }
