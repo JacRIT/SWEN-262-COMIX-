@@ -213,7 +213,6 @@ public class ComicController {
         obj.add(s.getName());
         obj.add(s.isAuthenticated());
         int id = jdbcInsert.executePreparedSQLGetId(sql, obj);
-        System.out.println("\tinfo insert done");
         // add entry to signature_refrence
         sql = """
                 INSERT INTO signature_refrence (signature_fk, copy_fk)
@@ -224,7 +223,6 @@ public class ComicController {
         psc.appendToObjects(id);
         psc.appendToObjects(copyId);
         jdbcInsert.executePreparedSQL(psc);
-        System.out.println("\trefrence insert done");
         s.setId(id);
         return s;
     }
