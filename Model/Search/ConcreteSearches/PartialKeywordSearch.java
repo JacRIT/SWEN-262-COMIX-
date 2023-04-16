@@ -96,7 +96,7 @@ public class PartialKeywordSearch extends SearchAlgorithm {
                             LEFT JOIN
                                 publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                             WHERE
-                                creator_info.c_name LIKE (CONCAT('%',?,'%'))
+                                LOWER(creator_info.c_name) LIKE LOWER(CONCAT('%',?,'%'))
                         ) UNION (
                             SELECT
                                 comic_ownership.id,
@@ -121,7 +121,7 @@ public class PartialKeywordSearch extends SearchAlgorithm {
                             LEFT JOIN
                                 publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                             WHERE
-                                character_info.character_name LIKE (CONCAT('%',?,'%'))
+                                LOWER(character_info.character_name) LIKE LOWER(CONCAT('%',?,'%'))
                         ) UNION (
                             SELECT
                                 comic_ownership.id,
@@ -142,7 +142,7 @@ public class PartialKeywordSearch extends SearchAlgorithm {
                             LEFT JOIN
                                 publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
                             WHERE
-                                publisher_info.p_name LIKE (CONCAT('%',?,'%'))
+                                LOWER(publisher_info.p_name) LIKE LOWER(CONCAT('%',?,'%'))
                         ) UNION (
                             SELECT
                                 comic_ownership.id,
@@ -162,13 +162,14 @@ public class PartialKeywordSearch extends SearchAlgorithm {
                                 publisher_refrence ON publisher_refrence.comic_fk = comic_info.id
                             LEFT JOIN
                                 publisher_info ON publisher_refrence.publisher_fk = publisher_info.id
-                            WHERE comic_info.series LIKE (CONCAT('%',?,'%')) 
-                                OR comic_info.title LIKE (CONCAT('%',?,'%')) 
-                                OR comic_info.descrip LIKE (CONCAT('%',?,'%'))
+                            WHERE LOWER(comic_info.series) LIKE LOWER(CONCAT('%',?,'%')) 
+                                OR LOWER(comic_info.title) LIKE LOWER(CONCAT('%',?,'%')) 
+                                OR LOWER(comic_info.descrip) LIKE LOWER(CONCAT('%',?,'%'))
                         )
                     )
                 ) 
             AS result
+            
             """
         );
 
