@@ -248,6 +248,8 @@ interface ComixAPI {
      */
     Boolean removeComicFromPersonalCollection(User user, Comic comic) throws Exception;
 
+    public void updateSignatureRefrences(int oldCopyId, int newCopyId) throws Exception;
+
     public void importComics(int userId, String filename, Boolean ispersonal) throws Exception;
 
     public void exportComics(int userId, String filename) throws Exception;

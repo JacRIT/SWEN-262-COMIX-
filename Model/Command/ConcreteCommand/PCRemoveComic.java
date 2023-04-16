@@ -45,8 +45,8 @@ public class PCRemoveComic implements PCCommand {
     if (copyId == null)
       return "Comic \"" + this.comic.getTitle() + "\" could not be added to " + this.user.getName() + "'s collection";
     
+    api.updateSignatureRefrences(comic.getCopyId(), copyId);
     this.record.setCurrentId(copyId);
-    // call updateSignaturesForNewCopyId() in ComicController through API
     // update the comic's copy id
     this.record.updateComic(comic);
     return "Comic \"" + this.comic.getTitle() + "\" successfully added to " + this.user.getName() + "'s collection";
