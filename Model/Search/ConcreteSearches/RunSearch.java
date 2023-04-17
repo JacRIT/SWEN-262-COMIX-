@@ -180,22 +180,22 @@ public class RunSearch extends SearchAlgorithm {
         //-----------------------------------------------------------------
         //special prepared statement connection for making RunGaps
         //-----------------------------------------------------------------
-        System.out.println("Creating Connection...");
+        // System.out.println("Creating Connection...");
         try (
                 Connection conn = DriverManager.getConnection(URL, USER, PASS);
                 PreparedStatement stmt = conn.prepareStatement(psc.getSql());) {
 
             int x = 1;
-            System.out.println("Preparing Statement...");
+            // System.out.println("Preparing Statement...");
             for (Object obj : psc.getObjects()) {
                 stmt.setObject(x, obj);
                 x++;
-                System.out.println("Preparing Statement..." + obj);
+                // System.out.println("Preparing Statement..." + obj);
             }
-            System.out.println("Executing Command...");
+            // System.out.println("Executing Command...");
 
             ResultSet rs = stmt.executeQuery();
-            System.out.println("Command Executed!");
+            // System.out.println("Command Executed!");
 
             while (rs.next()) {
                 int copy_id = rs.getInt(1) ;
