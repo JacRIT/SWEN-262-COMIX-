@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import Controllers.Utils.PreparedStatementContainer;
 import Model.Search.RunBin;
@@ -125,8 +126,14 @@ public class RunSearch extends SearchAlgorithm {
         ArrayList<Integer> copyIds = new ArrayList<Integer>() ;
 
         // for this algorithm to work, the RunGaps in rungaps MUST BE ORDERED BY ISSUE NUMBER
-        // this should be accomplished by the ORDER BY statement in search()
+        rungaps.sort(new Comparator<RunGap>() {
 
+            @Override
+            public int compare(RunGap o1, RunGap o2) {
+                return o1.getIssue() - o2.getIssue() ;
+            }
+            
+        });
         // for each copy in users personal collection that meets the series keyword
         for (RunGap rg : rungaps) {
             boolean added = false ;
@@ -149,7 +156,7 @@ public class RunSearch extends SearchAlgorithm {
         for (RunBin rb : runbins) {
             // get rid of all the runs that don't meet the specified length
             if (rb.getRunLength() < RUN_LENGTH ) {
-                runbins.remove(rb) ;
+                //runbins.remove(rb) ; //causes async edit serror
             } else {
                 // if they do meet the length requirement, add all of the copy ids to the master copy id list (copyIds)
                 copyIds.add( rb.getLast().getCopyId() ) ;

@@ -148,8 +148,18 @@ public abstract class DefaultInterpreter implements Interpreter {
   protected String setSearchFlags(String[] flags) {
     String successMessage = "";
 
-    SortAlgorithm sort = this.sortFactory.createAlgorithim(null);
-    SearchAlgorithm search = this.searchFactory.createAlgorithim(null);
+    String sortKey = "";
+    String searchKey = "";
+    for (String flag : flags) {
+      if ( flag.startsWith("searchBy=") ) {
+        searchKey = flag.split("=")[1] ;
+      } else if ( flag.startsWith("sortBy=") ) {
+        sortKey = flag.split("=")[1] ;
+      }
+    }
+
+    SortAlgorithm sort = this.sortFactory.createAlgorithim(sortKey);
+    SearchAlgorithm search = this.searchFactory.createAlgorithim(searchKey);
 
     if (flags.length == 0) {
       successMessage = "Results sorted by: " + sort.getClass() + "\nResults searched by: " + search.getClass();

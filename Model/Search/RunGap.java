@@ -10,11 +10,15 @@ public class RunGap {
         String newIssue = "" ;
         for (int i = 0; i < issueNum.length(); i++) {
             char check = issueNum.charAt(i) ;
-            if (check > '0' && check < '9') {
+            if (check >= '0' && check <= '9') {
                 newIssue += check ;
             }
         }
-        this.issue = Integer.parseInt(newIssue) ;
+        if (issueNum.equals("") ) {
+            issue = 0 ;
+        } else {
+            this.issue = Integer.parseInt(newIssue) ;
+        }
     }
 
     public int getCopyId() {
