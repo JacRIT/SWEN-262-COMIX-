@@ -228,9 +228,9 @@ public class AuthInterpreter extends DefaultInterpreter {
       return "Welcome to the Comic Creator\nEnter \"I\" to view instructions and current status of your Comic";
     }
 
-    System.out.println("");
-    System.out.println("Using super");
-    System.out.println("");
+    // System.out.println("");
+    // System.out.println("Using super");
+    // System.out.println("");
 
     this.lastViewed = null;
     return super.interprete(input);
