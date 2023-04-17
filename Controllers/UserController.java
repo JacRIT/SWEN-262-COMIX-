@@ -32,7 +32,7 @@ public class UserController {
         ArrayList<Object> vars = new ArrayList<>();
         vars.add(username + "'s Personal Collection");
         int collection_id = jdbcInsert.executePreparedSQLGetId(sql, vars);
-        System.out.println("collection done");
+        // System.out.println("collection done");
 
         // add the new collection to its own subcollection (for reursive searching)
         vars.clear();
