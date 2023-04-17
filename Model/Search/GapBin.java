@@ -34,9 +34,9 @@ public class GapBin {
             this.last = toAdd ;
             this.runLength++ ;
             
-        } else if ( (toAdd.isConsecutiveWithGap(this.last)+ totalGap) <= GAP_LIMIT ){
+        } else if ( (this.last.isConsecutiveWithGap(toAdd)+ totalGap) <= GAP_LIMIT ){
 
-            this.totalGap += toAdd.isConsecutiveWithGap(this.last) ;
+            this.totalGap += this.last.isConsecutiveWithGap(toAdd) ;
 
             this.others.add(this.last) ;
             this.last = toAdd ;
