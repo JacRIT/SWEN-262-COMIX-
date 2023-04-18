@@ -243,7 +243,8 @@ public class JDBCComicExtractor extends JDBC {
                     comic_ownership.comic_fk,
                     comic_ownership.comic_value,
                     comic_ownership.grade,
-                    comic_ownership.slabbed
+                    comic_ownership.slabbed,
+                    comic_ownership.id as idd
                 FROM 
                     comic_info 
                 INNER JOIN 
@@ -257,7 +258,7 @@ public class JDBCComicExtractor extends JDBC {
 
             while ( rs.next() ){
                 
-                copy_id =               rs.getInt("id") ;
+                copy_id =               rs.getInt("idd") ;
                 comic_id =              rs.getInt("comic_fk") ;
                 series =                rs.getString("series") ;
                 title =                 rs.getString("title") ;
@@ -280,19 +281,23 @@ public class JDBCComicExtractor extends JDBC {
             SELECT 
                 publisher_info.id,
                 publisher_info.p_name,
-                publisher_refrence.comic_fk
+                comic_ownership.id as idd
             FROM 
                 publisher_info 
             INNER JOIN 
                 publisher_refrence ON publisher_refrence.publisher_fk = publisher_info.id 
+            INNER JOIN
+                comic_info ON comic_info.id = publisher_refrence.comic_fk
+            INNER JOIN
+                comic_ownership ON comic_ownership.comic_fk = comic_info.id
             WHERE 
-                publisher_refrence.comic_fk IN 
+                comic_ownership.id IN 
             """;
         Statement stmt2 = this.conn.createStatement() ;
         sql2 += copyIdPreparedString ;
         ResultSet rs2 = stmt2.executeQuery(sql2);
         while(rs2.next()){
-            comics.get(rs2.getInt("comic_fk")).addPublisher(
+            comics.get(rs2.getInt("idd")).addPublisher(
                 new Publisher(
                     rs2.getInt("id"),
                     rs2.getString("p_name")
@@ -308,18 +313,23 @@ public class JDBCComicExtractor extends JDBC {
             SELECT 
                 creator_info.id,
                 creator_info.c_name,
-                creator_refrence.comic_fk 
+                comic_ownership.id as idd
             FROM 
                 creator_info
             INNER JOIN 
                 creator_refrence ON creator_refrence.creator_fk = creator_info.id 
-            WHERE creator_refrence.comic_fk IN 
+            INNER JOIN
+                comic_info ON comic_info.id = creator_refrence.comic_fk
+            INNER JOIN
+                comic_ownership ON comic_ownership.comic_fk = comic_info.id
+            WHERE 
+                comic_ownership.id IN 
             """;
         Statement stmt3 = this.conn.createStatement() ;
         sql3 += copyIdPreparedString ;
         ResultSet rs3 = stmt3.executeQuery(sql3);
         while(rs3.next()){
-            comics.get(rs3.getInt("comic_fk")).addCreator(
+            comics.get(rs3.getInt("idd")).addCreator(
                 new Creator(
                     rs3.getInt("id"),
                     rs3.getString("c_name")
