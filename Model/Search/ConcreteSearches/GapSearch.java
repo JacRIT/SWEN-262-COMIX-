@@ -167,10 +167,10 @@ public class GapSearch extends SearchAlgorithm {
                 //gapbins.remove(rb) ; //causes async edit serror
             } else {
                 // if they do meet the length requirement, add all of the copy ids to the master copy id list (copyIds)
-                copyIds.add( rb.getLast().getCopyId() ) ;
                 for (RunGap rg : rb.getOthers()) {
                     copyIds.add( rg.getCopyId() ) ;
                 }
+                copyIds.add( rb.getLast().getCopyId() ) ;
             }
         }
 
