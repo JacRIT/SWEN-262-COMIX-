@@ -67,16 +67,17 @@ public class ComicController {
      * @return an array of Comics matching the search request, sorted
      */
     public Comic[] search(int userId, String searchTerm) throws Exception {
-        int[] copy_ids = this.searchStrategy.executeSearch(userId, searchTerm);
-        Comic[] comics = new Comic[copy_ids.length];
-        int i = 0;
+        // int[] copy_ids = this.searchStrategy.executeSearch(userId, searchTerm);
+        // Comic[] comics = new Comic[copy_ids.length];
+        // int i = 0;
 
-        for (Object o : copy_ids) {
-            int copy_id = (int) o;
-            Comic c = get(copy_id);
-            comics[i++] = c;
-        }
-        return comics;
+        // for (Object o : copy_ids) {
+        //     int copy_id = (int) o;
+        //     Comic c = get(copy_id);
+        //     comics[i++] = c;
+        // }
+        // return comics;
+        return jdbcComicExtractor.getComicFromCopyIArray(this.searchStrategy.executeSearch(userId, searchTerm)) ;
     }
 
     /**

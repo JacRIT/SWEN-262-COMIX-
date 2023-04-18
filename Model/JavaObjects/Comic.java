@@ -146,6 +146,10 @@ public class Comic {
         return publisher;
     }
 
+    public void addPublisher(Publisher p) {
+        this.publisher.add(p);
+    }
+
     public void setPublisher(ArrayList<Publisher> publisher) {
         this.publisher = publisher;
     }
