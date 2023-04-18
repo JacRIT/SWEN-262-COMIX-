@@ -30,6 +30,7 @@ public class JSONComicAdapter implements ComicConverter {
         //then insert that array into here to be parsed (with maybe helper method),
         //this method will put it all into file
         FileWriter file = adaptee.createFile(filename);
+        JSONArray comicList = new JSONArray();
         for(Comic comic : comics){
             //each comic is translated to a JSON object
             if(comic == null){continue;}
@@ -45,11 +46,10 @@ public class JSONComicAdapter implements ComicConverter {
             comicDetail.put("creators", formatString(comic.getCreators()));
             JSONObject comicObj = new JSONObject();
             comicObj.put("comic", comicDetail);
-            JSONArray comicList = new JSONArray();
             comicList.add(comicObj);
-            file.write(comicList.toJSONString());
 
         }
+        file.write(comicList.toJSONString());
         file.flush();
     }
 
