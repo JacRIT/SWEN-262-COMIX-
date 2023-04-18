@@ -201,7 +201,7 @@ public class JDBCComicExtractor extends JDBC {
     
     public Comic[] getComicFromCopyIArray(int[] copy_ids) throws Exception {
         
-            if ( copy_ids.length < 1) {return null ;}
+            if ( copy_ids.length < 1) {return new Comic[0] ;}
 
             String copyIdPreparedString = "(";
             for (int i = 0; i < copy_ids.length-1; i++) {
