@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import CSVComicReader;
+//import CSVComicReader;
 import Model.JavaObjects.Comic;
 import Model.JavaObjects.Creator;
 import Model.JavaObjects.Publisher;
