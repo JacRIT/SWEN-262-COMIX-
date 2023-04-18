@@ -84,10 +84,10 @@ public class UserComixAPI implements ComixAPI {
     public Boolean unSignComic(Signature signature, Comic comic) throws Exception {
         if (signatureExists(signature, comic)) {
             comicController.removeSignature(signature);
+            return true;
         } else {
             return false;
         }
-        return false;
     }
 
     @Override
