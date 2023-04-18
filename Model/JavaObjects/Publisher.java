@@ -1,8 +1,8 @@
-package model;
+package Model.JavaObjects;
 
 public class Publisher {
-    private final int id ;
-    private final String name ;
+    private int id ;
+    private String name ;
 
     public Publisher(int id, String name) {
         this.id = id ;
@@ -48,5 +48,13 @@ public class Publisher {
 
     public String getName() {
         return name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -1,0 +1,22 @@
+<Comics>
+    <comic>
+        <series>'Mazing Man</series>
+        <title>Y'know, After A Long Hard Day...</title>
+        <vol>1</vol>
+        <issue>1</issue>
+        <desc> </desc>
+        <release>Jan 1986</release>
+        <pub>DC Comics</pub>
+        <creator>Bob Rozakis | Stephen DeStefano | Karl Kesel</creator>
+    </comic>
+    <comic>
+        <series>Fables</series>
+        <title>Legends in Exile</title>
+        <vol>1 </vol>
+        <issue> 1 </issue>
+        <desc>Trouble in Fabletown</desc>
+        <release>Apr 25, 2003</release>
+        <pub>DC Comics</pub>
+        <creator>Bill Willingham</creator>
+    </comic>
+</Comics>

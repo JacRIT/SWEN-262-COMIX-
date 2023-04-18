@@ -1,20 +1,22 @@
-package model;
+package Model.JavaObjects;
 
-public class Creator {
-    private final int id ;
-    private final String name ;
+public class Character {
+    private int id ;
+    private String name ;
     
-    public Creator(int id, String name) {
+    public Character(int id, String name) {
         this.id = id;
         this.name = name;
     }
+
     public int getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -23,6 +25,7 @@ public class Creator {
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -31,7 +34,7 @@ public class Creator {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Creator other = (Creator) obj;
+        Character other = (Character) obj;
         if (id != other.id)
             return false;
         if (name == null) {
@@ -42,7 +45,11 @@ public class Creator {
         return true;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
-
+    public void setName(String name) {
+        this.name = name;
+    }
 }
-
