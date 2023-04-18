@@ -270,7 +270,7 @@ public class JDBCComicExtractor extends JDBC {
                 value =                 rs.getInt("comic_value") ;
                 grade =                 rs.getInt("grade") ;
                 slabbed =               rs.getBoolean("slabbed") ;
-                comics.put(copy_id, new Comic(comic_id, copy_id, new ArrayList<Publisher>(), series, title, volume_number, release_date, sql, new ArrayList<Creator>(), new ArrayList<Character>(), description, initial_value, new ArrayList<Signature>(), value, grade, slabbed)) ;
+                comics.put(copy_id, new Comic(comic_id, copy_id, new ArrayList<Publisher>(), series, title, volume_number, issue_number, release_date, new ArrayList<Creator>(), new ArrayList<Character>(), description, initial_value, new ArrayList<Signature>(), value, grade, slabbed)) ;
             }
             stmt.close();
 
